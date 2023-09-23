@@ -1,0 +1,15 @@
+{
+  "name": "node-react-bird",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build"
+  },
+  "author": "Teo",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^13.5.2"
+  }
+}

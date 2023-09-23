@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 import AppLayout from '../components/AppLayout';
 
-const Home = () => {
+const Signup = () => {
     return (
         <AppLayout>
-            <div>Hello, Next!</div>
+            <div>sighup</div>
         </AppLayout>
     );
 };
 
-export default Home;
+export default Signup;

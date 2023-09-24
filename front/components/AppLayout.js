@@ -1,32 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Menu } from 'antd';
+import { Input, Menu, Row, Col } from 'antd';
 
 const AppLayout = ({ children }) => {
     const menuItems = [
         {
             key: 'home',
             icon: <Link href='/'>X</Link>,
-            // label: 'enfkdn',
         },
         {
             key: 'profile',
             icon: <Link href='/profile'>Profile</Link>,
-            // label: 'profile',
+        },
+        {
+            key: 'profile',
+            icon: <Input.Search />,
         },
         {
             key: 'signup',
             icon: <Link href='/signup'>Signup</Link>,
-            // label: 'signup',
         },
     ];
     return (
         <div>
-            <div>
-                <Menu items={menuItems} mode='horizontal' />
+            <Menu items={menuItems} mode='horizontal' />
 
-                {/* <Menu mode='horizontal'>
+            {/* <Menu mode='horizontal'>
                 <Menu.Item>
                     <Link href='/'>
                         X
@@ -44,8 +44,28 @@ const AppLayout = ({ children }) => {
                 </Menu.Item>
                 {item}
             </Menu> */}
-            </div>
-            {children}
+
+            <Row gutter={8}>
+                <Col xs={24} md={6}>
+                    {' '}
+                    left{' '}
+                </Col>
+
+                <Col xs={24} md={12}>
+                    {' '}
+                    {children}{' '}
+                </Col>
+
+                <Col xs={24} md={6}>
+                    <a
+                        href='https://teo-you.tistory.com/'
+                        target='_black'
+                        // for safety, should add  rel='noreferrer noopener'
+                        rel='noreferrer noopener'>
+                        Made by Teo
+                    </a>
+                </Col>
+            </Row>
         </div>
     );
 };

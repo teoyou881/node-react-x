@@ -3,33 +3,55 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu } from 'antd';
 
-const AppLayout = ({ item }) => {
+const AppLayout = ({ children }) => {
+    const menuItems = [
+        {
+            key: 'home',
+            icon: <Link href='/'>X</Link>,
+            // label: 'enfkdn',
+        },
+        {
+            key: 'profile',
+            icon: <Link href='/profile'>Profile</Link>,
+            // label: 'profile',
+        },
+        {
+            key: 'signup',
+            icon: <Link href='/signup'>Signup</Link>,
+            // label: 'signup',
+        },
+    ];
     return (
         <div>
-            <Menu mode='horizontal'>
+            <div>
+                <Menu items={menuItems} mode='horizontal' />
+
+                {/* <Menu mode='horizontal'>
                 <Menu.Item>
                     <Link href='/'>
-                        <a>X</a>{' '}
+                        X
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
                     <Link href='/profile'>
-                        <a>Profile</a>{' '}
+                        Profile
                     </Link>
                 </Menu.Item>
                 <Menu.Item>
                     <Link href='/signup'>
-                        <a>Signup</a>{' '}
+                        Signup
                     </Link>
                 </Menu.Item>
                 {item}
-            </Menu>
+            </Menu> */}
+            </div>
+            {children}
         </div>
     );
 };
 
 AppLayout.propTypes = {
-    item: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired,
 };
 
 export default AppLayout;

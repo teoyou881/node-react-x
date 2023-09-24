@@ -1,9 +1,18 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import 'antd/dist/antd.css';
+import Head from 'next/head';
 
 const App = ({ Component }) => {
-    return <div>App</div>;
+    return (
+        <>
+            <Head>
+                {' '}
+                <title>NodeX</title>
+            </Head>
+            <div>common menu</div>
+            <Component />
+        </>
+    );
 };
 
 App.propTypes = {

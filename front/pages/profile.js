@@ -1,12 +1,19 @@
-import React from 'react'
+import React from 'react';
 import AppLayout from '../components/AppLayout';
+import Head from 'next/head';
 
 const Profile = () => {
-  return (
-    <AppLayout>
-    <div>profile</div>
-    </AppLayout>
-  )
-}
+    return (
+        <>
+            <Head>
+                {' '}
+                <title>NodeX | Profile</title>
+            </Head>
+            <AppLayout>
+                <div>profile</div>
+            </AppLayout>
+        </>
+    );
+};
 
-export default Profile
+export default Profile;

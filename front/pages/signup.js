@@ -1,11 +1,17 @@
 import React from 'react';
 import AppLayout from '../components/AppLayout';
+import Head from 'next/head';
 
 const Signup = () => {
     return (
-        <AppLayout>
-            <div>sighup</div>
-        </AppLayout>
+        <>
+            <Head>
+                <title>NodeX | Sign Up</title>
+            </Head>
+            <AppLayout>
+                <div>sighup</div>
+            </AppLayout>
+        </>
     );
 };
 

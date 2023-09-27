@@ -2,7 +2,14 @@ import { Button, Form, Input } from 'antd';
 import React, { useCallback, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
+// {} === {} --> false
+// that's why we sholudn't use <div style={{}}></div>
+// it is recommended that use sytled, as shown below.
 import styled from 'styled-components';
+
+const ButtonWrapper=styled.div`
+    margin-top: 10px;
+`;
 
 const LoginForm = () => {
     const {
@@ -46,14 +53,14 @@ const LoginForm = () => {
                     {...register('user-password')}
                 />
             </div>
-            <div>
+            <ButtonWrapper>
                 <Button type='primary' htmlType='submit' loading={false} disabled={isSubmitting}>
                     Log In
                 </Button>
                 <Link href='/signup'>
                     <Button>회원가입</Button>
                 </Link>
-            </div>
+            </ButtonWrapper>
         </Form>
     );
 };

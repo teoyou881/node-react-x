@@ -1,11 +1,12 @@
-import { Button, Form, Input } from 'antd';
-import React, { useCallback, useState, useMemo } from 'react';
+import { Button, Form } from 'antd';
+import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 // {} === {} --> false
 // that's why we sholudn't use <div style={{}}></div>
 // it is recommended that use sytled, as shown below.
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
@@ -73,6 +74,10 @@ const LoginForm = ({setIsLoggedIn}) => {
             </ButtonWrapper>
         </Form>
     );
+};
+
+LoginForm.propTypes = {
+    setIsLoggedIn: PropTypes.node.isRequired,
 };
 
 export default LoginForm;

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Input, Menu, Row, Col } from 'antd';
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
-import styled from'styled-components'
+import styled from'styled-components';
 
 const SearchInput = styled(Input.Search)`
     vertical-align:middle;
@@ -56,7 +56,7 @@ const AppLayout = ({ children }) => {
 
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile /> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
+                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
                 </Col>
 
                 <Col xs={24} md={12}>

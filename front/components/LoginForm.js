@@ -2,6 +2,7 @@ import { Button, Form, Input } from 'antd';
 import React, { useCallback, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
+import styled from 'styled-components';
 
 const LoginForm = () => {
     const {
@@ -33,6 +34,7 @@ const LoginForm = () => {
             </div>
             <div>
                 <label htmlFor='user-password'>password</label>
+                <br />
                 {/* do not use <Input> form antd
                     if you want to use react-form-hook
                     becasue there is no name attribute in antd Input  */}

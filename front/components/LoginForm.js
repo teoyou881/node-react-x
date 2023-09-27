@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 // {} === {} --> false
@@ -7,11 +7,19 @@ import Link from 'next/link';
 // it is recommended that use sytled, as shown below.
 import styled from 'styled-components';
 
-const ButtonWrapper=styled.div`
+const ButtonWrapper = styled.div`
     margin-top: 10px;
 `;
 
-const LoginForm = () => {
+// TypeError: Cannot read properties of null (reading 'useMemo')
+// IDK why
+// const style = useMemo(() => ({
+//         marginTop: 10,
+//     }),
+//     []
+// );
+
+const LoginForm = ({setIsLoggedIn}) => {
     const {
         register,
         handleSubmit,
@@ -21,6 +29,7 @@ const LoginForm = () => {
 
     const onFormSubmit = (data) => {
         console.log(data);
+        setIsLoggedIn(true);
     };
     const onErrors = (errors) => console.error(errors);
 
@@ -33,6 +42,7 @@ const LoginForm = () => {
 
     return (
         // use obFinish instead of onSubmit
+        // onFinish has already applied e.preventDefault();
         <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
             <div>
                 <label htmlFor='user-email'>email</label>

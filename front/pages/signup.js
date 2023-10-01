@@ -68,6 +68,9 @@ const Signup = () => {
             console.error(errors['password-confirm']?.message);
             resetField('password-confirm');
         }
+        if (errors.term) {
+            alert(errors.term.message);
+        }
     };
 
     return (
@@ -134,8 +137,6 @@ const Signup = () => {
                         )}
                     </div>
                     <div>
-                        {/* <Checkbox name='user-term' checked={term} onChange={onChangeTerm}>You agree to our Terms of Service and that you have read our Privacy Policy.</Checkbox>
-                        {termError && <ErrorSpanWrapper>You must agree to our terms of service</ErrorSpanWrapper>} */}
                         <input
                             type='checkbox'
                             style={{ verticalAlign: 'middle', textAlign: 'center', width: '100%' }}
@@ -147,11 +148,11 @@ const Signup = () => {
                         <span style={{ display: 'table', margin: '0 auto', textAlign: 'center' }}>
                             I have read and agree to the terms of service
                         </span>
-                        {errors.term && (
+                        {/* {errors.term && (
                             <ErrorSpanWrapper>
                                 <span>{errors.term?.message}</span>
                             </ErrorSpanWrapper>
-                        )}
+                        )} */}
                     </div>
                     <ButtonWrapper>
                         <Button

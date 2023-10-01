@@ -29,7 +29,6 @@ const LoginForm = ({setIsLoggedIn}) => {
     } = useForm({ mode: 'onChange' });
 
     const onFormSubmit = (data) => {
-        console.log(data);
         setIsLoggedIn(true);
     };
     const onErrors = (errors) => console.error(errors);
@@ -69,7 +68,7 @@ const LoginForm = ({setIsLoggedIn}) => {
                     Log In
                 </Button>
                 <Link href='/signup'>
-                    <Button>회원가입</Button>
+                    <Button>Sign In</Button>
                 </Link>
             </ButtonWrapper>
         </Form>

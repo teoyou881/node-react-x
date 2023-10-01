@@ -20,6 +20,35 @@ const InputWrapper = styled.input`
 `;
 
 const Signup = () => {
+    const userEmail = {
+        required: 'Enter your e-mail address',
+        pattern: {
+            value: /\S+@\S+\.\S+/,
+            message: 'Wrong or invalid e-mail address. Please correct it and try again. ',
+        },
+    };
+
+    const userNickname = {
+        required: 'Enter your name',
+    };
+
+    const userPassword = {
+        required: 'Enter your password',
+        minLength: {
+            value: 6,
+            message: 'Minimum 6 characters required',
+        },
+    };
+
+    const passwordConfirm = {
+        required: true,
+        validate: (value) => {
+            if (watch('password') != value) {
+                return 'Your password does not match';
+            }
+        },
+    };
+
     const {
         register,
         handleSubmit,
@@ -51,13 +80,27 @@ const Signup = () => {
                     <div>
                         <label htmlFor='email'>email</label>
                         <br />
-                        <InputWrapper id='email' name='email' {...register('email')} />
+                        <InputWrapper id='email' name='email' {...register('email', userEmail)} />
                     </div>
+                    {errors.email && (
+                        <ErrorSpanWrapper>
+                            <span>{errors.email?.message}</span>
+                        </ErrorSpanWrapper>
+                    )}
                     <div>
                         <label htmlFor='nickname'>nickname</label>
                         <br />
-                        <InputWrapper id='nickname' name='nickname' {...register('nickname')} />
+                        <InputWrapper
+                            id='nickname'
+                            name='nickname'
+                            {...register('nickname', userNickname)}
+                        />
                     </div>
+                    {errors.nickname && (
+                        <ErrorSpanWrapper>
+                            <span>{errors.nickname?.message}</span>
+                        </ErrorSpanWrapper>
+                    )}
                     <div>
                         <label htmlFor='password'>password</label>
                         <br />
@@ -66,9 +109,14 @@ const Signup = () => {
                             name='password'
                             type='password'
                             required
-                            {...register('password')}
+                            {...register('password', userPassword)}
                         />
                     </div>
+                    {errors.password && (
+                        <ErrorSpanWrapper>
+                            <span>{errors.password?.message}</span>
+                        </ErrorSpanWrapper>
+                    )}
                     <div>
                         <label htmlFor='password-confirm'>password confirm</label>
                         <br />
@@ -77,14 +125,7 @@ const Signup = () => {
                             name='password-confirm'
                             type='password'
                             required
-                            {...register('password-confirm', {
-                                required: true,
-                                validate: (value) => {
-                                    if (watch('password') != value) {
-                                        return 'Your password does not match';
-                                    }
-                                },
-                            })}
+                            {...register('password-confirm', passwordConfirm)}
                         />
                         {errors['password-confirm'] && (
                             <ErrorSpanWrapper>

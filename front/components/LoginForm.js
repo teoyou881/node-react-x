@@ -65,10 +65,10 @@ const LoginForm = ({setIsLoggedIn}) => {
             </div>
             <ButtonWrapper>
                 <Button type='primary' htmlType='submit' loading={false} disabled={isSubmitting}>
-                    Log In
+                    Sign In
                 </Button>
                 <Link href='/signup'>
-                    <Button>Sign In</Button>
+                    <Button>Sign Up</Button>
                 </Link>
             </ButtonWrapper>
         </Form>
@@ -76,7 +76,7 @@ const LoginForm = ({setIsLoggedIn}) => {
 };
 
 LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.node.isRequired,
+    setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

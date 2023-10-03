@@ -1,12 +1,13 @@
-import { Button, Form } from 'antd';
-import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import Link from 'next/link';
+import { Button, Form } from "antd";
+import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import Link from "next/link";
 // {} === {} --> false
 // that's why we sholudn't use <div style={{}}></div>
 // it is recommended that use sytled, as shown below.
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { userAction } from "../reducers/user";
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
@@ -20,16 +21,18 @@ const ButtonWrapper = styled.div`
 //     []
 // );
 
-const LoginForm = ({setIsLoggedIn}) => {
+const LoginForm = () => {
+    const dispatch = useDispatch();
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
         reset,
-    } = useForm({ mode: 'onChange' });
+    } = useForm({ mode: "onChange" });
 
     const onFormSubmit = (data) => {
-        setIsLoggedIn(true);
+        // console.log(data);
+        dispatch(userAction.login(data.email));
     };
     const onErrors = (errors) => console.error(errors);
 
@@ -45,38 +48,38 @@ const LoginForm = ({setIsLoggedIn}) => {
         // onFinish has already applied e.preventDefault();
         <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
             <div>
-                <label htmlFor='user-email'>email</label>
+                <label htmlFor="email">email</label>
                 <br />
-                <input id='user-email' name='user-email' {...register('user-email')} />
+                <input id="email" name="email" {...register("email")} />
             </div>
             <div>
-                <label htmlFor='user-password'>password</label>
+                <label htmlFor="password">password</label>
                 <br />
                 {/* do not use <Input> form antd
                     if you want to use react-form-hook
                     becasue there is no name attribute in antd Input  */}
                 <input
-                    id='user-password'
-                    name='user-password'
-                    type='password'
+                    id="password"
+                    name="password"
+                    type="password"
                     required
-                    {...register('user-password')}
+                    {...register("password")}
                 />
             </div>
             <ButtonWrapper>
-                <Button type='primary' htmlType='submit' loading={false} disabled={isSubmitting}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    loading={false}
+                    disabled={isSubmitting}
+                >
                     Sign In
                 </Button>
-                <Link href='/signup'>
+                <Link href="/signup">
                     <Button>Sign Up</Button>
                 </Link>
             </ButtonWrapper>
         </Form>
     );
 };
-
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired,
-};
-
 export default LoginForm;

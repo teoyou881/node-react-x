@@ -1,39 +1,41 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
-import { Input, Menu, Row, Col } from 'antd';
-import UserProfile from './UserProfile';
-import LoginForm from './LoginForm';
-import styled from'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import Link from "next/link";
+import { Input, Menu, Row, Col } from "antd";
+import UserProfile from "./UserProfile";
+import LoginForm from "./LoginForm";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const SearchInput = styled(Input.Search)`
-    vertical-align:middle;
-`
+    vertical-align: middle;
+`;
 
 const AppLayout = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
+    // const isLoggedIn = false;
 
     const menuItems = [
         {
-            key: 'home',
-            icon: <Link href='/'>X</Link>,
+            key: "home",
+            icon: <Link href="/">X</Link>,
         },
         {
-            key: 'profile',
-            icon: <Link href='/profile'>Profile</Link>,
+            key: "profile",
+            icon: <Link href="/profile">Profile</Link>,
         },
         {
-            key: 'profile',
+            key: "profile",
             icon: <SearchInput />,
         },
         {
-            key: 'signup',
-            icon: <Link href='/signup'>Signup</Link>,
+            key: "signup",
+            icon: <Link href="/signup">Signup</Link>,
         },
     ];
     return (
         <div>
-            <Menu items={menuItems} mode='horizontal' />
+            <Menu items={menuItems} mode="horizontal" />
 
             {/* <Menu mode='horizontal'>
                 <Menu.Item>
@@ -56,20 +58,23 @@ const AppLayout = ({ children }) => {
 
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>}
+                    {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
+                    {/* Don't have to pass setIsLOggedIn to other component because we use redux. */}
+                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
 
                 <Col xs={24} md={12}>
-                    {' '}
-                    {children}{' '}
+                    {" "}
+                    {children}{" "}
                 </Col>
 
                 <Col xs={24} md={6}>
                     <a
-                        href='https://teo-you.tistory.com/'
-                        target='_black'
+                        href="https://teo-you.tistory.com/"
+                        target="_black"
                         // for safety, should add  rel='noreferrer noopener'
-                        rel='noreferrer noopener'>
+                        rel="noreferrer noopener"
+                    >
                         Made by Teo
                     </a>
                 </Col>

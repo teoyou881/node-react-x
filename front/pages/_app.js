@@ -1,21 +1,20 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
-import Head from 'next/head';
+import React from "react";
+import Head from "next/head";
+import wrapper from "../store/configureStore";
+import { Provider } from "react-redux";
 
-const App = ({ Component }) => {
+const App = ({ Component, ...rest }) => {
+    const { store, props } = wrapper.useWrappedStore(rest);
+    const { pageProps } = props;
     return (
-        <>
+        <Provider store={store}>
             <Head>
-                {' '}
+                {" "}
                 <title>NodeX</title>
             </Head>
             <div>common menu</div>
-            <Component />
-        </>
+            <Component {...pageProps} />
+        </Provider>
     );
-};
-
-App.propTypes = {
-    Component: PropTypes.elementType.isRequired,
 };
 export default App;

@@ -15,22 +15,23 @@ import { user } from "../reducers/user";
 const rootReducer = combineReducers({ user });
 
 export const makeStore = () => {
-    const store = configureStore({
-        reducer: (state, action) => {
-            switch (action.type) {
-                case HYDRATE:
-                    return action.payload;
-                default:
-                    return rootReducer(state, action);
-            }
-        },
-        devTools: process.env.NODE_ENV !== "production",
-    });
-    return store;
+  const store = configureStore({
+    reducer: (state, action) => {
+      switch (action.type) {
+        case HYDRATE:
+          return action.payload;
+        default:
+          return rootReducer(state, action);
+      }
+    },
+    devTools: process.env.NODE_ENV !== "production",
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
+  });
+  return store;
 };
 
 const wrapper = createWrapper(makeStore, {
-    debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === "development",
 });
 
 export default wrapper;

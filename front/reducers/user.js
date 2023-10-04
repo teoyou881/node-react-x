@@ -6,9 +6,6 @@ const initialState = {
     email: "",
     signUpdata: {},
     loginData: {},
-    post: {
-        mainPosts: [],
-    },
 };
 export const userSlice = createSlice({
     name: "user",

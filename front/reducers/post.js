@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { userSlice } from "./user";
 
 const initialState = {
     // The object starts with a uppercase letter like User, Images, and Comments,
@@ -60,7 +61,7 @@ const dummyPost = {
     Images: [],
     Comments: [],
 };
-content: export const postSlice = createSlice({
+export const postSlice = createSlice({
     name: "post",
     initialState,
     reducers: {
@@ -69,3 +70,6 @@ content: export const postSlice = createSlice({
         },
     },
 });
+
+export const post = postSlice.reducer;
+export const postAction = postSlice.actions;

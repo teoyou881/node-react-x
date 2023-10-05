@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Avatar, Button, Card, Popover } from "antd";
 import {
     RetweetOutlined,
     HeartOutlined,
     MessageOutlined,
     EllipsisOutlined,
+    HeartTwoTone,
 } from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
 import PropTypes from "prop-types";
@@ -13,6 +14,15 @@ import PostImages from "./PostImages";
 
 const PostCard = ({ post }) => {
     const id = useSelector((state) => state.user.me?.id);
+    const [liked, setLiked] = useState(false);
+    const [commentFormOpened, setCommentFormOpened] = useState(false);
+    const onToggleLike = useCallback(() => {
+        // make a new state based on previous state
+        setLiked((prev) => !prev);
+    }, []);
+    const onToggleComment = useCallback(() => {
+        setCommentFormOpened((prev) => !prev);
+    }, []);
     return (
         <div style={{ marginBottom: 10 }}>
             {/*<Image>*/}
@@ -24,8 +34,16 @@ const PostCard = ({ post }) => {
                 // Key should be in jsx, when jsx is inside array.
                 actions={[
                     <RetweetOutlined key="retweet" />,
-                    <HeartOutlined key="heart" />,
-                    <MessageOutlined key="comment" />,
+                    liked ? (
+                        <HeartTwoTone
+                            twoToneColor="red"
+                            key="heart"
+                            onClick={onToggleLike}
+                        />
+                    ) : (
+                        <HeartOutlined key="heart" onClick={onToggleLike} />
+                    ),
+                    <MessageOutlined key="comment" onClick={onToggleComment} />,
                     <Popover
                         key="more"
                         content={
@@ -51,6 +69,7 @@ const PostCard = ({ post }) => {
                     description={post.content}
                 />
             </Card>
+            {commentFormOpened && <div>part of comments</div>}
             {/*<CommentForm />*/}
             {/*<Comments />*/}
         </div>

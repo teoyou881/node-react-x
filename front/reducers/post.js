@@ -8,12 +8,13 @@ const initialState = {
     // uppercase means we are given data combined other info.
     mainPosts: [
         {
+            //id of post
             id: 1,
             User: {
-                id: 1,
-                nickname: "teo",
+                id: 2,
+                nickname: "whoru",
             },
-            content: "first content #hash #express",
+            content: "Hi #hash #express",
             Images: [
                 {
                     src: "https://cdn.pixabay.com/photo/2023/10/01/14/40/medicine-8287535_1280.jpg",
@@ -53,11 +54,11 @@ const initialState = {
 
 const dummyPost = {
     id: 2,
-    content: "dummy",
     User: {
         id: 1,
         nickname: "teo",
     },
+    content: "How are you?",
     Images: [],
     Comments: [],
 };

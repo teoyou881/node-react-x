@@ -45,13 +45,18 @@ const PostForm = () => {
                         style={{ display: "none" }}
                         ref={uploadInput}
                     />
-                    <Button onClick={showFileUploader}>image upload</Button>
+                    <Button
+                        onClick={showFileUploader}
+                        style={{ marginTop: "6px" }}
+                    >
+                        image upload
+                    </Button>
                     <Button
                         type={"primary"}
-                        style={{ float: "right" }}
+                        style={{ float: "right", marginTop: "6px" }}
                         htmlType={"submit"}
                     >
-                        Lol
+                        Post
                     </Button>
                 </div>
                 <div>

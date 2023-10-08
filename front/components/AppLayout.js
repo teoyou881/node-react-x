@@ -63,7 +63,7 @@ const AppLayout = ({ children }) => {
                     {isLoggedIn ? <UserProfile /> : <LoginForm />}
                 </Col>
 
-                <Col xs={24} md={12}>
+                <Col xs={24} md={12} style={{ maxWidth: "600px" }}>
                     {" "}
                     {children}{" "}
                 </Col>

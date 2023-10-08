@@ -15,7 +15,7 @@ const Home = () => {
 			especially, there is a possibility that post can be deleted.
 			But, if elements in iterator are not changed or deleted, can use index*/}
             {/*{mainPosts.map((post,index)=> <PostCard key={index} post={post} />}*/}
-            {mainPosts.map((post, index) => (
+            {mainPosts.map((post) => (
                 <PostCard key={post.id} post={post} />
             ))}
         </AppLayout>

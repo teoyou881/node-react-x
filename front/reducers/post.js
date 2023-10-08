@@ -22,9 +22,9 @@ const initialState = {
                 {
                     src: "https://cdn.pixabay.com/photo/2023/09/27/12/15/river-8279466_640.jpg",
                 },
-                // {
-                //     src: "https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_640.jpg",
-                // },
+                {
+                    src: "https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_640.jpg",
+                },
             ],
             Comments: [
                 {

@@ -12,12 +12,15 @@ import { HYDRATE, createWrapper } from "next-redux-wrapper";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { user } from "../reducers/user";
 import { post } from "../reducers/post";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "../sagas";
 
 const rootReducer = combineReducers({ user, post });
 // Combine their individual states into initialState.
 // ex --> state{user..., post...}
 
 export const makeStore = () => {
+    const sagaMiddleware = createSagaMiddleware();
     const store = configureStore({
         reducer: (state, action) => {
             switch (action.type) {
@@ -28,8 +31,13 @@ export const makeStore = () => {
             }
         },
         devTools: process.env.NODE_ENV !== "production",
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware().concat(sagaMiddleware),
     });
+
+    // Run the rootSaga to start your application sagas
+    sagaMiddleware.run(rootSaga);
+
     return store;
 };
 

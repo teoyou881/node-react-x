@@ -6,7 +6,7 @@ import Link from "next/link";
 // that's why we sholudn't use <div style={{}}></div>
 // it is recommended that use sytled, as shown below.
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../reducers/user";
 
 const ButtonWrapper = styled.div`
@@ -22,6 +22,7 @@ const ButtonWrapper = styled.div`
 // );
 
 const LoginForm = () => {
+    const { isLoggingIn } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const {
         register,
@@ -36,9 +37,9 @@ const LoginForm = () => {
         const me = {
             id: 1,
             email: data.email,
-            nickname: "teo",
+            nickname: "Teo",
         };
-        dispatch(userAction.login(me));
+        dispatch(userAction.loginRequest(me));
     };
     const onErrors = (errors) => console.error(errors);
 
@@ -76,7 +77,7 @@ const LoginForm = () => {
                 <Button
                     type="primary"
                     htmlType="submit"
-                    loading={false}
+                    loading={isLoggingIn}
                     disabled={isSubmitting}
                 >
                     Sign In

@@ -29,7 +29,11 @@ const UserProfile = () => {
                 avatar={<Avatar>{me.nickname[0]}</Avatar>}
                 title={me.nickname}
             />
-            <Button onClick={onSignOut} loading={isLoggingOut}>
+            <Button
+                onClick={onSignOut}
+                loading={isLoggingOut}
+                style={{ left: "100px", top: "10px" }}
+            >
                 Sign Out
             </Button>
         </Card>

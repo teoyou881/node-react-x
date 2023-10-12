@@ -1,4 +1,6 @@
 import { all, fork, takeLatest, put, delay, call } from "redux-saga/effects";
+import { POST_ACTION_SAGA } from "../actions/postAction";
+import axios from "axios";
 
 function addPostAPI(data) {
     return axios.post("/api/post", data);
@@ -9,18 +11,18 @@ function* addPost(action) {
         //const result = yield call(addPostAPI, action.data);
         yield delay(1000);
         yield put({
-            type: "ADD_POST_SUCCESS",
+            type: POST_ACTION_SAGA.ADD_POST_SUCCESS,
         });
     } catch (err) {
         yield put({
-            type: "ADD_POST_FAILURE",
+            type: POST_ACTION_SAGA.ADD_POST_FAILURE,
             error: err.response.data,
         });
     }
 }
 
 function* watchAddPost() {
-    yield takeLatest("ADD_POST_REQUEST", addPost);
+    yield takeLatest(POST_ACTION_SAGA.ADD_POST_REQUEST, addPost);
 }
 
 export default function* postSaga() {

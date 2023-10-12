@@ -1,0 +1,17 @@
+export const USER_ACTION_SAGA = {
+    LOGIN_REQUEST: "user/loginRequest",
+    LOGIN_SUCCESS: "user/loginSuccess",
+    LOGIN_FAILURE: "user/loginFailure",
+    LOGOUT_REQUEST: "user/logoutRequest",
+    LOGOUT_SUCCESS: "user/logoutSuccess",
+    LOGOUT_FAILURE: "user/logoutFailure",
+    SIGN_UP_REQUEST: "user/signUpRequest",
+    SIGN_UP_SUCCESS: "user/signUpSuccess",
+    SIGN_UP_FAILURE: "user/signUpFailure",
+    FOLLOW_REQUEST: "user/followRequest",
+    FOLLOW_SUCCESS: "user/followSuccess",
+    FOLLOW_FAILURE: "user/followFailure",
+    UNFOLLOW_REQUEST: "user/unfollowRequest",
+    UNFOLLOW_SUCCESS: "user/unfollowSuccess",
+    UNFOLLOW_FAILURE: "user/unfollowFailure",
+};

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import shortId from "shortid";
+import { faker } from "@faker-js/faker";
 
 const initialState = {
     // The object starts with a uppercase letter like User, Images, and Comments,
@@ -11,8 +12,8 @@ const initialState = {
             //id of post
             id: 1,
             User: {
-                id: 1,
-                nickname: "Teo",
+                id: 2,
+                nickname: "Number2",
             },
             content: "#itomocode #test",
             Images: [
@@ -36,55 +37,6 @@ const initialState = {
                 },
             ],
         },
-        {
-            //id of post
-            id: shortId.generate(),
-            User: {
-                id: 2,
-                nickname: "Whoru",
-            },
-            content: "Hi #hash #express",
-            Images: [
-                {
-                    id: shortId.generate(),
-                    src: "https://cdn.pixabay.com/photo/2023/10/01/14/40/medicine-8287535_1280.jpg",
-                },
-                {
-                    id: shortId.generate(),
-                    src: "https://cdn.pixabay.com/photo/2023/09/27/12/15/river-8279466_640.jpg",
-                },
-                {
-                    id: shortId.generate(),
-                    src: "https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_640.jpg",
-                },
-            ],
-            Comments: [
-                {
-                    id: shortId.generate(),
-                    User: {
-                        id: shortId.generate(),
-                        nickname: "ha",
-                    },
-                    content: "wow",
-                },
-                {
-                    id: shortId.generate(),
-                    User: {
-                        id: shortId.generate(),
-                        nickname: "ja",
-                    },
-                    content: "I want to sell",
-                },
-                {
-                    id: shortId.generate(),
-                    User: {
-                        id: shortId.generate(),
-                        nickname: "go",
-                    },
-                    content: "whoru?",
-                },
-            ],
-        },
     ],
     imagePaths: [],
     addPostLoading: false,
@@ -100,6 +52,34 @@ const initialState = {
     removeCommentDone: false,
     removeCommentError: null,
 };
+
+initialState.mainPosts = initialState.mainPosts.concat(
+    Array(20)
+        .fill()
+        .map((v, i) => ({
+            id: shortId.generate(),
+            User: {
+                id: shortId.generate(),
+                nickname: faker.lorem.word(),
+            },
+            content: faker.lorem.lines(),
+            Images: [
+                {
+                    src: faker.image.url(),
+                },
+            ],
+            Comments: [
+                {
+                    id: shortId.generate(),
+                    User: {
+                        id: shortId.generate(),
+                        nickname: faker.lorem.word(),
+                    },
+                    content: faker.lorem.sentence(),
+                },
+            ],
+        })),
+);
 
 const dummyPost = (data) => ({
     id: data.id,

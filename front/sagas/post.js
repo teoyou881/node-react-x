@@ -3,6 +3,7 @@ import { POST_ACTION } from "../actions/postAction";
 import axios from "axios";
 import shortId from "shortid";
 import { USER_ACTION } from "../actions/userAction";
+import { generateDummyPost } from "../reducers/post";
 
 function addPostAPI(data) {
     return axios.post("/api/post", data);
@@ -75,6 +76,21 @@ function* removeComment(action) {
     try {
     } catch (err) {}
 }
+function* loadPosts(action) {
+    try {
+        yield delay(1000);
+        yield put({
+            type: POST_ACTION.LOAD_POSTS_SUCCESS,
+            payload: generateDummyPost(10),
+        });
+    } catch (err) {
+        yield put({
+            type: POST_ACTION.LOAD_POSTS_FAILURE,
+            error: err,
+            // error: err.response.data,
+        });
+    }
+}
 
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
@@ -88,6 +104,9 @@ function* watchAddComment() {
 function* watchRemoveComment() {
     yield takeLatest(POST_ACTION.ADD_COMMENT_REQUEST, removeComment);
 }
+function* watchLoadPosts() {
+    yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
+}
 
 export default function* postSaga() {
     yield all([
@@ -95,5 +114,6 @@ export default function* postSaga() {
         fork(watchAddComment),
         fork(watchRemovePost),
         fork(watchRemoveComment),
+        fork(watchLoadPosts),
     ]);
 }

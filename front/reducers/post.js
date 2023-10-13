@@ -8,43 +8,47 @@ const initialState = {
     // It is all about sequelize.
     // uppercase means we are given data combined other info.
     mainPosts: [
-        {
-            //id of post
-            id: 1,
-            User: {
-                id: 2,
-                nickname: "Number2",
-            },
-            content: "#itomocode #test",
-            Images: [
-                {
-                    id: shortId.generate(),
-                    src: "https://cdn.pixabay.com/photo/2023/09/27/12/15/river-8279466_640.jpg",
-                },
-                {
-                    id: shortId.generate(),
-                    src: "https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_640.jpg",
-                },
-            ],
-            Comments: [
-                {
-                    id: shortId.generate(),
-                    User: {
-                        id: shortId.generate(),
-                        nickname: "haha",
-                    },
-                    content: "haha?",
-                },
-            ],
-        },
+        // {
+        //     //id of post
+        //     id: 1,
+        //     User: {
+        //         id: 2,
+        //         nickname: "Number2",
+        //     },
+        //     content: "#itomocode #test",
+        //     Images: [
+        //         {
+        //             id: shortId.generate(),
+        //             src: "https://cdn.pixabay.com/photo/2023/09/27/12/15/river-8279466_640.jpg",
+        //         },
+        //         {
+        //             id: shortId.generate(),
+        //             src: "https://cdn.pixabay.com/photo/2023/09/21/06/10/football-8266065_640.jpg",
+        //         },
+        //     ],
+        //     Comments: [
+        //         {
+        //             id: shortId.generate(),
+        //             User: {
+        //                 id: shortId.generate(),
+        //                 nickname: "haha",
+        //             },
+        //             content: "haha?",
+        //         },
+        //     ],
+        // },
     ],
     imagePaths: [],
+    hasMorePosts: true,
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
     removePostLoading: false,
     removePostDone: false,
     removePostError: null,
+    loadPostsLoading: false,
+    loadPostsDone: false,
+    loadPostsError: null,
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
@@ -53,8 +57,8 @@ const initialState = {
     removeCommentError: null,
 };
 
-initialState.mainPosts = initialState.mainPosts.concat(
-    Array(20)
+export const generateDummyPost = (number) =>
+    Array(number)
         .fill()
         .map((v, i) => ({
             id: shortId.generate(),
@@ -78,8 +82,7 @@ initialState.mainPosts = initialState.mainPosts.concat(
                     content: faker.lorem.sentence(),
                 },
             ],
-        })),
-);
+        }));
 
 const dummyPost = (data) => ({
     id: data.id,
@@ -132,6 +135,21 @@ export const postSlice = createSlice({
         removePostFailure: (state, action) => {
             state.removePostLoading = false;
             state.removePostError = action.payload;
+        },
+        loadPostsRequest: (state, action) => {
+            state.loadPostsLoading = true;
+            state.loadPostsDone = false;
+            state.loadPostsError = null;
+        },
+        loadPostsSuccess: (state, action) => {
+            state.loadPostsLoading = false;
+            state.loadPostsDone = true;
+            state.mainPosts = action.payload.concat(state.mainPosts);
+            state.hasMorePosts = state.mainPosts.length < 50;
+        },
+        loadPostsFailure: (state, action) => {
+            state.loadPostsLoading = false;
+            state.loadPostsError = action.payload;
         },
         addCommentRequest: (state, action) => {
             state.addCommentLoading = true;

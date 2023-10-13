@@ -1,4 +1,4 @@
-export const USER_ACTION_SAGA = {
+export const USER_ACTION = {
     LOGIN_REQUEST: "user/loginRequest",
     LOGIN_SUCCESS: "user/loginSuccess",
     LOGIN_FAILURE: "user/loginFailure",
@@ -8,6 +8,9 @@ export const USER_ACTION_SAGA = {
     SIGN_UP_REQUEST: "user/signUpRequest",
     SIGN_UP_SUCCESS: "user/signUpSuccess",
     SIGN_UP_FAILURE: "user/signUpFailure",
+    CHANGE_NICKNAME_REQUEST: "user/changeNicknameRequest",
+    CHANGE_NICKNAME_SUCCESS: "user/changeNicknameSuccess",
+    CHANGE_NICKNAME_FAILURE: "user/changeNicknameFailure",
     FOLLOW_REQUEST: "user/followRequest",
     FOLLOW_SUCCESS: "user/followSuccess",
     FOLLOW_FAILURE: "user/followFailure",

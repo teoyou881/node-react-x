@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userSlice } from "./user";
+import shortId from "shortid";
 
 const initialState = {
     // The object starts with a uppercase letter like User, Images, and Comments,
@@ -49,25 +49,71 @@ const initialState = {
         },
     ],
     imagePaths: [],
-    postAdded: false,
+    addPostLoading: false,
+    addPostDone: false,
+    addPostError: null,
+    addCommentLoading: false,
+    addCommentDone: false,
+    addCommentError: null,
 };
 
-const dummyPost = {
-    id: 2,
+const dummyPost = (data) => ({
+    id: shortId.generate(),
     User: {
         id: 1,
         nickname: "teo",
     },
-    content: "How are you?",
+    content: data,
     Images: [],
     Comments: [],
-};
+});
+
+const dummyComment = (data) => ({
+    User: {
+        nickname: "Teo",
+    },
+    content: data.content,
+});
 export const postSlice = createSlice({
     name: "post",
     initialState,
     reducers: {
-        addPost: (state, action) => {
-            state.mainPosts = [dummyPost, ...state.mainPosts];
+        addPostRequest: (state, action) => {
+            state.addPostLoading = true;
+            state.addPostDone = false;
+            state.addPostError = null;
+        },
+        addPostSuccess: (state, action) => {
+            state.addPostLoading = false;
+            state.addPostDone = true;
+            state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
+            state.imagePaths = [];
+        },
+        addPostFailure: (state, action) => {
+            state.addPostLoading = false;
+            state.addPostError = action.payload;
+        },
+        addCommentRequest: (state, action) => {
+            state.addCommentLoading = true;
+            state.addCommentDone = false;
+            state.addCommentError = null;
+        },
+        addCommentSuccess: (state, action) => {
+            state.addCommentLoading = false;
+            state.addCommentDone = true;
+            const postIndex = state.mainPosts.findIndex(
+                (v) => v.id === action.payload.postId,
+            );
+            const post = state.mainPosts[postIndex];
+            post.Comments = [dummyComment(action.payload), ...post.Comments];
+            // state.mainPosts.Comments = [
+            //     ...state.mainPosts.Comments,
+            //     dummyComment(action.payload),
+            // ];
+        },
+        addCommentFailure: (state, action) => {
+            state.addCommentLoading = false;
+            state.addCommentError = action.payload;
         },
     },
 });

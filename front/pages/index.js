@@ -5,11 +5,11 @@ import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
 
 const Home = () => {
-    const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const me = useSelector((state) => state.user.me);
     const mainPosts = useSelector((state) => state.post.mainPosts);
     return (
         <AppLayout>
-            {isLoggedIn && <PostForm />}
+            {me && <PostForm />}
             {/* this is one of the anti-pattern that using index into key as props
 			In most case, we must not pass index to key
 			especially, there is a possibility that post can be deleted.

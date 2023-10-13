@@ -12,8 +12,7 @@ const SearchInput = styled(Input.Search)`
 `;
 
 const AppLayout = ({ children }) => {
-    const isLoggedIn = useSelector((state) => state.user?.isLoggedIn);
-    // const isLoggedIn = false;
+    const { me } = useSelector((state) => state.user);
 
     const menuItems = [
         {
@@ -25,7 +24,7 @@ const AppLayout = ({ children }) => {
             icon: <Link href="/profile">Profile</Link>,
         },
         {
-            key: "profile",
+            key: "search",
             icon: <SearchInput />,
         },
         {
@@ -60,7 +59,7 @@ const AppLayout = ({ children }) => {
                 <Col xs={24} md={6}>
                     {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
                     {/* Don't have to pass setIsLOggedIn to other component because we use redux. */}
-                    {isLoggedIn ? <UserProfile /> : <LoginForm />}
+                    {me ? <UserProfile /> : <LoginForm />}
                 </Col>
 
                 <Col xs={24} md={12} style={{ maxWidth: "600px" }}>

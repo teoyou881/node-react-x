@@ -22,7 +22,7 @@ const ButtonWrapper = styled.div`
 // );
 
 const LoginForm = () => {
-    const { isLoggingIn } = useSelector((state) => state.user);
+    const { logInLoading } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const {
         register,
@@ -33,11 +33,13 @@ const LoginForm = () => {
 
     //TODO: deals with dummy data after connecting with backend
     const onFormSubmit = (data) => {
-        // console.log(data);
         const me = {
             id: 1,
             email: data.email,
             nickname: "Teo",
+            Posts: [],
+            Followings: [],
+            Followers: [],
         };
         dispatch(userAction.loginRequest(me));
     };
@@ -77,7 +79,7 @@ const LoginForm = () => {
                 <Button
                     type="primary"
                     htmlType="submit"
-                    loading={isLoggingIn}
+                    loading={logInLoading}
                     disabled={isSubmitting}
                 >
                     Sign In

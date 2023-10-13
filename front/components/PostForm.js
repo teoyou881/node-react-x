@@ -1,21 +1,46 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Form, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { postAction } from "../reducers/post";
+import { useForm } from "react-hook-form";
+import ImageUpload from "./ImageUpload";
+import useGetForms from "../utils/useCommentForms";
+import FileUploadForm from "../utils/fileUploadForm";
 
 const PostForm = () => {
-    const imagePaths = useSelector((state) => state.post.imagePaths);
+    const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const dispatch = useDispatch();
     const [text, setText] = useState("");
+
+    // try to change the way to use react-hook-form
+    /*
+	const { fileUploadField } = useGetForms({
+		control,
+	});
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+*/
+    useEffect(() => {
+        if (addPostDone) {
+            setText("");
+        }
+    }, [addPostDone]);
+
     const onChangeText = useCallback((e) => {
         setText(e.target.value);
     }, []);
     const uploadInput = useRef();
 
     const onSubmit = useCallback(() => {
-        dispatch(postAction.addPost());
-        setText("");
-    }, []);
+        dispatch(postAction.addPostRequest(text));
+
+        // If there is an error on backend, the text will be cleared.
+        // So, setText() should be called in useEffect.
+        // setText("");
+    }, [text]);
     const showFileUploader = useCallback(() => {
         // access input through dom
         // document.getElementById("inputFileUpload").click();
@@ -23,6 +48,7 @@ const PostForm = () => {
         // access input using ref
         uploadInput.current.click();
     }, [uploadInput.current]);
+
     return (
         <div>
             <Form
@@ -33,8 +59,12 @@ const PostForm = () => {
                 <Input.TextArea
                     value={text}
                     onChange={onChangeText}
-                    maxlength={140}
+                    maxLength={140}
+                    rows={6}
                     placeholder="what happened?"
+                    style={{
+                        resize: "none",
+                    }}
                 />
                 <div>
                     <input

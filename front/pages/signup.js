@@ -1,10 +1,11 @@
-import React from 'react';
-import AppLayout from '../components/AppLayout';
-import Head from 'next/head';
-import Link from 'next/link';
-import { Form, Button } from 'antd';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import styled from 'styled-components';
+import React from "react";
+import AppLayout from "../components/AppLayout";
+import Head from "next/head";
+import Link from "next/link";
+import { Form, Button } from "antd";
+import { useForm, SubmitHandler } from "react-hook-form";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 
 const ErrorSpanWrapper = styled.div`
     color: red;
@@ -20,31 +21,32 @@ const InputWrapper = styled.input`
 `;
 
 const Signup = () => {
+    const dispatch = useDispatch();
+    const { signUpLoading } = useSelector((state) => state.user);
+
     const userEmail = {
-        required: 'Enter your e-mail address',
+        required: "Enter your e-mail address",
         pattern: {
             value: /\S+@\S+\.\S+/,
-            message: 'Wrong or invalid e-mail address. Please correct it and try again. ',
+            message:
+                "Wrong or invalid e-mail address. Please correct it and try again. ",
         },
     };
-
     const userNickname = {
-        required: 'Enter your name',
+        required: "Enter your name",
     };
-
     const userPassword = {
-        required: 'Enter your password',
+        required: "Enter your password",
         minLength: {
             value: 6,
-            message: 'Minimum 6 characters required',
+            message: "Minimum 6 characters required",
         },
     };
-
     const passwordConfirm = {
         required: true,
         validate: (value) => {
-            if (watch('password') != value) {
-                return 'Your password does not match';
+            if (watch("password") != value) {
+                return "Your password does not match";
             }
         },
     };
@@ -56,17 +58,15 @@ const Signup = () => {
         resetField,
         reset,
         watch,
-    } = useForm({ mode: 'onChange' });
+    } = useForm({ mode: "onBlur" });
 
-    const onFormSubmit = ({ email, nickname, password }) => {
-        console.log(email, nickname, password);
-    };
+    const onFormSubmit = ({ email, nickname, password }) => {};
     const onErrors = (errors) => {
         console.error(errors);
 
-        if (errors['password-confirm']) {
-            console.error(errors['password-confirm']?.message);
-            resetField('password-confirm');
+        if (errors["password-confirm"]) {
+            console.error(errors["password-confirm"]?.message);
+            resetField("password-confirm");
         }
         if (errors.term) {
             alert(errors.term.message);
@@ -79,11 +79,15 @@ const Signup = () => {
                 <title>NodeX | Sign Up</title>
             </Head>
             <AppLayout>
-                <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
+                <Form onFinish={handleSubmit(onFormSubmit)}>
                     <div>
-                        <label htmlFor='email'>email</label>
+                        <label htmlFor="email">email</label>
                         <br />
-                        <InputWrapper id='email' name='email' {...register('email', userEmail)} />
+                        <InputWrapper
+                            id="email"
+                            name="email"
+                            {...register("email", userEmail)}
+                        />
                     </div>
                     {errors.email && (
                         <ErrorSpanWrapper>
@@ -91,12 +95,12 @@ const Signup = () => {
                         </ErrorSpanWrapper>
                     )}
                     <div>
-                        <label htmlFor='nickname'>nickname</label>
+                        <label htmlFor="nickname">nickname</label>
                         <br />
                         <InputWrapper
-                            id='nickname'
-                            name='nickname'
-                            {...register('nickname', userNickname)}
+                            id="nickname"
+                            name="nickname"
+                            {...register("nickname", userNickname)}
                         />
                     </div>
                     {errors.nickname && (
@@ -105,14 +109,15 @@ const Signup = () => {
                         </ErrorSpanWrapper>
                     )}
                     <div>
-                        <label htmlFor='password'>password</label>
+                        <label htmlFor="password">password</label>
                         <br />
                         <InputWrapper
-                            id='password'
-                            name='password'
-                            type='password'
+                            id="password"
+                            name="password"
+                            type="password"
+                            defaultValue=" "
                             required
-                            {...register('password', userPassword)}
+                            {...register("password", userPassword)}
                         />
                     </div>
                     {errors.password && (
@@ -121,31 +126,46 @@ const Signup = () => {
                         </ErrorSpanWrapper>
                     )}
                     <div>
-                        <label htmlFor='password-confirm'>password confirm</label>
+                        <label htmlFor="password-confirm">
+                            password confirm
+                        </label>
                         <br />
                         <InputWrapper
-                            id='password-confirm'
-                            name='password-confirm'
-                            type='password'
+                            id="password-confirm"
+                            name="password-confirm"
+                            type="password"
                             required
-                            {...register('password-confirm', passwordConfirm)}
+                            {...register("password-confirm", passwordConfirm)}
                         />
-                        {errors['password-confirm'] && (
+                        {errors["password-confirm"] && (
                             <ErrorSpanWrapper>
-                                <span>{errors['password-confirm'].message}</span>
+                                <span>
+                                    {errors["password-confirm"].message}
+                                </span>
                             </ErrorSpanWrapper>
                         )}
                     </div>
                     <div>
                         <input
-                            type='checkbox'
-                            style={{ verticalAlign: 'middle', textAlign: 'center', width: '100%' }}
-                            {...register('term', {
-                                required: 'You must agree to our terms of service',
+                            type="checkbox"
+                            style={{
+                                verticalAlign: "middle",
+                                textAlign: "center",
+                                width: "100%",
+                            }}
+                            {...register("term", {
+                                required:
+                                    "You must agree to our terms of service",
                             })}
-                            className='mx-3'
+                            className="mx-3"
                         />
-                        <span style={{ display: 'table', margin: '0 auto', textAlign: 'center' }}>
+                        <span
+                            style={{
+                                display: "table",
+                                margin: "0 auto",
+                                textAlign: "center",
+                            }}
+                        >
                             I have read and agree to the terms of service
                         </span>
                         {/* {errors.term && (
@@ -156,13 +176,14 @@ const Signup = () => {
                     </div>
                     <ButtonWrapper>
                         <Button
-                            type='primary'
-                            htmlType='submit'
-                            loading={false}
-                            disabled={isSubmitting}>
+                            type="primary"
+                            htmlType="submit"
+                            loading={signUpLoading}
+                            disabled={isSubmitting}
+                        >
                             Sign Up
                         </Button>
-                        <Link href='/'>
+                        <Link href="/">
                             <Button>Sign In</Button>
                         </Link>
                     </ButtonWrapper>

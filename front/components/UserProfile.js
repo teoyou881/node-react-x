@@ -15,13 +15,19 @@ const UserProfile = () => {
         <Card
             actions={[
                 <div key={"twit"}>
-                    <br />0
+                    haha
+                    <br />
+                    {me.Posts.length}
                 </div>,
                 <div key={"followings"}>
-                    <br />0
+                    Followings
+                    <br />
+                    {me.Followings.length}
                 </div>,
                 <div key={"followers"}>
-                    <br />0
+                    Followers
+                    <br />
+                    {me.Followers.length}
                 </div>,
             ]}
         >

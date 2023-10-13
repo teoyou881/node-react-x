@@ -10,12 +10,14 @@ import {
 } from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
+import { postAction } from "../reducers/post";
 
 const PostCard = ({ post }) => {
+    const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -25,6 +27,9 @@ const PostCard = ({ post }) => {
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
+    }, []);
+    const onRemovePost = useCallback(() => {
+        dispatch(postAction.removePostRequest(post.id));
     }, []);
     return (
         <div style={{ marginBottom: 10 }}>
@@ -54,7 +59,12 @@ const PostCard = ({ post }) => {
                                 {id && post.User.id === id ? (
                                     <>
                                         <Button>Edit</Button>
-                                        <Button type="danger">Delete</Button>
+                                        <Button
+                                            type="danger"
+                                            onClick={onRemovePost}
+                                        >
+                                            Delete
+                                        </Button>
                                     </>
                                 ) : (
                                     <Button>Report</Button>

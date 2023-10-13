@@ -90,9 +90,15 @@ const initialState = {
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
+    removePostLoading: false,
+    removePostDone: false,
+    removePostError: null,
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+    removeCommentLoading: false,
+    removeCommentDone: false,
+    removeCommentError: null,
 };
 
 const dummyPost = (data) => ({
@@ -132,6 +138,21 @@ export const postSlice = createSlice({
             state.addPostLoading = false;
             state.addPostError = action.payload;
         },
+        removePostRequest: (state, action) => {
+            state.removePostLoading = true;
+            state.removePostDone = false;
+        },
+        removePostSuccess: (state, action) => {
+            state.removePostLoading = false;
+            state.removePostDone = true;
+            state.mainPosts = state.mainPosts.filter(
+                (v) => v.id !== action.payload,
+            );
+        },
+        removePostFailure: (state, action) => {
+            state.removePostLoading = false;
+            state.removePostError = action.payload;
+        },
         addCommentRequest: (state, action) => {
             state.addCommentLoading = true;
             state.addCommentDone = false;
@@ -154,6 +175,9 @@ export const postSlice = createSlice({
             state.addCommentLoading = false;
             state.addCommentError = action.payload;
         },
+        removeCommentRequest: (state, action) => {},
+        removeCommentSuccess: (state, action) => {},
+        removeCommentFailure: (state, action) => {},
     },
 });
 

@@ -79,7 +79,8 @@ export const userSlice = createSlice({
             state.changeNicknameError = action.payload;
         },
         addPostToMe: (state, action) => {
-            state.me.Posts = [{ id: action.payload.id }, ...state.me.Posts];
+            console.log(action);
+            state.me.Posts = [{ id: action.payload }, ...state.me.Posts];
         },
         removePostOfMe: (state, action) => {},
         followRequest: (state, action) => {},

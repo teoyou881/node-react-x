@@ -35,13 +35,13 @@ export const userSlice = createSlice({
             state.logInLoading = true;
         },
         loginSuccess: (state, action) => {
-            state.isLoggingIn = false;
+            state.logInLoading = false;
             state.logInDone = true;
             state.me = dummyUser(action.payload);
         },
         loginFailure: (state, action) => {
-            state.isLoggingIn = false;
-            state.isLoggedIn = false;
+            state.logInLoading = false;
+            state.logInDone = false;
         },
         logoutRequest: (state, action) => {
             state.logoutLoading = true;

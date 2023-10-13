@@ -69,14 +69,8 @@ const CommentForm = ({ post }) => {
                             maxLength={140}
                             rows={4}
                             style={{
-                                width: "100%",
                                 resize: "none",
-                                boxSizing: "border-box",
-                                border: "solid 1px #D9D9D9",
-                                borderRadius: " 8px",
-                                padding: "4px 11px",
                             }}
-                            {...register("comment", {})}
                         />
                     )}
                 />

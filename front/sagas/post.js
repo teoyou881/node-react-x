@@ -1,6 +1,8 @@
 import { all, fork, takeLatest, put, delay, call } from "redux-saga/effects";
 import { POST_ACTION } from "../actions/postAction";
 import axios from "axios";
+import shortId from "shortid";
+import { USER_ACTION } from "../actions/userAction";
 
 function addPostAPI(data) {
     return axios.post("/api/post", data);
@@ -10,14 +12,20 @@ function* addPost(action) {
     try {
         //const result = yield call(addPostAPI, action.data);
         yield delay(1000);
+        const id = shortId.generate();
         yield put({
             type: POST_ACTION.ADD_POST_SUCCESS,
-            payload: action.payload,
+            payload: { content: action.payload, id },
+        });
+        yield put({
+            type: USER_ACTION.ADD_POST_TO_ME,
+            payload: id,
         });
     } catch (err) {
         yield put({
             type: POST_ACTION.ADD_POST_FAILURE,
-            error: err.response.data,
+            error: err,
+            // error: err.response.data,
         });
     }
 }

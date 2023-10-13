@@ -17,4 +17,6 @@ export const USER_ACTION = {
     UNFOLLOW_REQUEST: "user/unfollowRequest",
     UNFOLLOW_SUCCESS: "user/unfollowSuccess",
     UNFOLLOW_FAILURE: "user/unfollowFailure",
+    ADD_POST_TO_ME: "user/addPostToMe",
+    REMOVE_POST_OF_ME: "user/removePostOfMe",
 };

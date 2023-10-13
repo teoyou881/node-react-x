@@ -18,12 +18,14 @@ const initialState = {
     signUpData: {},
     loginData: {},
 };
-// const dummyUser = (data) => ({
-//     ...data,
-//     Posts: [],
-//     Followings: [],
-//     Followers: [],
-// });
+const dummyUser = (data) => ({
+    email: data.email,
+    nickname: "Teo",
+    id: 1,
+    Posts: [{ id: 1 }],
+    Followings: [{ nickname: "H1" }, { nickname: "H2" }, { nickname: "H3" }],
+    Followers: [{ nickname: "F1" }, { nickname: "F2" }, { nickname: "F3" }],
+});
 
 export const userSlice = createSlice({
     name: "user",
@@ -35,7 +37,7 @@ export const userSlice = createSlice({
         loginSuccess: (state, action) => {
             state.isLoggingIn = false;
             state.logInDone = true;
-            state.me = action.payload;
+            state.me = dummyUser(action.payload);
         },
         loginFailure: (state, action) => {
             state.isLoggingIn = false;
@@ -76,6 +78,10 @@ export const userSlice = createSlice({
             state.changeNicknameLoading = false;
             state.changeNicknameError = action.payload;
         },
+        addPostToMe: (state, action) => {
+            state.me.Posts = [{ id: action.payload.id }, ...state.me.Posts];
+        },
+        removePostOfMe: (state, action) => {},
         followRequest: (state, action) => {},
         followSuccess: (state, action) => {},
         followFailure: (state, action) => {},

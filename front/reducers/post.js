@@ -144,7 +144,7 @@ export const postSlice = createSlice({
         loadPostsSuccess: (state, action) => {
             state.loadPostsLoading = false;
             state.loadPostsDone = true;
-            state.mainPosts = action.payload.concat(state.mainPosts);
+            state.mainPosts = state.mainPosts.concat(action.payload);
             state.hasMorePosts = state.mainPosts.length < 50;
         },
         loadPostsFailure: (state, action) => {

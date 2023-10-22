@@ -56,18 +56,36 @@ const AppLayout = ({ children }) => {
             </Menu> */}
 
             <Row gutter={8}>
-                <Col xs={24} md={6}>
+                <Col
+                    xs={24}
+                    md={4}
+                    style={{ position: "fixed", zIndex: 100, left: "23vw" }}
+                >
                     {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
-                    {/* Don't have to pass setIsLOggedIn to other component because we use redux. */}
+                    {/* Don't have to pass setIsLOggedIn to another component because we use redux. */}
                     {me ? <UserProfile /> : <LoginForm />}
                 </Col>
 
-                <Col xs={24} md={12} style={{ maxWidth: "600px" }}>
+                <Col
+                    xs={24}
+                    md={8}
+                    style={{
+                        position: "relative",
+                        zIndex: 100,
+                        left: "34vw",
+                        maxWidth: "600px",
+                        padding: 0,
+                    }}
+                >
                     {" "}
                     {children}{" "}
                 </Col>
 
-                <Col xs={24} md={6}>
+                <Col
+                    xs={24}
+                    md={4}
+                    style={{ position: "fixed", zIndex: 100, right: "29vw" }}
+                >
                     <a
                         href="https://teo-you.tistory.com/"
                         target="_black"

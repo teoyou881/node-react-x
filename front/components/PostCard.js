@@ -16,7 +16,7 @@ import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, setClickedCommentForm }) => {
     const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
     const [liked, setLiked] = useState(false);
@@ -27,12 +27,16 @@ const PostCard = ({ post }) => {
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
+        setClickedCommentForm((prev) => !prev);
     }, []);
     const onRemovePost = useCallback(() => {
         dispatch(postAction.removePostRequest(post.id));
     }, []);
     return (
-        <div style={{ marginBottom: 10 }}>
+        <div
+            className="Post-virtualized"
+            style={{ width: "600px", margin: "0 auto" }}
+        >
             {/*<Image>*/}
             {/*    <Content />*/}
             {/*    <Buttons></Buttons>*/}

@@ -1,4 +1,12 @@
-import { all, fork, takeLatest, put, delay, call } from "redux-saga/effects";
+import {
+    all,
+    fork,
+    takeLatest,
+    put,
+    delay,
+    call,
+    throttle,
+} from "redux-saga/effects";
 import { POST_ACTION } from "../actions/postAction";
 import axios from "axios";
 import shortId from "shortid";
@@ -105,7 +113,7 @@ function* watchRemoveComment() {
     yield takeLatest(POST_ACTION.ADD_COMMENT_REQUEST, removeComment);
 }
 function* watchLoadPosts() {
-    yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
+    yield throttle(3000, POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
 }
 
 export default function* postSaga() {

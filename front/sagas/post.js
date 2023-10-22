@@ -113,7 +113,7 @@ function* watchRemoveComment() {
     yield takeLatest(POST_ACTION.ADD_COMMENT_REQUEST, removeComment);
 }
 function* watchLoadPosts() {
-    yield throttle(3000, POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
+    yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
 }
 
 export default function* postSaga() {

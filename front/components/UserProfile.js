@@ -38,7 +38,7 @@ const UserProfile = () => {
             <Button
                 onClick={onSignOut}
                 loading={isLoggingOut}
-                style={{ left: "100px", top: "10px" }}
+                style={{ left: "40px", top: "10px" }}
             >
                 Sign Out
             </Button>

@@ -12,6 +12,8 @@ import {
     List,
     ScrollSync,
 } from "react-virtualized";
+import UserProfile from "../components/UserProfile";
+import LoginForm from "../components/LoginForm";
 
 const Home = () => {
     const cache = new CellMeasurerCache({
@@ -21,9 +23,8 @@ const Home = () => {
     });
 
     const [clickCommentForm, setClickCommentForm] = useState();
-    const { me, logInLoading, logoutLoading } = useSelector(
-        (state) => state.user,
-    );
+    const { me, logInLoading, logoutLoading, logoutDone, logInDone } =
+        useSelector((state) => state.user);
     const {
         mainPosts,
         hasMorePosts,
@@ -31,7 +32,9 @@ const Home = () => {
         addCommentLoading,
         addCommentDone,
         addPostLoading,
+        addPostDone,
         removePostDone,
+        loadPostsDone,
     } = useSelector((state) => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -79,13 +82,14 @@ const Home = () => {
 
     const scrollListener = useCallback(
         (e) => {
-            if (e.scrollTop + e.clientHeight > e.scrollHeight - 40) {
+            console.log(e.scrollTop, e.clientHeight, e.scrollHeight);
+            if (e.scrollTop + e.clientHeight > e.scrollHeight - 100) {
                 if (hasMorePosts && !loadPostsLoading) {
                     dispatch(postAction.loadPostsRequest());
                 }
             }
         },
-        [hasMorePosts, loadPostsLoading],
+        [loadPostsDone],
     );
 
     const rowRenderer = useCallback(
@@ -100,6 +104,14 @@ const Home = () => {
                 >
                     {({ measure, registerChild }) => (
                         <div ref={registerChild} style={style} onLoad={measure}>
+                            <div
+                                style={{
+                                    width: "600px",
+                                    margin: "0 auto",
+                                }}
+                            >
+                                {index == 0 && me ? <PostForm /> : null}
+                            </div>
                             <PostCard
                                 // key={mainPosts[index].id}
                                 post={mainPosts[index]}
@@ -112,18 +124,22 @@ const Home = () => {
         },
         [
             mainPosts,
+            addPostLoading,
+            addPostDone,
             clickCommentForm,
             addCommentLoading,
             addCommentDone,
             logInLoading,
             logoutLoading,
+            logoutDone,
+            logInDone,
         ],
     );
 
     return (
         <div>
             <AppLayout>
-                {me && <PostForm />}
+                {/*{me && <PostForm />}*/}
                 {/* This is one of the anti-patterns that using index into a key as props
 			In most case, we must not pass index to a key
 			especially, there is a possibility that post can be deleted.
@@ -134,32 +150,33 @@ const Home = () => {
                 {/*    <PostCard key={post.id} post={post} />*/}
                 {/*))}*/}
             </AppLayout>
-            <ScrollSync>
-                {({ onScroll, registerChild }) => (
-                    <div
-                        style={{
-                            height: "91vh",
-                            width: "99vw",
-                            margin: "0 auto",
-                        }}
-                    >
-                        <AutoSizer>
-                            {({ width, height }) => (
-                                <List
-                                    width={width}
-                                    height={height}
-                                    rowHeight={cache.rowHeight}
-                                    rowCount={mainPosts.length}
-                                    deferredMeasurementCache={cache}
-                                    overscanRowCount={3}
-                                    onScroll={scrollListener}
-                                    rowRenderer={rowRenderer}
-                                />
-                            )}
-                        </AutoSizer>
-                    </div>
-                )}
-            </ScrollSync>
+            {/*<ScrollSync>*/}
+            {/*{({ onScroll, registerChild }) => (*/}
+
+            <div
+                style={{
+                    height: "92vh",
+                    width: "99vw",
+                    margin: "0 auto",
+                }}
+            >
+                <AutoSizer>
+                    {({ width, height }) => (
+                        <List
+                            width={width}
+                            height={height}
+                            rowHeight={cache.rowHeight}
+                            rowCount={mainPosts.length}
+                            deferredMeasurementCache={cache}
+                            overscanRowCount={8}
+                            onScroll={scrollListener}
+                            rowRenderer={rowRenderer}
+                        />
+                    )}
+                </AutoSizer>
+            </div>
+            {/*     )}*/}
+            {/* </ScrollSync>*/}
         </div>
     );
 };

@@ -35,6 +35,8 @@ const Home = () => {
         addPostDone,
         removePostDone,
         loadPostsDone,
+        followLoading,
+        unfollowLoading,
     } = useSelector((state) => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
@@ -131,15 +133,18 @@ const Home = () => {
             addCommentDone,
             logInLoading,
             logoutLoading,
-            logoutDone,
-            logInDone,
+            followLoading,
+            unfollowLoading,
         ],
     );
 
     return (
         <div>
             <AppLayout>
-                {/*{me && <PostForm />}*/}
+                {/*
+                {me && <PostForm />}
+                --> this is in List form react-virtualized
+                */}
                 {/* This is one of the anti-patterns that using index into a key as props
 			In most case, we must not pass index to a key
 			especially, there is a possibility that post can be deleted.

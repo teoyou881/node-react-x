@@ -7,6 +7,7 @@ import {
     MessageOutlined,
     EllipsisOutlined,
     HeartTwoTone,
+    PlusCircleTwoTone,
 } from "@ant-design/icons";
 import ButtonGroup from "antd/lib/button/button-group";
 import PropTypes from "prop-types";
@@ -15,6 +16,7 @@ import PostImages from "./PostImages";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
+import FollowButton from "./FollowButton";
 
 const PostCard = ({ post, setClickedCommentForm }) => {
     const dispatch = useDispatch();
@@ -42,6 +44,7 @@ const PostCard = ({ post, setClickedCommentForm }) => {
             {/*    <Buttons></Buttons>*/}
             {/*</Image>*/}
             <Card
+                // extra={id && <FollowButton post={post} />}
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 // Key should be in jsx, when jsx is inside array.
                 actions={[
@@ -64,7 +67,7 @@ const PostCard = ({ post, setClickedCommentForm }) => {
                                     <>
                                         <Button>Edit</Button>
                                         <Button
-                                            type="danger"
+                                            // type="danger"
                                             onClick={onRemovePost}
                                         >
                                             Delete
@@ -78,6 +81,7 @@ const PostCard = ({ post, setClickedCommentForm }) => {
                     >
                         <EllipsisOutlined />
                     </Popover>,
+                    <PlusCircleTwoTone />,
                 ]}
             >
                 <Card.Meta

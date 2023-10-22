@@ -40,6 +40,37 @@ function* logOut() {
     }
 }
 
+function* follow() {
+    try {
+        // TODO
+        // API
+        yield delay(1000);
+        yield put({
+            type: USER_ACTION.FOLLOW_SUCCESS,
+        });
+    } catch (err) {
+        yield put({
+            type: USER_ACTION.FOLLOW_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+function* unfollow() {
+    try {
+        // TODO
+        // API
+        yield delay(1000);
+        yield put({
+            type: USER_ACTION.UNFOLLOW_SUCCESS,
+        });
+    } catch (err) {
+        yield put({
+            type: USER_ACTION.UNFOLLOW_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
+
 function* watchLogIn() {
     yield takeLatest(USER_ACTION.LOGIN_REQUEST, logIn);
 }
@@ -47,15 +78,21 @@ function* watchLogIn() {
 function* watchLogOut() {
     yield takeLatest(USER_ACTION.LOGOUT_REQUEST, logOut);
 }
+function* watchFollow() {
+    yield takeLatest(USER_ACTION.LOGOUT_REQUEST, follow);
+}
+function* watchUnfollow() {
+    yield takeLatest(USER_ACTION.LOGOUT_REQUEST, unfollow);
+}
 
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
         fork(watchLogOut),
+        fork(watchFollow),
+        fork(watchUnfollow),
         // fork(watchLoadUser),
         // fork(watchSignUp),
-        // fork(watchFollow),
-        // fork(watchUnfollow),
         // fork(watchLoadFollowers),
         // fork(watchLoadFollowings),
         // fork(watchRemoveFollower),

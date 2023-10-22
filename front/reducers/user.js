@@ -14,6 +14,12 @@ const initialState = {
     changeNicknameLoading: false,
     changeNicknameDone: false,
     changeNicknameError: null,
+    followLoading: false,
+    followDone: false,
+    followError: null,
+    unfollowLoading: false,
+    unfollowDone: false,
+    unfollowError: null,
     me: null,
     signUpData: {},
     loginData: {},
@@ -86,12 +92,34 @@ export const userSlice = createSlice({
                 (v) => v.id !== action.payload,
             );
         },
-        followRequest: (state, action) => {},
-        followSuccess: (state, action) => {},
-        followFailure: (state, action) => {},
-        unfollowRequest: (state, action) => {},
-        unfollowSuccess: (state, action) => {},
-        unfollowFailure: (state, action) => {},
+        followRequest: (state, action) => {
+            state.followLoading = true;
+        },
+        followSuccess: (state, action) => {
+            state.followLoading = false;
+            state.followDone = true;
+            state.me.Followings.push({ id: action.payload });
+        },
+        followFailure: (state, action) => {
+            state.followLoading = false;
+            state.followDone = true;
+            state.followError = action.payload;
+        },
+        unfollowRequest: (state, action) => {
+            state.unfollowLoading = true;
+        },
+        unfollowSuccess: (state, action) => {
+            state.unfollowLoading = false;
+            state.unfollowDone = true;
+            state.me.Followings = state.me.Followings.filter(
+                (v) => v.id !== action.payload,
+            );
+        },
+        unfollowFailure: (state, action) => {
+            state.unfollowLoading = false;
+            state.unfollowDone = true;
+            state.unfollowError = action.payload;
+        },
     },
 });
 export const user = userSlice.reducer;

@@ -12,37 +12,39 @@ const UserProfile = () => {
     }, []);
 
     return (
-        <Card
-            actions={[
-                <div key={"twit"}>
-                    Posts
-                    <br />
-                    {me.Posts.length}
-                </div>,
-                <div key={"followings"}>
-                    Followings
-                    <br />
-                    {me.Followings.length}
-                </div>,
-                <div key={"followers"}>
-                    Followers
-                    <br />
-                    {me.Followers.length}
-                </div>,
-            ]}
-        >
-            <Card.Meta
-                avatar={<Avatar>{me.nickname[0]}</Avatar>}
-                title={me.nickname}
-            />
-            <Button
-                onClick={onSignOut}
-                loading={isLoggingOut}
-                style={{ left: "40px", top: "10px" }}
+        <div className="profileWrapper">
+            <Card
+                actions={[
+                    <div key={"twit"}>
+                        Posts
+                        <br />
+                        {me.Posts.length}
+                    </div>,
+                    <div key={"followings"}>
+                        Followings
+                        <br />
+                        {me.Followings.length}
+                    </div>,
+                    <div key={"followers"}>
+                        Followers
+                        <br />
+                        {me.Followers.length}
+                    </div>,
+                ]}
             >
-                Sign Out
-            </Button>
-        </Card>
+                <Card.Meta
+                    avatar={<Avatar>{me.nickname[0]}</Avatar>}
+                    title={me.nickname}
+                />
+                <Button
+                    onClick={onSignOut}
+                    loading={isLoggingOut}
+                    style={{ left: "40px", top: "10px" }}
+                >
+                    Sign Out
+                </Button>
+            </Card>
+        </div>
     );
 };
 

@@ -4,3 +4,6 @@
 //       styledComponents: true
 //     }
 //   }
+module.exports = {
+    reactStrictMode: false,
+};

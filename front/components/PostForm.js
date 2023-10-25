@@ -50,12 +50,13 @@ const PostForm = () => {
     }, [uploadInput.current]);
 
     return (
-        <div>
-            <Form
-                style={{ margin: "10px 0 20px" }}
-                encType={"multipart/form-data"}
-                onFinish={onSubmit}
-            >
+        <div
+            style={{
+                width: "inherit",
+                margin: "inherit",
+            }}
+        >
+            <Form encType={"multipart/form-data"} onFinish={onSubmit}>
                 <Input.TextArea
                     value={text}
                     onChange={onChangeText}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Avatar, Button, Card, List, Popover } from "antd";
 import { Comment } from "@ant-design/compatible";
 import {
@@ -18,9 +18,12 @@ import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
 import FollowButton from "./FollowButton";
 
-const PostCard = ({ post, setClickedCommentForm }) => {
+const PostCard = ({ post, index }) => {
     const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
+    const { virtualized, loadPostsLoading } = useSelector(
+        (state) => state.post,
+    );
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
     const onToggleLike = useCallback(() => {
@@ -29,20 +32,42 @@ const PostCard = ({ post, setClickedCommentForm }) => {
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
-        setClickedCommentForm((prev) => !prev);
     }, []);
     const onRemovePost = useCallback(() => {
         dispatch(postAction.removePostRequest(post.id));
     }, []);
+
+    const divRef = useRef();
+    useEffect(() => {
+        if (divRef.current) {
+            // Ensure divRef.current is not null
+            const height = divRef.current.clientHeight;
+            let data = { index, height, postId: post.id };
+            dispatch(postAction.firstVirtualized(data));
+        }
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (divRef.current) {
+                // Ensure divRef.current is not null
+                const height = divRef.current.clientHeight;
+                let data = { index, height, postId: post.id };
+                dispatch(postAction.changeVirtualized(data));
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []); // Empty dependency array means this effect runs once after the initial render
+
     return (
         <div
-            className="Post-virtualized"
-            style={{ width: "600px", margin: "0 auto" }}
+            id={post.id}
+            style={{ width: "inherit", margin: "inherit" }}
+            ref={divRef}
         >
-            {/*<Image>*/}
-            {/*    <Content />*/}
-            {/*    <Buttons></Buttons>*/}
-            {/*</Image>*/}
             <Card
                 // extra={id && <FollowButton post={post} />}
                 cover={post.Images[0] && <PostImages images={post.Images} />}
@@ -81,7 +106,7 @@ const PostCard = ({ post, setClickedCommentForm }) => {
                     >
                         <EllipsisOutlined />
                     </Popover>,
-                    <PlusCircleTwoTone />,
+                    <FollowButton post={post} />,
                 ]}
             >
                 <Card.Meta
@@ -111,8 +136,6 @@ const PostCard = ({ post, setClickedCommentForm }) => {
                     />
                 </div>
             )}
-            {/*<CommentForm />*/}
-            {/*<Comments />*/}
         </div>
     );
 };

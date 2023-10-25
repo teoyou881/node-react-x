@@ -56,18 +56,7 @@ const AppLayout = ({ children }) => {
             </Menu> */}
 
             <Row gutter={8}>
-                <Col
-                    xs={24}
-                    md={4}
-                    style={{
-                        position: "fixed",
-                        zIndex: 100,
-                        left: "20vw",
-                        width: "-webkit-fill-available",
-                        maxWidth: "250px",
-                        marginTop: "10px",
-                    }}
-                >
+                <Col xs={24} md={{ span: 5, offset: 3 }}>
                     {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
                     {/* Don't have to pass setIsLOggedIn to another component because we use redux. */}
                     {me ? <UserProfile /> : <LoginForm />}
@@ -76,30 +65,13 @@ const AppLayout = ({ children }) => {
                 <Col
                     xs={24}
                     md={8}
-                    style={{
-                        position: "relative",
-                        zIndex: 100,
-                        left: "34vw",
-                        maxWidth: "600px",
-                        padding: 0,
-                    }}
+                    // style={{ width: "600px", margin: "0 auto 10px" }}
                 >
                     {" "}
                     {children}{" "}
                 </Col>
 
-                <Col
-                    xs={24}
-                    md={4}
-                    style={{
-                        position: "fixed",
-                        zIndex: 100,
-                        right: "20vw",
-                        width: "-webkit-fill-available",
-                        maxWidth: "250px",
-                        marginTop: "10px",
-                    }}
-                >
+                <Col xs={24} md={8}>
                     <a
                         href="https://teo-you.tistory.com/"
                         target="_black"

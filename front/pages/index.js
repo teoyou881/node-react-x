@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import AppLayout from "../components/AppLayout";
 import { useDispatch, useSelector } from "react-redux";
 import PostForm from "../components/PostForm";
@@ -9,179 +15,84 @@ import {
     AutoSizer,
     CellMeasurer,
     CellMeasurerCache,
+    InfiniteLoader,
     List,
     ScrollSync,
+    WindowScroller,
 } from "react-virtualized";
 import UserProfile from "../components/UserProfile";
 import LoginForm from "../components/LoginForm";
 
 const Home = () => {
-    const cache = new CellMeasurerCache({
-        fixedWidth: true,
-        minHeight: 100,
-        // keyMapper: (index) => index,
-    });
-
-    const [clickCommentForm, setClickCommentForm] = useState();
-    const { me, logInLoading, logoutLoading, logoutDone, logInDone } =
-        useSelector((state) => state.user);
-    const {
-        mainPosts,
-        hasMorePosts,
-        loadPostsLoading,
-        addCommentLoading,
-        addCommentDone,
-        addPostLoading,
-        addPostDone,
-        removePostDone,
-        loadPostsDone,
-        followLoading,
-        unfollowLoading,
-    } = useSelector((state) => state.post);
+    const { me } = useSelector((state) => state.user);
+    const { mainPosts, hasMorePosts, loadPostsLoading, firstVirtualized } =
+        useSelector((state) => state.post);
     const dispatch = useDispatch();
+    const divRef = useRef();
     useEffect(() => {
         dispatch(postAction.loadPostsRequest());
     }, []);
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-    });
-    // function updateRowHeight() {
-    //     if (clickedCommentForm) {
-    //         console.log("recompute");
-    //         cache.clearAll();
-    //         cache.recomputeRowHeights();
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (clickedCommentForm) {
-    //         updateRowHeight();
-    //     }
-    // }, []);
 
     // Just infinite scrolling
-    // useEffect(() => {
-    //     function onScroll() {
-    //         console.log(
-    //             window.scrollY,
-    //             document.documentElement.clientHeight,
-    //             document.documentElement.scrollHeight,
-    //         );
-    //         if (
-    //             window.scrollY + document.documentElement.clientHeight >
-    //             document.documentElement.scrollHeight - 400
-    //         ) {
-    //             console.log("hasMorePosts", hasMorePosts);
-    //             if (hasMorePosts && !loadPostsLoading) {
-    //                 dispatch(postAction.loadPostsRequest());
-    //             }
-    //         }
-    //     }
-    //     window.addEventListener("scroll", onScroll);
-    //     return () => {
-    //         window.removeEventListener("scroll", onScroll);
-    //     };
-    // }, [hasMorePosts, loadPostsLoading]);
-
-    const scrollListener = useCallback(
-        (e) => {
-            console.log(e.scrollTop, e.clientHeight, e.scrollHeight);
-            if (e.scrollTop + e.clientHeight > e.scrollHeight - 100) {
+    useEffect(() => {
+        function onScroll() {
+            if (
+                window.scrollY + document.documentElement.clientHeight >
+                document.documentElement.scrollHeight - 400
+            ) {
+                console.log("hasMorePosts", hasMorePosts);
                 if (hasMorePosts && !loadPostsLoading) {
                     dispatch(postAction.loadPostsRequest());
                 }
             }
-        },
-        [loadPostsDone],
-    );
+        }
+        window.addEventListener("scroll", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+        };
+    }, [hasMorePosts, loadPostsLoading]);
 
-    const rowRenderer = useCallback(
-        ({ key, index, style, parent }) => {
-            return (
-                <CellMeasurer
-                    key={key}
-                    cache={cache}
-                    parent={parent}
-                    columnIndex={0}
-                    rowIndex={index}
-                >
-                    {({ measure, registerChild }) => (
-                        <div ref={registerChild} style={style} onLoad={measure}>
-                            <div
-                                style={{
-                                    width: "600px",
-                                    margin: "0 auto",
-                                }}
-                            >
-                                {index == 0 && me ? <PostForm /> : null}
-                            </div>
-                            <PostCard
-                                // key={mainPosts[index].id}
-                                post={mainPosts[index]}
-                                setClickedCommentForm={setClickCommentForm}
-                            />
-                        </div>
-                    )}
-                </CellMeasurer>
-            );
-        },
-        [
-            mainPosts,
-            addPostLoading,
-            addPostDone,
-            clickCommentForm,
-            addCommentLoading,
-            addCommentDone,
-            logInLoading,
-            logoutLoading,
-            followLoading,
-            unfollowLoading,
-        ],
-    );
+    useEffect(() => {
+        function findDiv() {
+            let heights = firstVirtualized.map((data) => data.height);
+            let min = Number.MAX_SAFE_INTEGER;
+            let near = 0;
+
+            for (let i = 0; i < heights.length; i++) {
+                let abs = Math.abs(heights[i] - window.scrollY);
+                console.log("abs", abs, "min", min);
+                if (abs < min) {
+                    min = abs;
+                    near = i + 1; // 바로 numbers[i]로 찾는다. 따로 index 찾지말고
+                } else {
+                    break;
+                }
+            }
+            const findDiv = firstVirtualized.find((v) => v.index === near);
+            console.log("findDiv", findDiv);
+            if (findDiv) {
+                const div = document.getElementById(findDiv.postId);
+                console.log("div", div);
+            }
+        }
+        window.addEventListener("scroll", findDiv);
+        return () => {
+            window.removeEventListener("scroll", findDiv);
+        };
+    });
 
     return (
         <div>
             <AppLayout>
-                {/*
                 {me && <PostForm />}
-                --> this is in List form react-virtualized
-                */}
                 {/* This is one of the anti-patterns that using index into a key as props
 			In most case, we must not pass index to a key
 			especially, there is a possibility that post can be deleted.
 			But if elements in iterator are not changed or deleted, can use index*/}
-                {/*{mainPosts.map((post,index)=> <PostCard key={index} post={post} />}*/}
-
-                {/*{mainPosts.map((post) => (*/}
-                {/*    <PostCard key={post.id} post={post} />*/}
-                {/*))}*/}
+                {mainPosts.map((post, index) => (
+                    <PostCard key={post.id} post={post} index={index} />
+                ))}
             </AppLayout>
-            {/*<ScrollSync>*/}
-            {/*{({ onScroll, registerChild }) => (*/}
-
-            <div
-                style={{
-                    height: "92vh",
-                    width: "99vw",
-                    margin: "0 auto",
-                }}
-            >
-                <AutoSizer>
-                    {({ width, height }) => (
-                        <List
-                            width={width}
-                            height={height}
-                            rowHeight={cache.rowHeight}
-                            rowCount={mainPosts.length}
-                            deferredMeasurementCache={cache}
-                            overscanRowCount={8}
-                            onScroll={scrollListener}
-                            rowRenderer={rowRenderer}
-                        />
-                    )}
-                </AutoSizer>
-            </div>
-            {/*     )}*/}
-            {/* </ScrollSync>*/}
         </div>
     );
 };

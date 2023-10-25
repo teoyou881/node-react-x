@@ -38,6 +38,8 @@ const initialState = {
         //     ],
         // },
     ],
+    firstVirtualized: [],
+    changeVirtualized: [],
     imagePaths: [],
     hasMorePosts: true,
     addPostLoading: false,
@@ -176,6 +178,42 @@ export const postSlice = createSlice({
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},
         removeCommentFailure: (state, action) => {},
+        firstVirtualized: (state, action) => {
+            if (state.firstVirtualized.length > 0) {
+                let last =
+                    state.firstVirtualized[state.firstVirtualized.length - 1];
+                action.payload.height += last.height;
+            }
+            state.firstVirtualized = [
+                ...state.firstVirtualized,
+                action.payload,
+            ];
+        },
+        changeVirtualized: (state, action) => {
+            // state.virtualized.find(
+            //     (v) => v.postId === action.payload.postId,
+            // ).height = action.payload.height;
+            //
+            // let heights = state.virtualized.map((v) => v.height);
+            // heights.reduce((accumulator, current, currentIndex) => {
+            //     state.virtualized[currentIndex].height = accumulator;
+            //
+            //     console.log(currentIndex, accumulator, current);
+            //     return accumulator + current;
+            // }, 0);
+            if (action.payload.index === 0) {
+                state.changeVirtualized = [];
+            }
+            if (state.changeVirtualized.length > 0) {
+                let last =
+                    state.changeVirtualized[state.changeVirtualized.length - 1];
+                action.payload.height += last.height;
+            }
+            state.changeVirtualized = [
+                ...state.changeVirtualized,
+                action.payload,
+            ];
+        },
     },
 });
 

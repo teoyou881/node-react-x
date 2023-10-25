@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { PlusOutlined } from "@ant-design/icons";
 import ImagesZoom from "./ImagesZoom";
@@ -13,9 +13,21 @@ const PostImages = ({ images }) => {
         setShowImagesZoom(false);
     }, []);
 
+    const [firstMount, setFirstMount] = useState(true);
+    useEffect(() => {
+        if (firstMount) {
+            setFirstMount(false);
+        }
+    }, []);
+
     if (images.length === 1) {
         return (
-            <>
+            <div
+                style={{
+                    height: firstMount ? "190.98px" : "auto",
+                    display: "inline-block",
+                }}
+            >
                 <img
                     role="presentation"
                     style={{ width: "50%", display: "inline-block" }}
@@ -26,12 +38,17 @@ const PostImages = ({ images }) => {
                 {showImagesZoom && (
                     <ImagesZoom images={images} onClose={onClose} />
                 )}
-            </>
+            </div>
         );
     }
     if (images.length === 2) {
         return (
-            <>
+            <div
+                style={{
+                    height: firstMount ? "190.98px" : "auto",
+                    display: "inline-block",
+                }}
+            >
                 <img
                     role="presentation"
                     style={{ width: "50%", display: "inline-block" }}
@@ -49,7 +66,7 @@ const PostImages = ({ images }) => {
                 {showImagesZoom && (
                     <ImagesZoom images={images} onClose={onClose} />
                 )}
-            </>
+            </div>
         );
     }
     return (

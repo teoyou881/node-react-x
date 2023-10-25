@@ -55,40 +55,42 @@ const LoginForm = () => {
     return (
         // use obFinish instead of onSubmit
         // onFinish has already applied e.preventDefault();
-        <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
-            <div>
-                <label htmlFor="email">email</label>
-                <br />
-                <input id="email" name="email" {...register("email")} />
-            </div>
-            <div>
-                <label htmlFor="password">password</label>
-                <br />
-                {/* do not use <Input> form antd
+        <div className="formWrapper">
+            <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
+                <div>
+                    <label htmlFor="email">email</label>
+                    <br />
+                    <input id="email" name="email" {...register("email")} />
+                </div>
+                <div>
+                    <label htmlFor="password">password</label>
+                    <br />
+                    {/* do not use <Input> form antd
                     if you want to use react-form-hook
                     becasue there is no name attribute in antd Input  */}
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    {...register("password")}
-                />
-            </div>
-            <ButtonWrapper>
-                <Button
-                    type="primary"
-                    htmlType="submit"
-                    loading={logInLoading}
-                    disabled={isSubmitting}
-                >
-                    Sign In
-                </Button>
-                <Link href="/signup">
-                    <Button>Sign Up</Button>
-                </Link>
-            </ButtonWrapper>
-        </Form>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        {...register("password")}
+                    />
+                </div>
+                <ButtonWrapper>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={logInLoading}
+                        disabled={isSubmitting}
+                    >
+                        Sign In
+                    </Button>
+                    <Link href="/signup">
+                        <Button>Sign Up</Button>
+                    </Link>
+                </ButtonWrapper>
+            </Form>
+        </div>
     );
 };
 export default LoginForm;

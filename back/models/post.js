@@ -15,6 +15,13 @@ module.exports = (sequelize, DataTypes) => {
             collate: "utf8mb4_general_ci", // For emoji
         },
     );
-    Post.associate = (db) => {};
+    Post.associate = (db) => {
+        db.Post.belongsTo(db.User); // A post belongs to a user.
+        db.Post.hasMany(db.Comment); // A post has many comments.
+        db.Post.hasMany(db.Image); // A post has many comments.
+        db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" }); // A post belongs to many hashtags.
+        db.Post.belongsToMany(db.User, { through: "Like", as: "Likers" }); // A post belongs to many users as likers.
+        db.Post.belongsTo(db.Post, { as: "Retweet" }); // A post belongs to a post as retweet.
+    };
     return Post;
 };

@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
             collate: "utf8mb4_general_ci", // For emoji
         },
     );
-    Hashtag.associate = (db) => {};
+    Hashtag.associate = (db) => {
+        db.Hashtag.belongsToMany(db.Post, { through: "PostHashtag" }); // A hashtag belongs to many posts.
+    };
     return Hashtag;
 };

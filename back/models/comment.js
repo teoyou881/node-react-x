@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
             collate: "utf8mb4_general_ci", // For emoji
         },
     );
-    Comment.associate = (db) => {};
+    Comment.associate = (db) => {
+        db.Comment.belongsTo(db.User); // A comment belongs to a user.
+        db.Comment.belongsTo(db.Post); // A comment belongs to a post.
+    };
     return Comment;
 };

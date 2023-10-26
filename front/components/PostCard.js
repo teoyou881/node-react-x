@@ -37,36 +37,39 @@ const PostCard = ({ post, index }) => {
         dispatch(postAction.removePostRequest(post.id));
     }, []);
 
-    const divRef = useRef();
-    useEffect(() => {
-        if (divRef.current) {
-            // Ensure divRef.current is not null
-            const height = divRef.current.clientHeight;
-            let data = { index, height, postId: post.id };
-            dispatch(postAction.firstVirtualized(data));
-        }
-    }, []);
+    const postcardRef = useRef();
+    /* For virtual scroll..
+    // useEffect(() => {
+    //     if (postcardRef.current) {
+    //         // Ensure postcardRef.current is not null
+    //         const height = postcardRef.current.clientHeight;
+    //         let data = { index, height, postId: post.id };
+    //         dispatch(postAction.firstVirtualized(data));
+    //     }
+    // }, []);
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (divRef.current) {
-                // Ensure divRef.current is not null
-                const height = divRef.current.clientHeight;
-                let data = { index, height, postId: post.id };
-                dispatch(postAction.changeVirtualized(data));
-            }
-        };
-        window.addEventListener("resize", handleResize);
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, []); // Empty dependency array means this effect runs once after the initial render
+    // useEffect(() => {
+    //     const handleResize = () => {
+    //         if (postcardRef.current) {
+    //             // Ensure postcardRef.current is not null
+    //             const height = postcardRef.current.clientHeight;
+    //             let data = { index, height, postId: post.id };
+    //             dispatch(postAction.changeVirtualized(data));
+    //         }
+    //     };
+    //     window.addEventListener("resize", handleResize);
+    //     return () => {
+    //         window.removeEventListener("resize", handleResize);
+    //     };
+    // }, []); // Empty dependency array means this effect runs once after the initial render
+
+     */
 
     return (
         <div
             id={post.id}
             style={{ width: "inherit", margin: "inherit" }}
-            ref={divRef}
+            ref={postcardRef}
         >
             <Card
                 // extra={id && <FollowButton post={post} />}
@@ -106,8 +109,12 @@ const PostCard = ({ post, index }) => {
                     >
                         <EllipsisOutlined />
                     </Popover>,
-                    <FollowButton post={post} />,
+
+                    // <FollowButton post={post} />,
                 ]}
+                extra={
+                    id && id !== post.User.id && <FollowButton post={post} />
+                }
             >
                 <Card.Meta
                     avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

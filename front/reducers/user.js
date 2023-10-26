@@ -21,6 +21,7 @@ const initialState = {
     unfollowDone: false,
     unfollowError: null,
     me: null,
+    followBtnId: null,
     signUpData: {},
     loginData: {},
 };
@@ -94,6 +95,7 @@ export const userSlice = createSlice({
         },
         followRequest: (state, action) => {
             state.followLoading = true;
+            state.followBtnId = action.payload;
         },
         followSuccess: (state, action) => {
             state.followLoading = false;

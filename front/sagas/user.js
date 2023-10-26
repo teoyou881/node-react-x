@@ -40,13 +40,14 @@ function* logOut() {
     }
 }
 
-function* follow() {
+function* follow(action) {
     try {
         // TODO
         // API
         yield delay(1000);
         yield put({
             type: USER_ACTION.FOLLOW_SUCCESS,
+            payload: action.payload,
         });
     } catch (err) {
         yield put({
@@ -55,13 +56,14 @@ function* follow() {
         });
     }
 }
-function* unfollow() {
+function* unfollow(action) {
     try {
         // TODO
         // API
         yield delay(1000);
         yield put({
             type: USER_ACTION.UNFOLLOW_SUCCESS,
+            payload: action.payload,
         });
     } catch (err) {
         yield put({
@@ -79,10 +81,10 @@ function* watchLogOut() {
     yield takeLatest(USER_ACTION.LOGOUT_REQUEST, logOut);
 }
 function* watchFollow() {
-    yield takeLatest(USER_ACTION.LOGOUT_REQUEST, follow);
+    yield takeLatest(USER_ACTION.FOLLOW_REQUEST, follow);
 }
 function* watchUnfollow() {
-    yield takeLatest(USER_ACTION.LOGOUT_REQUEST, unfollow);
+    yield takeLatest(USER_ACTION.UNFOLLOW_REQUEST, unfollow);
 }
 
 export default function* userSaga() {

@@ -31,9 +31,9 @@ const LoginForm = () => {
         reset,
     } = useForm({ mode: "onChange" });
 
-    // const signUp = () => {
-    //     dispatch(userAction.signUpRequest());
-    // };
+    const signUp = () => {
+        dispatch(userAction.signUpDoneReset());
+    };
 
     //TODO: deals with dummy data after connecting with backend
     const onFormSubmit = (data) => {
@@ -90,7 +90,7 @@ const LoginForm = () => {
                         Sign In
                     </Button>
                     <Link href="/signup">
-                        <Button>Sign Up</Button>
+                        <Button onClick={signUp}>Sign Up</Button>
                     </Link>
                 </ButtonWrapper>
             </Form>

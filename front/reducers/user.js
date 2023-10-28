@@ -74,6 +74,9 @@ export const userSlice = createSlice({
             state.signUpLoading = false;
             state.signUpError = action.payload;
         },
+        signUpDoneReset: (state, action) => {
+            state.signUpDone = false;
+        },
         changeNicknameRequest: (state, action) => {
             state.changeNicknameLoading = true;
         },

@@ -64,6 +64,7 @@ export const userSlice = createSlice({
         },
         signUpRequest: (state, action) => {
             state.signUpLoading = true;
+            state.signUpDone = false;
         },
         signUpSuccess: (state, action) => {
             state.signUpLoading = false;

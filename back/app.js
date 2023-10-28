@@ -3,7 +3,14 @@ const app = express();
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
 const db = require("./models");
+const cors = require("cors");
 
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

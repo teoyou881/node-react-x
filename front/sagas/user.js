@@ -79,12 +79,12 @@ function* signUp(action) {
     try {
         const result = yield call(signUpAPI, action.payload);
         yield put({
-            type: USER_ACTION.UNFOLLOW_SUCCESS,
+            type: USER_ACTION.SIGN_UP_SUCCESS,
             payload: action.payload,
         });
     } catch (err) {
         yield put({
-            type: USER_ACTION.UNFOLLOW_FAILURE,
+            type: USER_ACTION.SIGN_UP_FAILURE,
             error: err,
         });
     }

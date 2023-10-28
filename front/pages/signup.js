@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import Link from "next/link";
@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../reducers/user";
+import { useRouter } from "next/router";
 
 const ErrorSpanWrapper = styled.div`
     color: red;
@@ -23,7 +24,22 @@ const InputWrapper = styled.input`
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const { signUpLoading } = useSelector((state) => state.user);
+    const { signUpLoading, signUpDone, signUpError } = useSelector(
+        (state) => state.user,
+    );
+    const router = useRouter();
+
+    useEffect(() => {
+        if (signUpDone) {
+            router.push("/");
+        }
+    }, [signUpDone]);
+
+    useEffect(() => {
+        if (signUpError) {
+            alert(signUpError);
+        }
+    }, [signUpError]);
 
     const userEmail = {
         required: "Enter your e-mail address",
@@ -83,7 +99,7 @@ const Signup = () => {
                 <title>NodeX | Sign Up</title>
             </Head>
             <AppLayout>
-                <Form onFinish={handleSubmit(onFormSubmit)}>
+                <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
                     <div>
                         <label htmlFor="email">email</label>
                         <br />
@@ -119,7 +135,6 @@ const Signup = () => {
                             id="password"
                             name="password"
                             type="password"
-                            defaultValue=" "
                             required
                             {...register("password", userPassword)}
                         />

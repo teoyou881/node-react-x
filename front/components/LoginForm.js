@@ -31,6 +31,10 @@ const LoginForm = () => {
         reset,
     } = useForm({ mode: "onChange" });
 
+    // const signUp = () => {
+    //     dispatch(userAction.signUpRequest());
+    // };
+
     //TODO: deals with dummy data after connecting with backend
     const onFormSubmit = (data) => {
         const me = {

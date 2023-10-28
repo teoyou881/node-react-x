@@ -7,11 +7,13 @@ import { postAction } from "../reducers/post";
 import styled from "styled-components";
 const Home = () => {
     const { me } = useSelector((state) => state.user);
-    const { mainPosts, hasMorePosts, loadPostsLoading, firstVirtualized } =
+    const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } =
         useSelector((state) => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(postAction.loadPostsRequest());
+        if (!firstAccess) {
+            dispatch(postAction.loadPostsRequest());
+        }
     }, []);
 
     // Just infinite scrolling

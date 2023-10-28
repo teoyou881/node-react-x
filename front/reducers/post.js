@@ -57,6 +57,7 @@ const initialState = {
     removeCommentLoading: false,
     removeCommentDone: false,
     removeCommentError: null,
+    firstAccess: false,
 };
 
 export const generateDummyPost = (number) =>
@@ -142,6 +143,7 @@ export const postSlice = createSlice({
             state.loadPostsLoading = true;
             state.loadPostsDone = false;
             state.loadPostsError = null;
+            state.firstAccess = true;
         },
         loadPostsSuccess: (state, action) => {
             state.loadPostsLoading = false;

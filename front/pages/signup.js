@@ -24,16 +24,16 @@ const InputWrapper = styled.input`
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const { signUpLoading, signUpDone, signUpError } = useSelector(
+    const { signUpLoading, signUpDone, signUpError, me } = useSelector(
         (state) => state.user,
     );
     const router = useRouter();
 
     useEffect(() => {
-        if (signUpDone) {
+        if (signUpDone || me) {
             router.push("/");
         }
-    }, [signUpDone]);
+    }, [signUpDone, me]);
 
     useEffect(() => {
         if (signUpError) {

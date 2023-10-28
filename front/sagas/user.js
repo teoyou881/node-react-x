@@ -5,6 +5,9 @@ import { USER_ACTION } from "../actions/userAction";
 function logInAPI(data) {
     return axios.post("/api/login", data);
 }
+function signUpAPI(data) {
+    return axios.post("http://localhost:3065/user", data);
+}
 
 function* logIn(action) {
     try {
@@ -72,6 +75,20 @@ function* unfollow(action) {
         });
     }
 }
+function* signUp(action) {
+    try {
+        const result = yield call(signUpAPI, action.payload);
+        yield put({
+            type: USER_ACTION.UNFOLLOW_SUCCESS,
+            payload: action.payload,
+        });
+    } catch (err) {
+        yield put({
+            type: USER_ACTION.UNFOLLOW_FAILURE,
+            error: err,
+        });
+    }
+}
 
 function* watchLogIn() {
     yield takeLatest(USER_ACTION.LOGIN_REQUEST, logIn);
@@ -86,6 +103,9 @@ function* watchFollow() {
 function* watchUnfollow() {
     yield takeLatest(USER_ACTION.UNFOLLOW_REQUEST, unfollow);
 }
+function* watchSignUp() {
+    yield takeLatest(USER_ACTION.SIGN_UP_REQUEST, signUp);
+}
 
 export default function* userSaga() {
     yield all([
@@ -93,8 +113,8 @@ export default function* userSaga() {
         fork(watchLogOut),
         fork(watchFollow),
         fork(watchUnfollow),
+        fork(watchSignUp),
         // fork(watchLoadUser),
-        // fork(watchSignUp),
         // fork(watchLoadFollowers),
         // fork(watchLoadFollowings),
         // fork(watchRemoveFollower),

@@ -6,6 +6,7 @@ import { Form, Button } from "antd";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
+import { userAction } from "../reducers/user";
 
 const ErrorSpanWrapper = styled.div`
     color: red;
@@ -60,7 +61,10 @@ const Signup = () => {
         watch,
     } = useForm({ mode: "onBlur" });
 
-    const onFormSubmit = ({ email, nickname, password }) => {};
+    const onFormSubmit = (data) => {
+        dispatch(userAction.signUpRequest(data));
+        reset();
+    };
     const onErrors = (errors) => {
         console.error(errors);
 

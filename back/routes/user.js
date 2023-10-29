@@ -34,30 +34,44 @@ router.post("/", async (req, res, next) => {
 // server error-> err  success -> user  client error -> info
 
 router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+    passport.authenticate(
+        "local",
+        (err, user, info) => {
+            if (err) {
+                console.error(err);
+                return next(err);
+            }
+            if (info) {
+                return res.status(401).send(info.reason);
+            }
+            return req.login(user, async (loginErr) => {
+                // this process is not our business
+                // passport will handle this
+                if (loginErr) {
+                    console.error(loginErr);
+                    return next(loginErr);
+                }
+                const fullUserWithoutPassword = await User.findOne({
+                    where: { id: user.id },
+                    attributes: {
+                        exclude: ["password"],
+                    },
+                });
+                return res.status(200).json(fullUserWithoutPassword);
+            });
+        },
+        () => {},
+    )(req, res, next);
+});
+
+router.post("/logout", (req, res, next) => {
+    req.logout((err) => {
         if (err) {
-            console.error(err);
+            console.log(err);
             return next(err);
         }
-        if (info) {
-            return res.status(401).send(info.reason);
-        }
-        return req.login(user, async (loginErr) => {
-            // this process is not our business
-            // passport will handle this
-            if (loginErr) {
-                console.error(loginErr);
-                return next(loginErr);
-            }
-            const fullUserWithoutPassword = await User.findOne({
-                where: { id: user.id },
-                attributes: {
-                    exclude: ["password"],
-                },
-            });
-            return res.status(200).json(fullUserWithoutPassword);
-        });
-    })(req, res, next);
+        res.redirect("/");
+    });
 });
 
 module.exports = router;

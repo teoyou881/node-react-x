@@ -13,10 +13,8 @@ function signUpAPI(data) {
 }
 
 function* logIn(action) {
-    console.log("logIn saga");
     try {
         const result = yield call(logInAPI, action.payload);
-        console.log(result);
         yield put({
             type: USER_ACTION.LOGIN_SUCCESS,
             payload: result,

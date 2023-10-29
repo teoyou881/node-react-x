@@ -3,34 +3,35 @@ import axios from "axios";
 import { USER_ACTION } from "../actions/userAction";
 
 function logInAPI(data) {
-    return axios.post("/api/login", data);
+    return axios.post("/user/login", data);
+}
+function logOutAPI(data) {
+    return axios.post("/user/logout", data);
 }
 function signUpAPI(data) {
-    return axios.post("http://localhost:3065/user", data);
+    return axios.post("/user", data);
 }
 
 function* logIn(action) {
+    console.log("logIn saga");
     try {
-        // yield put({
-        // 	type: "LOG_IN_REQUEST",
-        // })
-        // const result = yield call(logInAPI, action.data);
-        yield delay(1000);
+        const result = yield call(logInAPI, action.payload);
+        console.log(result);
         yield put({
             type: USER_ACTION.LOGIN_SUCCESS,
-            payload: action.payload,
+            payload: result,
         });
     } catch (err) {
         yield put({
             type: USER_ACTION.LOGIN_FAILURE,
-            error: err.response.data,
+            error: err,
         });
     }
 }
 
 function* logOut() {
+    const result = yield call(logOutAPI);
     try {
-        // const result = yield call(logOutAPI);
         yield delay(1000);
         yield put({
             type: USER_ACTION.LOGOUT_SUCCESS,

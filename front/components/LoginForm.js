@@ -37,15 +37,7 @@ const LoginForm = () => {
 
     //TODO: deals with dummy data after connecting with backend
     const onFormSubmit = (data) => {
-        const me = {
-            id: 1,
-            email: data.email,
-            nickname: "Teo",
-            Posts: [],
-            Followings: [],
-            Followers: [],
-        };
-        dispatch(userAction.loginRequest(me));
+        dispatch(userAction.loginRequest(data));
     };
     const onErrors = (errors) => console.error(errors);
 

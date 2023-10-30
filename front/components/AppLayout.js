@@ -14,7 +14,7 @@ const SearchInput = styled(Input.Search)`
 const AppLayout = ({ children }) => {
     const { me } = useSelector((state) => state.user);
 
-    const menuItems = [
+    const userMenuItems = [
         {
             key: "home",
             icon: <Link href="/">X</Link>,
@@ -27,6 +27,16 @@ const AppLayout = ({ children }) => {
             key: "search",
             icon: <SearchInput />,
         },
+    ];
+    const noUserMenuItems = [
+        {
+            key: "home",
+            icon: <Link href="/">X</Link>,
+        },
+        {
+            key: "search",
+            icon: <SearchInput />,
+        },
         {
             key: "signup",
             icon: <Link href="/signup">Signup</Link>,
@@ -34,7 +44,10 @@ const AppLayout = ({ children }) => {
     ];
     return (
         <div>
-            <Menu items={menuItems} mode="horizontal" />
+            <Menu
+                items={me ? userMenuItems : noUserMenuItems}
+                mode="horizontal"
+            />
 
             {/* <Menu mode='horizontal'>
                 <Menu.Item>

@@ -44,7 +44,7 @@ export const userSlice = createSlice({
         loginSuccess: (state, action) => {
             state.logInLoading = false;
             state.logInDone = true;
-            state.me = dummyUser(action.payload);
+            state.me = action.payload.data;
         },
         loginFailure: (state, action) => {
             state.logInLoading = false;

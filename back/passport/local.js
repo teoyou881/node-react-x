@@ -12,7 +12,6 @@ module.exports = () => {
                 passwordField: "password",
             },
             async (email, password, done) => {
-                console.log("passport/local.js");
                 try {
                     const user = await User.findOne({
                         where: { email },

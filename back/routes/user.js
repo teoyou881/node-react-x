@@ -44,20 +44,16 @@ router.post("/login", (req, res, next) => {
             if (info) {
                 return res.status(401).send(info.reason);
             }
-            return req.login(user, async (loginErr) => {
+            // req.login() is a passport function
+            // it calls passport serializeUser()
+            return req.login(user, (loginErr) => {
                 // this process is not our business
                 // passport will handle this
                 if (loginErr) {
                     console.error(loginErr);
                     return next(loginErr);
                 }
-                const fullUserWithoutPassword = await User.findOne({
-                    where: { id: user.id },
-                    attributes: {
-                        exclude: ["password"],
-                    },
-                });
-                return res.status(200).json(fullUserWithoutPassword);
+                return res.status(200).json(user);
             });
         },
         () => {},

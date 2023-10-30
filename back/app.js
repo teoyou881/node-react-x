@@ -14,8 +14,7 @@ dotenv.config();
 passportConfig();
 app.use(
     cors({
-        origin: true,
-        credentials: true,
+        origin: "*",
     }),
 );
 
@@ -27,6 +26,7 @@ app.use(
         savedUninitialized: false,
         resave: false,
         secret: process.env.COOKIE_SECRET,
+        cookie: { secure: true },
     }),
 );
 app.use(passport.initialize());

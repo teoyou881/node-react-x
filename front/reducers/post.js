@@ -116,7 +116,6 @@ export const postSlice = createSlice({
         addPostSuccess: (state, action) => {
             state.addPostLoading = false;
             state.addPostDone = true;
-            console.log(action.payload);
             state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
             state.imagePaths = [];
         },

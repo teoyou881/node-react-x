@@ -1,5 +1,5 @@
 import { Button, Form } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
 // {} === {} --> false
@@ -22,7 +22,7 @@ const ButtonWrapper = styled.div`
 // );
 
 const LoginForm = () => {
-    const { logInLoading } = useSelector((state) => state.user);
+    const { logInLoading, logInError } = useSelector((state) => state.user);
     const dispatch = useDispatch();
     const {
         register,
@@ -30,6 +30,12 @@ const LoginForm = () => {
         formState: { errors, isSubmitting },
         reset,
     } = useForm({ mode: "onChange" });
+
+    useEffect(() => {
+        if (logInError) {
+            alert(logInError);
+        }
+    }, [logInError]);
 
     const signUp = () => {
         dispatch(userAction.signUpDoneReset());
@@ -72,6 +78,7 @@ const LoginForm = () => {
                         {...register("password")}
                     />
                 </div>
+                {/*{logInError && <p style={{ color: "red" }}>{logInError}</p>}*/}
                 <ButtonWrapper>
                     <Button
                         type="primary"

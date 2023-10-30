@@ -40,6 +40,8 @@ export const userSlice = createSlice({
     reducers: {
         loginRequest: (state, action) => {
             state.logInLoading = true;
+            state.logInDone = false;
+            state.logInError = null;
         },
         loginSuccess: (state, action) => {
             state.logInLoading = false;
@@ -49,6 +51,7 @@ export const userSlice = createSlice({
         loginFailure: (state, action) => {
             state.logInLoading = false;
             state.logInDone = false;
+            state.logInError = action.error.response.data;
         },
         logoutRequest: (state, action) => {
             state.logoutLoading = true;

@@ -32,7 +32,9 @@ export const makeStore = () => {
         },
         devTools: process.env.NODE_ENV !== "production",
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware().concat(sagaMiddleware),
+            getDefaultMiddleware({
+                serializableCheck: false,
+            }).concat(sagaMiddleware),
     });
 
     // Run the rootSaga to start your application sagas

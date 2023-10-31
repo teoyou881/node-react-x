@@ -64,7 +64,7 @@ export const generateDummyPost = (number) =>
     Array(number)
         .fill()
         .map((v, i) => ({
-            id: shortId.generate(),
+            id: faker.number.int({ min: 1, max: 1000000 }),
             User: {
                 id: shortId.generate(),
                 nickname: faker.lorem.word(),
@@ -86,7 +86,7 @@ export const generateDummyPost = (number) =>
                 },
             ],
         }));
-
+/*
 const dummyPost = (data) => ({
     id: data.id,
     User: {
@@ -97,13 +97,15 @@ const dummyPost = (data) => ({
     Images: [],
     Comments: [],
 });
-
+*/
+/*
 const dummyComment = (data) => ({
     User: {
         nickname: "Teo",
     },
     content: data.content,
 });
+*/
 export const postSlice = createSlice({
     name: "post",
     initialState,
@@ -116,7 +118,12 @@ export const postSlice = createSlice({
         addPostSuccess: (state, action) => {
             state.addPostLoading = false;
             state.addPostDone = true;
-            state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
+            // state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
+            const payload = action.payload;
+            const Images = [];
+            const Comments = [];
+            const post = { ...payload, Images, Comments };
+            state.mainPosts.unshift(post);
             state.imagePaths = [];
         },
         addPostFailure: (state, action) => {
@@ -162,11 +169,10 @@ export const postSlice = createSlice({
         addCommentSuccess: (state, action) => {
             state.addCommentLoading = false;
             state.addCommentDone = true;
-            const postIndex = state.mainPosts.findIndex(
-                (v) => v.id === action.payload.postId,
+            const post = state.mainPosts.find(
+                (v) => v.id === action.payload.PostId,
             );
-            const post = state.mainPosts[postIndex];
-            post.Comments = [dummyComment(action.payload), ...post.Comments];
+            post.Comments.unshift(action.payload);
             // state.mainPosts.Comments = [
             //     ...state.mainPosts.Comments,
             //     dummyComment(action.payload),

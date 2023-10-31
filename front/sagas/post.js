@@ -15,24 +15,26 @@ import { USER_ACTION } from "../actions/userAction";
 import { generateDummyPost } from "../reducers/post";
 
 function addPostAPI(data) {
-    return axios.post("/api/post", data);
+    return axios.post("/post", { content: data });
 }
 function removePostAPI(data) {
     return axios.delete("/api/post", data);
 }
+function addCommentAPI(data) {
+    return axios.post(`/post/${data.postId}/comment`, data);
+}
 
 function* addPost(action) {
     try {
-        //const result = yield call(addPostAPI, action.data);
-        yield delay(1000);
-        const id = shortId.generate();
+        const result = yield call(addPostAPI, action.payload);
+        console.log(result.data);
         yield put({
             type: POST_ACTION.ADD_POST_SUCCESS,
-            payload: { content: action.payload, id },
+            payload: result.data,
         });
         yield put({
             type: USER_ACTION.ADD_POST_TO_ME,
-            payload: id,
+            payload: result.data.id,
         });
     } catch (err) {
         yield put({
@@ -66,11 +68,10 @@ function* removePost(action) {
 
 function* addComment(action) {
     try {
-        //const result = yield call(addPostAPI, action.data);
-        yield delay(1000);
+        const result = yield call(addCommentAPI, action.payload);
         yield put({
             type: POST_ACTION.ADD_COMMENT_SUCCESS,
-            payload: action.payload,
+            payload: result.data,
         });
     } catch (err) {
         console.log(err);

@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { postAction } from "../reducers/post";
 import useGetForms from "../utils/useCommentForms";
 const CommentForm = ({ post }) => {
-    const userId = useSelector((state) => state.user.me?.id);
+    // const userId = useSelector((state) => state.user.me?.id);
     // const [comment, setComment] = useState("");
     const { addCommentDone, addCommentLoading } = useSelector(
         (state) => state.post,
@@ -29,13 +29,11 @@ const CommentForm = ({ post }) => {
     } = useForm({ mode: "onChange", defaultValues: { comment: "" } });
     const onFormSubmit = (data) => {
         dispatch(
-            postAction.addCommentRequest(
-                (data = {
-                    postId: post.id,
-                    content: data.comment,
-                    userId: userId,
-                }),
-            ),
+            postAction.addCommentRequest({
+                postId: post.id,
+                content: data.comment,
+                // userId: userId,
+            }),
         );
     };
     const onErrors = (errors) => console.error(errors);

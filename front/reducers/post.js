@@ -119,10 +119,6 @@ export const postSlice = createSlice({
             state.addPostLoading = false;
             state.addPostDone = true;
             // state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
-            const payload = action.payload;
-            const Images = [];
-            const Comments = [];
-            const post = { ...payload, Images, Comments };
             state.mainPosts.unshift(post);
             state.imagePaths = [];
         },

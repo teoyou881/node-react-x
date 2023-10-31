@@ -2,13 +2,22 @@ const express = require("express");
 const router = express.Router();
 const { Post, User, Image, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
+const { Model } = require("sequelize");
 router.post("/", isLoggedIn, async (req, res, next) => {
     try {
         const post = await Post.create({
             content: req.body.content,
             UserId: req.user.id,
         });
-        res.status(201).json(post);
+        const fullPost = await Post.findOne({
+            where: { id: post.id },
+            include: [
+                { model: Image },
+                { model: Comment },
+                { model: User, attributes: ["id", "nickname"] },
+            ],
+        });
+        res.status(201).json(fullPost);
     } catch (e) {
         console.log(e);
         next(e);

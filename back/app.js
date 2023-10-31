@@ -14,7 +14,7 @@ dotenv.config();
 passportConfig();
 app.use(
     cors({
-        origin: "*",
+        origin: true,
         credentials: true,
     }),
 );
@@ -27,7 +27,7 @@ app.use(
         savedUninitialized: false,
         resave: false,
         secret: process.env.COOKIE_SECRET,
-        cookie: { secure: true },
+        cookie: { secure: false, httpOnly: true },
     }),
 );
 app.use(passport.initialize());
@@ -35,10 +35,6 @@ app.use(passport.session());
 
 app.use("/post", postRouter);
 app.use("/user", userRouter);
-
-app.get("/", (req, res) => {
-    res.end("hi express");
-});
 
 app.listen(3065, () => {
     db.sequelize.sync().then(() => {

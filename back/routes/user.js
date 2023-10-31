@@ -3,8 +3,9 @@ const router = express.Router();
 const { User, Post } = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
-router.post("/", async (req, res, next) => {
+router.post("/", isNotLoggedIn, async (req, res, next) => {
     try {
         await User.findOne({
             where: { email: req.body.email },
@@ -33,7 +34,7 @@ router.post("/", async (req, res, next) => {
 // client -> server -> passport.authenticate("local") -> callback function
 // server error-> err  success -> user  client error -> info
 
-router.post("/login", (req, res, next) => {
+router.post("/login", isNotLoggedIn, (req, res, next) => {
     passport.authenticate(
         "local",
         (err, user, info) => {
@@ -79,13 +80,13 @@ router.post("/login", (req, res, next) => {
     )(req, res, next);
 });
 
-router.post("/logout", (req, res, next) => {
+router.post("/logout", isLoggedIn, (req, res, next) => {
     req.logout((err) => {
         if (err) {
             console.log(err);
             return next(err);
         }
-        res.redirect("/");
+        res.send("ok");
     });
 });
 

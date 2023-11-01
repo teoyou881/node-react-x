@@ -5,19 +5,12 @@ import { USER_ACTION } from "../actions/userAction";
 function logInAPI(data) {
     return axios.post("/user/login", data);
 }
-function logOutAPI(data) {
-    return axios.post("/user/logout", data);
-}
-function signUpAPI(data) {
-    return axios.post("/user", data);
-}
-
 function* logIn(action) {
     try {
         const result = yield call(logInAPI, action.payload);
         yield put({
             type: USER_ACTION.LOGIN_SUCCESS,
-            payload: result,
+            payload: result.data,
         });
     } catch (err) {
         yield put({
@@ -26,7 +19,26 @@ function* logIn(action) {
         });
     }
 }
-
+function loadMyInfoAPI() {
+    return axios.get("/user");
+}
+function* loadMyInfo() {
+    try {
+        const result = yield call(loadMyInfoAPI);
+        yield put({
+            type: USER_ACTION.LOAD_MY_INFO_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        yield put({
+            type: USER_ACTION.LOAD_MY_INFO_FAILURE,
+            error: err,
+        });
+    }
+}
+function logOutAPI(data) {
+    return axios.post("/user/logout", data);
+}
 function* logOut() {
     const result = yield call(logOutAPI);
     try {
@@ -74,6 +86,9 @@ function* unfollow(action) {
         });
     }
 }
+function signUpAPI(data) {
+    return axios.post("/user", data);
+}
 function* signUp(action) {
     try {
         const result = yield call(signUpAPI, action.payload);
@@ -105,7 +120,9 @@ function* watchUnfollow() {
 function* watchSignUp() {
     yield takeLatest(USER_ACTION.SIGN_UP_REQUEST, signUp);
 }
-
+function* watchLoadUser() {
+    yield takeLatest(USER_ACTION.LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -113,7 +130,7 @@ export default function* userSaga() {
         fork(watchFollow),
         fork(watchUnfollow),
         fork(watchSignUp),
-        // fork(watchLoadUser),
+        fork(watchLoadUser),
         // fork(watchLoadFollowers),
         // fork(watchLoadFollowings),
         // fork(watchRemoveFollower),

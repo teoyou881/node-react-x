@@ -4,13 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
 import { postAction } from "../reducers/post";
-import styled from "styled-components";
+import { userAction } from "../reducers/user";
 const Home = () => {
     const { me } = useSelector((state) => state.user);
     const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } =
         useSelector((state) => state.post);
     const dispatch = useDispatch();
+
     useEffect(() => {
+        dispatch(userAction.loadMyInfoRequest());
         if (!firstAccess) {
             dispatch(postAction.loadPostsRequest());
         }

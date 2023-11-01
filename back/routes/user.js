@@ -1,9 +1,46 @@
 const express = require("express");
 const router = express.Router();
-const { User, Post } = require("../models");
+const { User, Post, Comment } = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+
+router.get("/", async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            where: { id: req.user?.id || null },
+        });
+        if (!user) {
+            return res.status(200).json(null);
+        }
+        const userWithoutPassword = await User.findOne({
+            where: { id: user.id },
+            attributes: {
+                exclude: ["password"],
+            },
+            include: [
+                {
+                    model: Post,
+                    attributes: ["id"],
+                },
+                {
+                    model: User,
+                    as: "Followings",
+                    attributes: ["id"],
+                },
+                {
+                    model: User,
+                    as: "Followers",
+                    attributes: ["id"],
+                },
+            ],
+        });
+        res.status(200).json(userWithoutPassword);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
 
 router.post("/", isNotLoggedIn, async (req, res, next) => {
     try {
@@ -62,14 +99,17 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
                     include: [
                         {
                             model: Post,
+                            attributes: ["id"],
                         },
                         {
                             model: User,
                             as: "Followings",
+                            attributes: ["id"],
                         },
                         {
                             model: User,
                             as: "Followers",
+                            attributes: ["id"],
                         },
                     ],
                 });

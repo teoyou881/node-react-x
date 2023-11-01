@@ -5,6 +5,9 @@ const initialState = {
     logInLoading: false,
     logInDone: false,
     logInError: null,
+    loadMyInfoLoading: false,
+    loadMyInfoDone: false,
+    loadMyInfoError: null,
     logoutLoading: false,
     logoutDone: false,
     logoutError: null,
@@ -46,9 +49,24 @@ export const userSlice = createSlice({
         loginSuccess: (state, action) => {
             state.logInLoading = false;
             state.logInDone = true;
-            state.me = action.payload.data;
+            state.me = action.payload;
         },
         loginFailure: (state, action) => {
+            state.logInLoading = false;
+            state.logInDone = false;
+            state.logInError = action.error.response.data;
+        },
+        loadMyInfoRequest: (state, action) => {
+            state.logInLoading = true;
+            state.logInDone = false;
+            state.logInError = null;
+        },
+        loadMyInfoSuccess: (state, action) => {
+            state.logInLoading = false;
+            state.logInDone = true;
+            state.me = action.payload;
+        },
+        loadMyInfoFailure: (state, action) => {
             state.logInLoading = false;
             state.logInDone = false;
             state.logInError = action.error.response.data;
@@ -65,6 +83,7 @@ export const userSlice = createSlice({
             state.logoutLoading = false;
             state.logoutError = action.payload;
         },
+
         signUpRequest: (state, action) => {
             state.signUpLoading = true;
             state.signUpDone = false;

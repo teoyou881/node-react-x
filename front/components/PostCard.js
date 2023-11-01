@@ -122,7 +122,7 @@ const PostCard = ({ post, index }) => {
                     description={<PostCardContent postData={post.content} />}
                 />
             </Card>
-            {commentFormOpened && (
+            {id && commentFormOpened && (
                 <div>
                     <CommentForm post={post} />
                     <List

@@ -32,7 +32,6 @@ const CommentForm = ({ post }) => {
             postAction.addCommentRequest({
                 postId: post.id,
                 content: data.comment,
-                // userId: userId,
             }),
         );
     };

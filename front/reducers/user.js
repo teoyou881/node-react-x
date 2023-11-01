@@ -28,6 +28,7 @@ const initialState = {
     signUpData: {},
     loginData: {},
 };
+/*
 const dummyUser = (data) => ({
     email: data.email,
     nickname: "Teo",
@@ -36,7 +37,7 @@ const dummyUser = (data) => ({
     Followings: [{ nickname: "H1" }, { nickname: "H2" }, { nickname: "H3" }],
     Followers: [{ nickname: "F1" }, { nickname: "F2" }, { nickname: "F3" }],
 });
-
+*/
 export const userSlice = createSlice({
     name: "user",
     initialState,
@@ -112,7 +113,10 @@ export const userSlice = createSlice({
             state.changeNicknameError = action.payload;
         },
         addPostToMe: (state, action) => {
-            state.me.Posts = [{ id: action.payload }, ...state.me.Posts];
+            state.me.Posts = [...state.me.Posts, { id: action.payload }];
+        },
+        addCommentToMe: (state, action) => {
+            state.me.Comments = [...state.me.Comments, { id: action.payload }];
         },
         removePostOfMe: (state, action) => {
             state.me.Posts = state.me.Posts.filter(

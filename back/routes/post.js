@@ -13,7 +13,10 @@ router.post("/", isLoggedIn, async (req, res, next) => {
             where: { id: post.id },
             include: [
                 { model: Image },
-                { model: Comment },
+                {
+                    model: Comment,
+                    include: [{ model: User, attributes: ["id", "nickname"] }],
+                },
                 { model: User, attributes: ["id", "nickname"] },
             ],
         });
@@ -34,10 +37,17 @@ router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
         }
         const comment = await Comment.create({
             content: req.body.content,
-            PostId: req.params.postId,
             UserId: req.user.id,
+            //postId is int type, but req.params.postId is string type.
+            // So, we need to convert it to int type.
+            PostId: Number.parseInt(req.params.postId),
         });
-        res.status(201).json(comment);
+        const fullComment = await Comment.findOne({
+            where: { id: comment.id },
+            include: [{ model: User, attributes: ["id", "nickname"] }],
+        });
+        console.log(fullComment);
+        res.status(201).json(fullComment);
     } catch (e) {
         console.log(e);
         next(e);

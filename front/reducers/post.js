@@ -60,6 +60,7 @@ const initialState = {
     firstAccess: false,
 };
 
+/*
 export const generateDummyPost = (number) =>
     Array(number)
         .fill()
@@ -86,6 +87,7 @@ export const generateDummyPost = (number) =>
                 },
             ],
         }));
+ */
 /*
 const dummyPost = (data) => ({
     id: data.id,
@@ -118,8 +120,7 @@ export const postSlice = createSlice({
         addPostSuccess: (state, action) => {
             state.addPostLoading = false;
             state.addPostDone = true;
-            // state.mainPosts = [dummyPost(action.payload), ...state.mainPosts];
-            state.mainPosts.unshift(post);
+            state.mainPosts.unshift(action.payload);
             state.imagePaths = [];
         },
         addPostFailure: (state, action) => {

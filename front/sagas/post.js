@@ -10,24 +10,16 @@ import {
 } from "redux-saga/effects";
 import { POST_ACTION } from "../actions/postAction";
 import axios from "axios";
-import shortId from "shortid";
 import { USER_ACTION } from "../actions/userAction";
+import shortId from "shortid";
 import { generateDummyPost } from "../reducers/post";
 
 function addPostAPI(data) {
     return axios.post("/post", { content: data });
 }
-function removePostAPI(data) {
-    return axios.delete("/api/post", data);
-}
-function addCommentAPI(data) {
-    return axios.post(`/post/${data.postId}/comment`, data);
-}
-
 function* addPost(action) {
     try {
         const result = yield call(addPostAPI, action.payload);
-        console.log(result.data);
         yield put({
             type: POST_ACTION.ADD_POST_SUCCESS,
             payload: result.data,
@@ -43,6 +35,9 @@ function* addPost(action) {
             // error: err.response.data,
         });
     }
+}
+function removePostAPI(data) {
+    return axios.delete("/api/post", data);
 }
 
 function* removePost(action) {
@@ -65,13 +60,21 @@ function* removePost(action) {
         });
     }
 }
+function addCommentAPI(data) {
+    return axios.post(`/post/${data.postId}/comment`, data);
+}
 
 function* addComment(action) {
     try {
         const result = yield call(addCommentAPI, action.payload);
+        console.log(result.data);
         yield put({
             type: POST_ACTION.ADD_COMMENT_SUCCESS,
             payload: result.data,
+        });
+        yield put({
+            type: USER_ACTION.ADD_COMMENT_TO_ME,
+            payload: result.data.id,
         });
     } catch (err) {
         console.log(err);
@@ -86,14 +89,20 @@ function* removeComment(action) {
     try {
     } catch (err) {}
 }
-function* loadPosts(action) {
+
+function loadPostsAPI() {
+    return axios.get("/posts");
+}
+
+function* loadPosts() {
     try {
-        yield delay(1000);
+        const result = yield call(loadPostsAPI);
         yield put({
             type: POST_ACTION.LOAD_POSTS_SUCCESS,
-            payload: generateDummyPost(10),
+            payload: result.data,
         });
     } catch (err) {
+        console.log(err);
         yield put({
             type: POST_ACTION.LOAD_POSTS_FAILURE,
             error: err,

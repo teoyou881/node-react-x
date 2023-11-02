@@ -30,10 +30,23 @@ router.post("/", isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.delete("/:postId", isLoggedIn, async (req, res, next) => {
+    try {
+        const post = await Post.findOne({ where: { id: req.params.postId } });
+        if (!post) {
+            return res.status(403).send("There is no post");
+        }
+        await Post.destroy({ where: { id: req.params.postId } });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     try {
         const post = await Post.findOne({
-            where: { id: req.params.postId },
+            where: { id: req.params.postId, UserId: req.user.id },
         });
         if (!post) {
             return res.status(403).send("There is no post");

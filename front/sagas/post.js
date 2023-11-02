@@ -37,20 +37,18 @@ function* addPost(action) {
     }
 }
 function removePostAPI(data) {
-    return axios.delete("/api/post", data);
+    return axios.delete(`/post/${data}`);
 }
-
 function* removePost(action) {
     try {
-        //const result = yield call(addPostAPI, action.data);
-        yield delay(1000);
+        const result = yield call(removePostAPI, action.payload);
         yield put({
             type: POST_ACTION.REMOVE_POST_SUCCESS,
-            payload: action.payload,
+            payload: result.data,
         });
         yield put({
             type: USER_ACTION.REMOVE_POST_OF_ME,
-            payload: action.payload,
+            payload: result.data,
         });
     } catch (err) {
         yield put({

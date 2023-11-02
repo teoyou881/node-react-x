@@ -119,8 +119,9 @@ export const userSlice = createSlice({
             state.me.Comments = [...state.me.Comments, { id: action.payload }];
         },
         removePostOfMe: (state, action) => {
+            console.log(action.payload);
             state.me.Posts = state.me.Posts.filter(
-                (v) => v.id !== action.payload,
+                (v) => v.id !== action.payload.PostId,
             );
         },
         followRequest: (state, action) => {

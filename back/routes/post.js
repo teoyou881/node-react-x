@@ -37,6 +37,9 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
             return res.status(403).send("There is no post");
         }
         await Post.destroy({ where: { id: req.params.postId } });
+        res.json({
+            PostId: parseInt(req.params.postId, 10),
+        });
     } catch (e) {
         console.log(e);
         next(e);

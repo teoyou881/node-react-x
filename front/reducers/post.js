@@ -141,7 +141,7 @@ export const postSlice = createSlice({
             state.removePostLoading = false;
             state.removePostDone = true;
             state.mainPosts = state.mainPosts.filter(
-                (v) => v.id !== action.payload,
+                (v) => v.id !== action.payload.PostId,
             );
         },
         removePostFailure: (state, action) => {

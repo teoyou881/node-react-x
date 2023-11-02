@@ -21,14 +21,16 @@ import FollowButton from "./FollowButton";
 const PostCard = ({ post, index }) => {
     const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
+    const liked = post.Likers.find((v) => v.id === id);
     const { virtualized, loadPostsLoading } = useSelector(
         (state) => state.post,
     );
-    const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
-    const onToggleLike = useCallback(() => {
-        // make a new state based on previous state
-        setLiked((prev) => !prev);
+    const onLike = useCallback(() => {
+        dispatch(postAction.likePostRequest(post.id));
+    }, []);
+    const onUnlike = useCallback(() => {
+        dispatch(postAction.unlikePostRequest(post.id));
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);
@@ -81,10 +83,10 @@ const PostCard = ({ post, index }) => {
                         <HeartTwoTone
                             twoToneColor="red"
                             key="heart"
-                            onClick={onToggleLike}
+                            onClick={onUnlike}
                         />
                     ) : (
-                        <HeartOutlined key="heart" onClick={onToggleLike} />
+                        <HeartOutlined key="heart" onClick={onLike} />
                     ),
                     <MessageOutlined key="comment" onClick={onToggleComment} />,
                     <Popover
@@ -158,6 +160,7 @@ PostCard.propTypes = {
         createAt: PropTypes.object,
         Comments: PropTypes.arrayOf(PropTypes.object),
         Images: PropTypes.arrayOf(PropTypes.object),
+        Likers: PropTypes.arrayOf(PropTypes.object),
     }),
 };
 

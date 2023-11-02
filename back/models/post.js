@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
         },
     );
     Post.associate = (db) => {
+        // sequelize provides add/get/set/add/remove methods.
+        // Based on relationship, singular or plural should be used.
+        // post.addUser, post.getUser, post.setUser, post.addUser, post.removeUser
+        // post.addComments, post.getComments, post.setComments, post.addComments, post.removeComments
         db.Post.belongsTo(db.User); // A post belongs to a user.
         db.Post.hasMany(db.Comment); // A post has many comments.
         db.Post.hasMany(db.Image); // A post has many comments.

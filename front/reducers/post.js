@@ -42,6 +42,12 @@ const initialState = {
     changeVirtualized: [],
     imagePaths: [],
     hasMorePosts: true,
+    likePostLoading: false,
+    likePostDone: false,
+    likePostError: null,
+    unlikeLoading: false,
+    unlikeDone: false,
+    unlikeError: null,
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
@@ -178,6 +184,41 @@ export const postSlice = createSlice({
         addCommentFailure: (state, action) => {
             state.addCommentLoading = false;
             state.addCommentError = action.payload;
+        },
+        likePostRequest: (state, action) => {
+            state.likePostLoading = true;
+            state.likePostDone = false;
+            state.likePostError = null;
+        },
+        likePostSuccess: (state, action) => {
+            state.likePostLoading = false;
+            state.likePostDone = true;
+            state.mainPosts
+                .find((v) => v.id === action.payload.PostId)
+                .Likers.push({ id: action.payload.UserId });
+        },
+        likePostFailure: (state, action) => {
+            state.likePostLoading = false;
+            state.likePostError = action.payload;
+        },
+        unlikePostRequest: (state, action) => {
+            state.unlikeLoading = true;
+            state.unlikeDone = false;
+            state.unlikeError = null;
+        },
+        unlikePostSuccess: (state, action) => {
+            state.unlikeLoading = false;
+            state.unlikeDone = true;
+            const post = state.mainPosts.find(
+                (v) => v.id === action.payload.PostId,
+            );
+            post.Likers = post.Likers.filter(
+                (v) => v.id !== action.payload.UserId,
+            );
+        },
+        unlikePostFailure: (state, action) => {
+            state.unlikeLoading = false;
+            state.unlikeError = action.payload;
         },
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},

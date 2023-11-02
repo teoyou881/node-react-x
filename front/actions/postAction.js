@@ -8,11 +8,16 @@ export const POST_ACTION = {
     LOAD_POSTS_REQUEST: "post/loadPostsRequest",
     LOAD_POSTS_SUCCESS: "post/loadPostsSuccess",
     LOAD_POSTS_FAILURE: "post/loadPostsFailure",
-
     ADD_COMMENT_REQUEST: "post/addCommentRequest",
     ADD_COMMENT_SUCCESS: "post/addCommentSuccess",
     ADD_COMMENT_FAILURE: "post/addCommentFailure",
     REMOVE_COMMENT_REQUEST: "post/removeCommentRequest",
     REMOVE_COMMENT_SUCCESS: "post/removeCommentSuccess",
     REMOVE_COMMENT_FAILURE: "post/removeCommentFailure",
+    LIKE_POST_REQUEST: "post/likePostRequest",
+    LIKE_POST_SUCCESS: "post/likePostSuccess",
+    LIKE_POST_FAILURE: "post/likePostFailure",
+    UNLIKE_POST_REQUEST: "post/unlikePostRequest",
+    UNLIKE_POST_SUCCESS: "post/unlikePostSuccess",
+    UNLIKE_POST_FAILURE: "post/unlikePostFailure",
 };

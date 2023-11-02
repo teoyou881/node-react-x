@@ -110,6 +110,44 @@ function* loadPosts() {
         });
     }
 }
+function likePostAPI(data) {
+    return axios.patch(`/post/${data}/like`);
+}
+function* likePost(action) {
+    try {
+        const result = yield call(likePostAPI, action.payload);
+        yield put({
+            type: POST_ACTION.LIKE_POST_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.LIKE_POST_FAILURE,
+            error: err,
+            // error: err.response.data,
+        });
+    }
+}
+function unlikePostAPI(data) {
+    return axios.delete(`/post/${data}/like`);
+}
+function* unlikePost(action) {
+    try {
+        const result = yield call(unlikePostAPI, action.payload);
+        yield put({
+            type: POST_ACTION.UNLIKE_POST_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.UNLIKE_POST_FAILURE,
+            error: err,
+            // error: err.response.data,
+        });
+    }
+}
 
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
@@ -126,6 +164,12 @@ function* watchRemoveComment() {
 function* watchLoadPosts() {
     yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
 }
+function* watchLikePost() {
+    yield takeLatest(POST_ACTION.LIKE_POST_REQUEST, likePost);
+}
+function* watchUnlikePost() {
+    yield takeLatest(POST_ACTION.UNLIKE_POST_REQUEST, unlikePost);
+}
 
 export default function* postSaga() {
     yield all([
@@ -134,5 +178,7 @@ export default function* postSaga() {
         fork(watchRemovePost),
         fork(watchRemoveComment),
         fork(watchLoadPosts),
+        fork(watchLikePost),
+        fork(watchUnlikePost),
     ]);
 }

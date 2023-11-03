@@ -27,10 +27,11 @@ const PostCard = ({ post, index }) => {
     );
     const [commentFormOpened, setCommentFormOpened] = useState(false);
     const onLike = useCallback(() => {
-        dispatch(postAction.likePostRequest(post.id));
+        if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));
     }, []);
     const onUnlike = useCallback(() => {
-        dispatch(postAction.unlikePostRequest(post.id));
+        if (id !== post.User.id)
+            dispatch(postAction.unlikePostRequest(post.id));
     }, []);
     const onToggleComment = useCallback(() => {
         setCommentFormOpened((prev) => !prev);

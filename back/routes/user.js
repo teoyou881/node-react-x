@@ -136,6 +136,16 @@ router.post("/logout", isLoggedIn, (req, res, next) => {
 
 router.patch("/nickname", isLoggedIn, async (req, res, next) => {
     try {
+        const existingUser = await User.findOne({
+            where: { nickname: req.body.nickname },
+        });
+
+        if (existingUser) {
+            return res
+                .status(400)
+                .json({ error: "Nickname is already in use" });
+        }
+
         await User.update(
             {
                 nickname: req.body.nickname,

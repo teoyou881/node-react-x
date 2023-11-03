@@ -1,6 +1,7 @@
 import { all, fork, takeLatest, put, delay, call } from "redux-saga/effects";
 import axios from "axios";
 import { USER_ACTION } from "../actions/userAction";
+import { POST_ACTION } from "../actions/postAction";
 
 function logInAPI(data) {
     return axios.post("/user/login", data);
@@ -111,6 +112,12 @@ function* changeNickname(action) {
         const result = yield call(changeNicknameAPI, action.payload);
         yield put({
             type: USER_ACTION.CHANGE_NICKNAME_SUCCESS,
+            payload: result.data,
+        });
+        // After changing nickname, we need to change the nickname of the user in the post
+        // So we need to dispatch the action to the post reducer
+        yield put({
+            type: POST_ACTION.CHANGE_NICKNAME_REQUEST,
             payload: result.data,
         });
     } catch (err) {

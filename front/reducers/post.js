@@ -63,6 +63,9 @@ const initialState = {
     removeCommentLoading: false,
     removeCommentDone: false,
     removeCommentError: null,
+    changeNicknameLoading: false,
+    changeNicknameDone: false,
+    changeNicknameError: null,
     firstAccess: false,
 };
 
@@ -220,6 +223,33 @@ export const postSlice = createSlice({
             state.unlikeLoading = false;
             state.unlikeError = action.payload;
         },
+        changeNicknameRequest: (state, action) => {
+            state.changeNicknameLoading = true;
+            state.changeNicknameDone = false;
+            state.changeNicknameError = null;
+        },
+        changeNicknameSuccess: (state, action) => {
+            state.changeNicknameLoading = false;
+            state.changeNicknameDone = true;
+            // all posts and comments' user.nickname should be changed
+            state.mainPosts.forEach((v) => {
+                if (v.User.id === action.payload.UserId) {
+                    v.User.nickname = action.payload.nickname;
+                }
+                if (v.Comments) {
+                    v.Comments.forEach((c) => {
+                        if (c.User.id === action.payload.UserId) {
+                            c.User.nickname = action.payload.nickname;
+                        }
+                    });
+                }
+            });
+        },
+        changeNicknameFailure: (state, action) => {
+            state.changeNicknameLoading = false;
+            state.changeNicknameError = action.payload;
+        },
+
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},
         removeCommentFailure: (state, action) => {},

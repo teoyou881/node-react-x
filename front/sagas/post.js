@@ -147,6 +147,22 @@ function* unlikePost(action) {
     }
 }
 
+function* changeNickname(action) {
+    try {
+        yield put({
+            type: POST_ACTION.CHANGE_NICKNAME_SUCCESS,
+            payload: action.payload,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.CHANGE_NICKNAME_FAILURE,
+            error: err,
+            // error: err.response.data,
+        });
+    }
+}
+
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
 }
@@ -168,7 +184,9 @@ function* watchLikePost() {
 function* watchUnlikePost() {
     yield takeLatest(POST_ACTION.UNLIKE_POST_REQUEST, unlikePost);
 }
-
+function* watchChangeNickname() {
+    yield takeLatest(POST_ACTION.CHANGE_NICKNAME_REQUEST, changeNickname);
+}
 export default function* postSaga() {
     yield all([
         fork(watchAddPost),
@@ -178,5 +196,6 @@ export default function* postSaga() {
         fork(watchLoadPosts),
         fork(watchLikePost),
         fork(watchUnlikePost),
+        fork(watchChangeNickname),
     ]);
 }

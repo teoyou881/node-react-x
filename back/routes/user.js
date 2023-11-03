@@ -154,7 +154,10 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
                 where: { id: req.user.id },
             },
         );
-        res.status(200).json({ nickname: req.body.nickname });
+        res.status(200).json({
+            nickname: req.body.nickname,
+            UserId: req.user.id,
+        });
     } catch (e) {
         console.log(e);
         next(e);

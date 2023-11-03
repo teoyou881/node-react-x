@@ -20,4 +20,7 @@ export const POST_ACTION = {
     UNLIKE_POST_REQUEST: "post/unlikePostRequest",
     UNLIKE_POST_SUCCESS: "post/unlikePostSuccess",
     UNLIKE_POST_FAILURE: "post/unlikePostFailure",
+    CHANGE_NICKNAME_REQUEST: "post/changeNicknameRequest",
+    CHANGE_NICKNAME_SUCCESS: "post/changeNicknameSuccess",
+    CHANGE_NICKNAME_FAILURE: "post/changeNicknameFailure",
 };

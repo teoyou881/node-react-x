@@ -102,11 +102,13 @@ export const userSlice = createSlice({
         },
         changeNicknameRequest: (state, action) => {
             state.changeNicknameLoading = true;
+            state.changeNicknameDone = false;
+            state.changeNicknameError = null;
         },
         changeNicknameSuccess: (state, action) => {
             state.changeNicknameLoading = false;
             state.changeNicknameDone = true;
-            state.me = action.payload;
+            state.me.nickname = action.payload.nickname;
         },
         changeNicknameFailure: (state, action) => {
             state.changeNicknameLoading = false;

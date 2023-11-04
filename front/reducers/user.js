@@ -24,6 +24,8 @@ const initialState = {
     unfollowDone: false,
     unfollowError: null,
     me: null,
+    // With this, we can know which button is loading
+    // Otherwise, all follow buttons will be loading
     followBtnId: null,
     signUpData: {},
     loginData: {},
@@ -128,12 +130,14 @@ export const userSlice = createSlice({
         },
         followRequest: (state, action) => {
             state.followLoading = true;
-            state.followBtnId = action.payload;
+            state.followDone = false;
+            state.followError = null;
+            state.followBtnId = action.payload.UserId;
         },
         followSuccess: (state, action) => {
             state.followLoading = false;
             state.followDone = true;
-            state.me.Followings.push({ id: action.payload });
+            state.me.Followings.push({ id: action.payload.UserId });
         },
         followFailure: (state, action) => {
             state.followLoading = false;
@@ -142,12 +146,14 @@ export const userSlice = createSlice({
         },
         unfollowRequest: (state, action) => {
             state.unfollowLoading = true;
+            state.unfollowDone = false;
+            state.unfollowError = null;
         },
         unfollowSuccess: (state, action) => {
             state.unfollowLoading = false;
             state.unfollowDone = true;
             state.me.Followings = state.me.Followings.filter(
-                (v) => v.id !== action.payload,
+                (v) => v.id !== action.payload.Userid,
             );
         },
         unfollowFailure: (state, action) => {

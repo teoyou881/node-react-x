@@ -55,30 +55,34 @@ function* logOut() {
     }
 }
 
+function followAPI(data) {
+    return axios.patch(`/user/${data}/follow`);
+}
 function* follow(action) {
     try {
-        // TODO
-        // API
-        yield delay(1000);
+        const result = yield call(followAPI, action.payload);
         yield put({
             type: USER_ACTION.FOLLOW_SUCCESS,
-            payload: action.payload,
+            payload: result.data,
         });
     } catch (err) {
+        console.log(err);
         yield put({
             type: USER_ACTION.FOLLOW_FAILURE,
             error: err.response.data,
         });
     }
 }
+
+function unfollowAPI(data) {
+    return axios.patch(`/user/${data}/unfollow`);
+}
 function* unfollow(action) {
     try {
-        // TODO
-        // API
-        yield delay(1000);
+        const result = yield call(unfollowAPI, action.payload);
         yield put({
             type: USER_ACTION.UNFOLLOW_SUCCESS,
-            payload: action.payload,
+            payload: result.data,
         });
     } catch (err) {
         yield put({

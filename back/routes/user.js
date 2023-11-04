@@ -164,4 +164,38 @@ router.patch("/nickname", isLoggedIn, async (req, res, next) => {
     }
 });
 
+//router for following
+router.patch("/:userId/follow", isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            where: { id: req.params.userId },
+        });
+        if (!user) {
+            return res.status(403).send("No user");
+        }
+        await user.addFollowers(req.user.id);
+        res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
+//router for unfollowing
+router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            where: { id: req.params.userId },
+        });
+        if (!user) {
+            return res.status(403).send("No user");
+        }
+        await user.removeFollowers(req.user.id);
+        res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 module.exports = router;

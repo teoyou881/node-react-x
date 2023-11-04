@@ -6,9 +6,9 @@ import { userAction } from "../reducers/user";
 import useInput from "../hooks/useInput";
 
 const DivWrapper = styled.div`
-    margin-bottom: 20px;
-    border: 1px solid #d9d9d9;
-    padding: 20px;
+    margin-bottom: 10px;
+    //border: 1px solid #d9d9d9;
+    //padding: 20px;
 `;
 
 const NicknameEditForm = () => {
@@ -19,15 +19,17 @@ const NicknameEditForm = () => {
         setNickname("");
     }, [nickname]);
     return (
-        <Form>
-            <Input.Search
-                addonBefore="nickname"
-                enterButton="edit"
-                value={nickname}
-                onChange={onChangeNickname}
-                onSearch={onSearch}
-            />
-        </Form>
+        <DivWrapper>
+            <Form>
+                <Input.Search
+                    addonBefore="nickname"
+                    enterButton="edit"
+                    value={nickname}
+                    onChange={onChangeNickname}
+                    onSearch={onSearch}
+                />
+            </Form>
+        </DivWrapper>
     );
 };
 

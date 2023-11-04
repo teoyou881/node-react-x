@@ -198,4 +198,51 @@ router.delete("/:userId/follow", isLoggedIn, async (req, res, next) => {
     }
 });
 
+//router for deleeing followers
+router.delete("/follower/:userId", isLoggedIn, async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            where: { id: req.params.userId },
+        });
+        if (!user) {
+            return res.status(403).send("No user");
+        }
+        await user.removeFollowings(req.user.id);
+        res.status(200).json({ UserId: parseInt(req.params.userId, 10) });
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
+//router for getting followers
+router.get("/followers", isLoggedIn, async (req, res, next) => {
+    try {
+        const user = req.user;
+        const followers = await user.getFollowers({
+            attributes: ["id", "nickname"],
+            // limit: parseInt(req.query.limit, 10),
+        });
+        res.status(200).json(followers);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
+//router for getting followings
+router.get("/followings", isLoggedIn, async (req, res, next) => {
+    try {
+        const user = req.user;
+        const followings = await user.getFollowings({
+            attributes: ["id", "nickname"],
+            // limit: parseInt(req.query.limit, 10),
+        });
+        res.status(200).json(followings);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 module.exports = router;

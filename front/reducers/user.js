@@ -8,6 +8,12 @@ const initialState = {
     loadMyInfoLoading: false,
     loadMyInfoDone: false,
     loadMyInfoError: null,
+    loadFollowersLoading: false,
+    loadFollowersDone: false,
+    loadFollowersError: null,
+    loadFollowingsLoading: false,
+    loadFollowingsDone: false,
+    loadFollowingsError: null,
     logoutLoading: false,
     logoutDone: false,
     logoutError: null,
@@ -23,6 +29,9 @@ const initialState = {
     unfollowLoading: false,
     unfollowDone: false,
     unfollowError: null,
+    removeFollowerLoading: false,
+    removeFollowerDone: false,
+    removeFollowerError: null,
     me: null,
     // With this, we can know which button is loading
     // Otherwise, all follow buttons will be loading
@@ -160,6 +169,53 @@ export const userSlice = createSlice({
             state.unfollowLoading = false;
             state.unfollowDone = true;
             state.unfollowError = action.payload;
+        },
+        removeFollowerRequest: (state, action) => {
+            state.removeFollowerLoading = true;
+            state.removeFollowerDone = false;
+            state.removeFollowerError = null;
+        },
+        removeFollowerSuccess: (state, action) => {
+            state.removeFollowerLoading = false;
+            state.removeFollowerDone = true;
+            state.me.Followers = state.me.Followers.filter(
+                (v) => v.id !== action.payload.UserId,
+            );
+        },
+        removeFollowerFailure: (state, action) => {
+            state.removeFollowerLoading = false;
+            state.removeFollowerDone = true;
+            state.removeFollowerError = action.payload;
+        },
+        loadFollowersRequest: (state, action) => {
+            state.loadFollowersLoading = true;
+            state.loadFollowersDone = false;
+            state.loadFollowersError = null;
+        },
+        loadFollowersSuccess: (state, action) => {
+            state.loadFollowersLoading = false;
+            state.loadFollowersDone = true;
+            state.me.Followers = action.payload;
+        },
+        loadFollowersFailure: (state, action) => {
+            state.loadFollowersLoading = false;
+            state.loadFollowersDone = true;
+            state.loadFollowersError = action.payload;
+        },
+        loadFollowingsRequest: (state, action) => {
+            state.loadFollowingsLoading = true;
+            state.loadFollowingsDone = false;
+            state.loadFollowingsError = null;
+        },
+        loadFollowingsSuccess: (state, action) => {
+            state.loadFollowingsLoading = false;
+            state.loadFollowingsDone = true;
+            state.me.Followings = action.payload;
+        },
+        loadFollowingsFailure: (state, action) => {
+            state.loadFollowingsLoading = false;
+            state.loadFollowingsDone = true;
+            state.loadFollowingsError = action.payload;
         },
     },
 });

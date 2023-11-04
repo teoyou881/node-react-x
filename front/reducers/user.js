@@ -153,7 +153,7 @@ export const userSlice = createSlice({
             state.unfollowLoading = false;
             state.unfollowDone = true;
             state.me.Followings = state.me.Followings.filter(
-                (v) => v.id !== action.payload.Userid,
+                (v) => v.id !== action.payload.UserId,
             );
         },
         unfollowFailure: (state, action) => {

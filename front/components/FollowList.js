@@ -19,27 +19,41 @@ const FollowList = ({ header, data }) => {
     return (
         <List
             style={{ marginBottom: 20 }}
-            grid={{ gutter: 4, xs: 2, md: 3 }}
+            // grid={{ gutter: 4, xs: 2, md: 3 }}
             size="small"
             header={<div>{header}</div>}
             loadMore={
-                <div style={{ textAlign: "center", margin: "10px 0" }}>
+                <div
+                    style={{
+                        textAlign: "center",
+                        margin: "10px 0",
+                    }}
+                >
                     <Button>More</Button>
                 </div>
             }
             bordered
             dataSource={data}
             renderItem={(item) => (
-                <List.Item style={{ marginTop: 20 }} key={item.id}>
+                <List.Item key={item.id}>
                     <Card
-                        actions={[
-                            <StopOutlined
-                                key="stop"
-                                onClick={onClick(item.id)}
-                            />,
-                        ]}
+                        style={{ width: "100%", padding: "0px" }}
+                        // actions={[
+                        //     <StopOutlined
+                        //         key="stop"
+                        //         onClick={onClick(item.id)}
+                        //     />,
+                        // ]}
                     >
-                        <Card.Meta description={item.nickname}></Card.Meta>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <span>{item.nickname}</span>
+                            <Button>delete</Button>
+                        </div>
                     </Card>
                 </List.Item>
             )}

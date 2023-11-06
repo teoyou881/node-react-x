@@ -1,10 +1,9 @@
 import { List, Button, Card } from "antd";
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
-import { StopOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { userAction } from "../reducers/user";
-import { USER_ACTION } from "../actions/userAction";
+import { createGlobalStyle } from "styled-components";
 
 const FollowList = ({ header, data }) => {
     const dispatch = useDispatch();
@@ -35,26 +34,21 @@ const FollowList = ({ header, data }) => {
             bordered
             dataSource={data}
             renderItem={(item) => (
-                <List.Item key={item.id}>
-                    <Card
-                        style={{ width: "100%", padding: "0px" }}
-                        // actions={[
-                        //     <StopOutlined
-                        //         key="stop"
-                        //         onClick={onClick(item.id)}
-                        //     />,
-                        // ]}
+                <List.Item key={item.id} style={{ padding: "0px" }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                        }}
                     >
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                            }}
-                        >
-                            <span>{item.nickname}</span>
-                            <Button>delete</Button>
-                        </div>
-                    </Card>
+                        <span style={{ marginLeft: "1.25rem" }}>
+                            {item.nickname}
+                        </span>
+                        <Button style={{ marginRight: "1.25rem" }}>
+                            delete
+                        </Button>
+                    </div>
                 </List.Item>
             )}
         />

@@ -1,5 +1,7 @@
 // store/reducer/user.ts
 import { createSlice } from "@reduxjs/toolkit";
+import shortId from "shortid";
+import { faker } from "@faker-js/faker";
 
 const initialState = {
     logInLoading: false,
@@ -49,6 +51,10 @@ const dummyUser = (data) => ({
     Followers: [{ nickname: "F1" }, { nickname: "F2" }, { nickname: "F3" }],
 });
 */
+const dummyFollowers = () => ({
+    id: faker.number.int(),
+    nickname: faker.internet.userName(),
+});
 export const userSlice = createSlice({
     name: "user",
     initialState,
@@ -195,7 +201,46 @@ export const userSlice = createSlice({
         loadFollowersSuccess: (state, action) => {
             state.loadFollowersLoading = false;
             state.loadFollowersDone = true;
-            state.me.Followers = action.payload;
+            // state.me.Followers = action.payload;
+
+            state.me.Followers = [
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+                dummyFollowers(),
+            ];
         },
         loadFollowersFailure: (state, action) => {
             state.loadFollowersLoading = false;

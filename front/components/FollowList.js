@@ -42,7 +42,13 @@ const FollowList = ({ header, data }) => {
                             width: "100%",
                         }}
                     >
-                        <span style={{ marginLeft: "1.25rem" }}>
+                        <span
+                            style={{
+                                marginLeft: "1.25rem",
+                                lineHeight: "32px",
+                                height: "32px",
+                            }}
+                        >
                             {item.nickname}
                         </span>
                         <Button style={{ marginRight: "1.25rem" }}>

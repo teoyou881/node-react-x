@@ -21,6 +21,13 @@ const Profile = () => {
     const Followings = me?.Followings;
     const router = useRouter();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!me) router.push("/");
+    }, [me]); // Run this effect whenever 'me' changes
+    if (!me) {
+        return null;
+    }
     useEffect(() => {
         dispatch(userAction.loadFollowersRequest());
         dispatch(userAction.loadFollowingsRequest());
@@ -68,12 +75,11 @@ const Profile = () => {
         };
     }, [loadMoreFollowersLoading, showFollowerIndex]);
 
-    useEffect(() => {
-        if (!me) router.push("/");
-    }, [me]); // Run this effect whenever 'me' changes
-    if (!me) {
-        return null;
-    }
+    const onDelete = useCallback((id, follow) => {
+        if (follow === "following") dispatch(userAction.unfollowRequest(id));
+        if (follow === "follower")
+            dispatch(userAction.removeFollowerRequest(id));
+    }, []);
 
     // functions for react-virtualized
     const followingsRowRenderer = useCallback(
@@ -96,7 +102,11 @@ const Profile = () => {
                         >
                             {following.nickname}
                         </span>
-                        <Button>remove</Button>
+                        <Button
+                            onClick={() => onDelete(following.id, "following")}
+                        >
+                            Delete
+                        </Button>
                     </div>
                 </div>
             );
@@ -123,7 +133,11 @@ const Profile = () => {
                         >
                             {follower.nickname}
                         </span>
-                        <Button>remove</Button>
+                        <Button
+                            onClick={() => onDelete(follower.id, "follower")}
+                        >
+                            Following
+                        </Button>
                     </div>
                 </div>
             );

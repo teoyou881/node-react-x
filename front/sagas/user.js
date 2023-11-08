@@ -139,7 +139,6 @@ function loadFollowersAPI() {
 function* loadFollowers() {
     try {
         const result = yield call(loadFollowersAPI);
-        console.log(result.data);
         yield put({
             type: USER_ACTION.LOAD_FOLLOWERS_SUCCESS,
             payload: result.data,
@@ -159,7 +158,6 @@ function loadFollowingsAPI() {
 function* loadFollowings() {
     try {
         const result = yield call(loadFollowingsAPI);
-        console.log(result.data);
         yield put({
             type: USER_ACTION.LOAD_FOLLOWINGS_SUCCESS,
             payload: result.data,
@@ -188,6 +186,22 @@ function* removeFollower(action) {
         console.log(err);
         yield put({
             type: USER_ACTION.REMOVE_FOLLOWER_FAILURE,
+            error: err,
+        });
+    }
+}
+
+function* loadMoreFollowings(action) {
+    console.log(action.payload);
+    try {
+        yield put({
+            type: USER_ACTION.LOAD_MORE_FOLLOWINGS_SUCCESS,
+            payload: action.payload,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: USER_ACTION.LOAD_MORE_FOLLOWINGS_FAILURE,
             error: err,
         });
     }
@@ -224,6 +238,12 @@ function* watchLoadFollowings() {
 function* watchRemoveFollower() {
     yield takeLatest(USER_ACTION.REMOVE_FOLLOWER_REQUEST, removeFollower);
 }
+function* watchLoadMoreFollowings() {
+    yield takeLatest(
+        USER_ACTION.LOAD_MORE_FOLLOWINGS_REQUEST,
+        loadMoreFollowings,
+    );
+}
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -236,6 +256,7 @@ export default function* userSaga() {
         fork(watchLoadFollowers),
         fork(watchLoadFollowings),
         fork(watchRemoveFollower),
+        fork(watchLoadMoreFollowings),
         // fork(watchEditNickname),
     ]);
 }

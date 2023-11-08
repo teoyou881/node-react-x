@@ -16,6 +16,9 @@ const initialState = {
     loadFollowingsLoading: false,
     loadFollowingsDone: false,
     loadFollowingsError: null,
+    loadMoreFollowingsLoading: false,
+    loadMoreFollowingsDone: false,
+    loadMoreFollowingsError: null,
     logoutLoading: false,
     logoutDone: false,
     logoutError: null,
@@ -40,6 +43,9 @@ const initialState = {
     followBtnId: null,
     signUpData: {},
     loginData: {},
+    followingLastIndex: 10,
+    followerLastIndex: 10,
+    showFollowings: [],
 };
 /*
 const dummyUser = (data) => ({
@@ -201,46 +207,7 @@ export const userSlice = createSlice({
         loadFollowersSuccess: (state, action) => {
             state.loadFollowersLoading = false;
             state.loadFollowersDone = true;
-            // state.me.Followers = action.payload;
-
-            state.me.Followers = [
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-                dummyFollowers(),
-            ];
+            state.me.Followers = action.payload;
         },
         loadFollowersFailure: (state, action) => {
             state.loadFollowersLoading = false;
@@ -251,16 +218,48 @@ export const userSlice = createSlice({
             state.loadFollowingsLoading = true;
             state.loadFollowingsDone = false;
             state.loadFollowingsError = null;
+            state.followingLastIndex = 10;
         },
         loadFollowingsSuccess: (state, action) => {
             state.loadFollowingsLoading = false;
             state.loadFollowingsDone = true;
             state.me.Followings = action.payload;
+            state.showFollowings = action.payload.slice(0, 10);
         },
         loadFollowingsFailure: (state, action) => {
             state.loadFollowingsLoading = false;
             state.loadFollowingsDone = true;
             state.loadFollowingsError = action.payload;
+        },
+        loadMoreFollowingsRequest: (state, action) => {
+            state.loadMoreFollowingsLoading = true;
+            state.loadMoreFollowingsDone = false;
+            state.loadMoreFollowingsError = null;
+        },
+        loadMoreFollowingsSuccess: (state, action) => {
+            state.loadMoreFollowingsLoading = false;
+            state.loadMoreFollowingsDone = true;
+            console.log(state.followingLastIndex);
+            if (action.payload === state.me.Followings.length) {
+                return;
+            }
+
+            if (action.payload + 10 > state.me.Followings.length) {
+                state.followingLastIndex = state.me.Followings.length;
+            } else {
+                state.followingLastIndex = action.payload + 10;
+            }
+            console.log(state.followingLastIndex);
+            const newArr = state.me.Followings.slice(
+                action.payload,
+                state.followingLastIndex,
+            );
+            state.showFollowings = [...state.showFollowings, ...newArr];
+        },
+        loadMoreFollowingsFailure: (state, action) => {
+            state.loadMoreFollowingsLoading = false;
+            state.loadMoreFollowingsDone = true;
+            state.loadMoreFollowingsError = action.payload;
         },
     },
 });

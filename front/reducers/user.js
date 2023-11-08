@@ -161,6 +161,11 @@ export const userSlice = createSlice({
             state.followLoading = false;
             state.followDone = true;
             state.me.Followings.push({ id: action.payload.UserId });
+            if (state.me.Followings.length < 10) {
+                state.showFollowingIndex = state.me.Followings.length;
+            } else {
+                state.showFollowingIndex = 10;
+            }
         },
         followFailure: (state, action) => {
             state.followLoading = false;
@@ -178,6 +183,11 @@ export const userSlice = createSlice({
             state.me.Followings = state.me.Followings.filter(
                 (v) => v.id !== action.payload.UserId,
             );
+            if (state.me.Followings.length < 10) {
+                state.showFollowingIndex = state.me.Followings.length;
+            } else {
+                state.showFollowingIndex = 10;
+            }
         },
         unfollowFailure: (state, action) => {
             state.unfollowLoading = false;
@@ -195,6 +205,11 @@ export const userSlice = createSlice({
             state.me.Followers = state.me.Followers.filter(
                 (v) => v.id !== action.payload.UserId,
             );
+            if (state.me.Followers.length < 10) {
+                state.showFollowerIndex = state.me.Followers.length;
+            } else {
+                state.showFollowerIndex = 10;
+            }
         },
         removeFollowerFailure: (state, action) => {
             state.removeFollowerLoading = false;

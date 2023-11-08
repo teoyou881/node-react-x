@@ -192,7 +192,8 @@ function* removeFollower(action) {
 }
 
 function* loadMoreFollowings(action) {
-    console.log(action.payload);
+    //debounce
+    yield delay(100);
     try {
         yield put({
             type: USER_ACTION.LOAD_MORE_FOLLOWINGS_SUCCESS,

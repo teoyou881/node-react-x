@@ -18,14 +18,12 @@ import { Button } from "antd";
 const Profile = () => {
     const {
         me,
-        loadFollowingsLoading,
         loadFollowersLoading,
         followingLastIndex,
-        followerLastIndex,
         loadMoreFollowingsLoading,
         loadMoreFollowersLoading,
-        showFollowings,
-        showFollowers,
+        showFollowingIndex,
+        showFollowerIndex,
     } = useSelector((state) => state.user);
     const { Followers, Followings } = useSelector((state) => state.user?.me);
     const router = useRouter();
@@ -45,11 +43,15 @@ const Profile = () => {
         function onScroll() {
             if (
                 followings.scrollTop + followings.clientHeight >
-                followings.scrollHeight - 50
+                followings.scrollHeight - 300
             ) {
-                dispatch(
-                    userAction.loadMoreFollowingsRequest(followingLastIndex),
-                );
+                if (!loadMoreFollowingsLoading) {
+                    dispatch(
+                        userAction.loadMoreFollowingsRequest(
+                            showFollowingIndex,
+                        ),
+                    );
+                }
             }
         }
         followings.addEventListener("scroll", onScroll);
@@ -177,7 +179,7 @@ const Profile = () => {
                                 width={width}
                                 height={height}
                                 rowHeight={40}
-                                rowCount={showFollowings.length}
+                                rowCount={showFollowingIndex}
                                 rowRenderer={followingsRowRenderer}
                             />
                         )}

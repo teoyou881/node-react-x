@@ -202,6 +202,11 @@ export const userSlice = createSlice({
             state.loadFollowersLoading = true;
             state.loadFollowersDone = false;
             state.loadFollowersError = null;
+            if (state.me.Followers.length < 10) {
+                state.showFollowerIndex = state.me.Followers.length;
+            } else {
+                state.showFollowerIndex = 10;
+            }
         },
         loadFollowersSuccess: (state, action) => {
             state.loadFollowersLoading = false;
@@ -217,7 +222,11 @@ export const userSlice = createSlice({
             state.loadFollowingsLoading = true;
             state.loadFollowingsDone = false;
             state.loadFollowingsError = null;
-            state.showFollowingIndex = 10;
+            if (state.me.Followings.length < 10) {
+                state.showFollowingIndex = state.me.Followings.length;
+            } else {
+                state.showFollowingIndex = 10;
+            }
         },
         loadFollowingsSuccess: (state, action) => {
             state.loadFollowingsLoading = false;

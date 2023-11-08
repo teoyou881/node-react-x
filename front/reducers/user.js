@@ -19,6 +19,9 @@ const initialState = {
     loadMoreFollowingsLoading: false,
     loadMoreFollowingsDone: false,
     loadMoreFollowingsError: null,
+    loadMoreFollowersLoading: false,
+    loadMoreFollowersDone: false,
+    loadMoreFollowersError: null,
     logoutLoading: false,
     logoutDone: false,
     logoutError: null,
@@ -259,6 +262,28 @@ export const userSlice = createSlice({
             state.loadMoreFollowingsLoading = false;
             state.loadMoreFollowingsDone = true;
             state.loadMoreFollowingsError = action.payload;
+        },
+        loadMoreFollowersRequest: (state, action) => {
+            state.loadMoreFollowersLoading = true;
+            state.loadMoreFollowersDone = false;
+            state.loadMoreFollowersError = null;
+        },
+        loadMoreFollowersSuccess: (state, action) => {
+            state.loadMoreFollowersLoading = false;
+            state.loadMoreFollowersDone = true;
+            if (action.payload === state.me.Followers.length) {
+                return;
+            }
+            if (action.payload + 10 > state.me.Followers.length) {
+                state.showFollowerIndex = state.me.Followers.length;
+            } else {
+                state.showFollowerIndex = action.payload + 10;
+            }
+        },
+        loadMoreFollowersFailure: (state, action) => {
+            state.loadMoreFollowersLoading = false;
+            state.loadMoreFollowersDone = true;
+            state.loadMoreFollowersError = action.payload;
         },
     },
 });

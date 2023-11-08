@@ -207,6 +207,22 @@ function* loadMoreFollowings(action) {
         });
     }
 }
+function* loadMoreFollowers(action) {
+    //debounce
+    yield delay(100);
+    try {
+        yield put({
+            type: USER_ACTION.LOAD_MORE_FOLLOWERS_SUCCESS,
+            payload: action.payload,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: USER_ACTION.LOAD_MORE_FOLLOWERS_FAILURE,
+            error: err,
+        });
+    }
+}
 
 function* watchLogIn() {
     yield takeLatest(USER_ACTION.LOGIN_REQUEST, logIn);
@@ -245,6 +261,12 @@ function* watchLoadMoreFollowings() {
         loadMoreFollowings,
     );
 }
+function* watchLoadMoreFollowers() {
+    yield takeLatest(
+        USER_ACTION.LOAD_MORE_FOLLOWERS_REQUEST,
+        loadMoreFollowers,
+    );
+}
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -258,6 +280,7 @@ export default function* userSaga() {
         fork(watchLoadFollowings),
         fork(watchRemoveFollower),
         fork(watchLoadMoreFollowings),
+        fork(watchLoadMoreFollowers),
         // fork(watchEditNickname),
     ]);
 }

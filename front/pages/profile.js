@@ -1,43 +1,32 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import NicknameEditForm from "../components/NicknameEditForm";
-import FollowList from "../components/FollowList";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { userAction } from "../reducers/user";
-import {
-    AutoSizer,
-    CellMeasurer,
-    CellMeasurerCache,
-    InfiniteLoader,
-    List,
-} from "react-virtualized";
-import { Button } from "antd";
+import { AutoSizer, List } from "react-virtualized";
+import { Button, Empty } from "antd";
 
 const Profile = () => {
     const {
         me,
-        loadFollowersLoading,
         followingLastIndex,
         loadMoreFollowingsLoading,
         loadMoreFollowersLoading,
         showFollowingIndex,
         showFollowerIndex,
     } = useSelector((state) => state.user);
-    const { Followers, Followings } = useSelector((state) => state.user?.me);
+    const Followers = me?.Followers;
+    const Followings = me?.Followings;
     const router = useRouter();
     const dispatch = useDispatch();
-
-    const [followingUsers, setFollowingUsers] = useState(
-        Followings.slice(0, 10),
-    );
-    const [followerUsers, setFollowerUsers] = useState(Followers.slice(0, 10));
     useEffect(() => {
         dispatch(userAction.loadFollowersRequest());
         dispatch(userAction.loadFollowingsRequest());
     }, []);
 
+    // useEffect for infinite scrolling
     useEffect(() => {
         const followings = document.getElementById("followings");
         function onScroll() {
@@ -54,27 +43,30 @@ const Profile = () => {
                 }
             }
         }
-        followings.addEventListener("scroll", onScroll);
+        followings?.addEventListener("scroll", onScroll);
         return () => {
-            followings.removeEventListener("scroll", onScroll);
+            followings?.removeEventListener("scroll", onScroll);
         };
-    }, [loadMoreFollowingsLoading, followingLastIndex]);
-
+    }, [loadMoreFollowingsLoading, showFollowingIndex]);
     useEffect(() => {
         const followers = document.getElementById("followers");
         function onScroll() {
             if (
                 followers.scrollTop + followers.clientHeight >
-                followers.scrollHeight - 400
+                followers.scrollHeight - 300
             ) {
-                dispatch(userAction.loadFollowersRequest());
+                if (!loadMoreFollowersLoading) {
+                    dispatch(
+                        userAction.loadFollowersRequest(showFollowerIndex),
+                    );
+                }
             }
         }
-        followers.addEventListener("scroll", onScroll);
+        followers?.addEventListener("scroll", onScroll);
         return () => {
-            followers.removeEventListener("scroll", onScroll);
+            followers?.removeEventListener("scroll", onScroll);
         };
-    }, [loadFollowersLoading, Followers]);
+    }, [loadMoreFollowersLoading, showFollowerIndex]);
 
     useEffect(() => {
         if (!me) router.push("/");
@@ -82,18 +74,11 @@ const Profile = () => {
     if (!me) {
         return null;
     }
-    // const cache = new CellMeasurerCache({
-    //     fixedWidth: true,
-    //     // fixedHeight: true,
-    //     // minHeight: 100,
-    //     defaultHeight: 32,
-    //     // keyMapper: (index) => index,
-    // });
 
+    // functions for react-virtualized
     const followingsRowRenderer = useCallback(
         ({ key, index, style, parent }) => {
             const following = Followings[index];
-            console.log(following);
             return (
                 <div key={key} style={style}>
                     <div
@@ -109,16 +94,15 @@ const Profile = () => {
                                 lineHeight: "32px",
                             }}
                         >
-                            {following?.nickname}
+                            {following.nickname}
                         </span>
                         <Button>remove</Button>
                     </div>
                 </div>
             );
         },
-        [],
+        [Followings],
     );
-
     const followersRowRenderer = useCallback(
         ({ key, index, style, parent }) => {
             const follower = Followers[index];
@@ -154,67 +138,107 @@ const Profile = () => {
             </Head>
             <AppLayout>
                 <NicknameEditForm />
-                <div>
-                    <div style={{ textAlign: "center" }}>
-                        <h2 style={{ margin: "0 auto" }}>Followings</h2>
-                    </div>
-
-                    <AutoSizer
-                        style={{
-                            height: "160px",
-                            marginBottom: "70px",
-                            width: "auto",
-                        }}
-                    >
-                        {({ width, height }) => (
-                            <List
+                <div style={{ marginTop: "50px" }}>
+                    <div>
+                        <div style={{ textAlign: "center" }}>
+                            <h2 style={{ margin: "0 auto" }}>Followings</h2>
+                        </div>
+                        {showFollowingIndex > 0 ? (
+                            <AutoSizer
                                 style={{
-                                    border: "1px solid #D7D7D7",
-                                    borderRadius: "10px",
-                                    margin: "1.25rem auto",
-                                    maxWidth: "420px",
-                                    padding: "5px 0",
+                                    height: "160px",
+                                    width: "auto",
                                 }}
-                                id="followings"
-                                width={width}
-                                height={height}
-                                rowHeight={40}
-                                rowCount={showFollowingIndex}
-                                rowRenderer={followingsRowRenderer}
-                            />
+                            >
+                                {({ width, height }) => (
+                                    <List
+                                        style={{
+                                            border: "1px solid #D7D7D7",
+                                            borderRadius: "10px",
+                                            margin: "1.25rem auto",
+                                            maxWidth: "420px",
+                                            padding: "5px 0",
+                                        }}
+                                        id="followings"
+                                        width={width}
+                                        height={height}
+                                        rowHeight={40}
+                                        rowCount={showFollowingIndex}
+                                        rowRenderer={followingsRowRenderer}
+                                    />
+                                )}
+                            </AutoSizer>
+                        ) : (
+                            <div>
+                                <Empty
+                                    imageStyle={{
+                                        height: "inherit",
+                                        marginTop: "20px",
+                                    }}
+                                    description={
+                                        <span
+                                            style={{
+                                                fontSize: "1.25rem",
+                                                fontWeight: "400",
+                                            }}
+                                        >
+                                            No Followings
+                                        </span>
+                                    }
+                                />
+                            </div>
                         )}
-                    </AutoSizer>
-                </div>
-                <div>
-                    <div style={{ textAlign: "center" }}>
-                        <h2 style={{ margin: "0 auto" }}>Followers</h2>
                     </div>
-
-                    <AutoSizer
-                        style={{
-                            height: "250px",
-                            marginBottom: "70px",
-                            width: "auto",
-                        }}
-                    >
-                        {({ width, height }) => (
-                            <List
+                    <div style={{ marginTop: "100px" }}>
+                        <div style={{ textAlign: "center" }}>
+                            <h2 style={{ margin: "0 auto" }}>Followers</h2>
+                        </div>
+                        {showFollowerIndex > 0 ? (
+                            <AutoSizer
                                 style={{
-                                    border: "1px solid #D7D7D7",
-                                    borderRadius: "10px",
-                                    margin: "1.25rem auto",
-                                    maxWidth: "420px",
-                                    padding: "5px 0",
+                                    height: "160px",
+                                    width: "auto",
                                 }}
-                                id="followers"
-                                width={width}
-                                height={height}
-                                rowHeight={40}
-                                rowCount={Followers.length}
-                                rowRenderer={followersRowRenderer}
-                            />
+                            >
+                                {({ width, height }) => (
+                                    <List
+                                        style={{
+                                            border: "1px solid #D7D7D7",
+                                            borderRadius: "10px",
+                                            margin: "1.25rem auto",
+                                            maxWidth: "420px",
+                                            padding: "5px 0",
+                                        }}
+                                        id="followers"
+                                        width={width}
+                                        height={height}
+                                        rowHeight={40}
+                                        rowCount={showFollowerIndex}
+                                        rowRenderer={followersRowRenderer}
+                                    />
+                                )}
+                            </AutoSizer>
+                        ) : (
+                            <div>
+                                <Empty
+                                    imageStyle={{
+                                        height: "inherit",
+                                        marginTop: "20px",
+                                    }}
+                                    description={
+                                        <span
+                                            style={{
+                                                fontSize: "1.25rem",
+                                                fontWeight: "400",
+                                            }}
+                                        >
+                                            No Followers
+                                        </span>
+                                    }
+                                />
+                            </div>
                         )}
-                    </AutoSizer>
+                    </div>
                 </div>
             </AppLayout>
         </>

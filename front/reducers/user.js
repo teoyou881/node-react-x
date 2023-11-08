@@ -43,9 +43,8 @@ const initialState = {
     followBtnId: null,
     signUpData: {},
     loginData: {},
-    followingLastIndex: 10,
-    followerLastIndex: 10,
-    showFollowings: [],
+    showFollowingIndex: 10,
+    showFollowerIndex: 10,
 };
 /*
 const dummyUser = (data) => ({
@@ -218,13 +217,12 @@ export const userSlice = createSlice({
             state.loadFollowingsLoading = true;
             state.loadFollowingsDone = false;
             state.loadFollowingsError = null;
-            state.followingLastIndex = 10;
+            state.showFollowingIndex = 10;
         },
         loadFollowingsSuccess: (state, action) => {
             state.loadFollowingsLoading = false;
             state.loadFollowingsDone = true;
             state.me.Followings = action.payload;
-            state.showFollowings = action.payload.slice(0, 10);
         },
         loadFollowingsFailure: (state, action) => {
             state.loadFollowingsLoading = false;
@@ -239,22 +237,14 @@ export const userSlice = createSlice({
         loadMoreFollowingsSuccess: (state, action) => {
             state.loadMoreFollowingsLoading = false;
             state.loadMoreFollowingsDone = true;
-            console.log(state.followingLastIndex);
             if (action.payload === state.me.Followings.length) {
                 return;
             }
-
             if (action.payload + 10 > state.me.Followings.length) {
-                state.followingLastIndex = state.me.Followings.length;
+                state.showFollowingIndex = state.me.Followings.length;
             } else {
-                state.followingLastIndex = action.payload + 10;
+                state.showFollowingIndex = action.payload + 10;
             }
-            console.log(state.followingLastIndex);
-            const newArr = state.me.Followings.slice(
-                action.payload,
-                state.followingLastIndex,
-            );
-            state.showFollowings = [...state.showFollowings, ...newArr];
         },
         loadMoreFollowingsFailure: (state, action) => {
             state.loadMoreFollowingsLoading = false;

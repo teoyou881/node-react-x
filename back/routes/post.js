@@ -26,7 +26,7 @@ const upload = multer({
             // Teo.jpg
             const ext = path.extname(file.originalname); // extract extension name  jpg
             const basename = path.basename(file.originalname, ext); // extract file name without extension  Teo
-            done(null, basename + new Date().getTime() + ext); // Teo123123123.jpg
+            done(null, basename + "_" + new Date().getTime() + ext); // Teo123123123.jpg
         },
     }),
     // Processing images and videos is very taxing on the server.

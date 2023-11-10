@@ -50,17 +50,20 @@ const PostForm = () => {
     }, [uploadInput.current]);
 
     //After user choosing images, onChange function will be called once user click confirm btn.
-    const onChangeImages = useCallback((e) => {
-        console.log("images", e.target.files);
-        const imageFormData = new FormData();
-        // e.target.files is not an array, but it is like an array.
-        // So, we can't use forEach() method.
-        // Instead, we can use Array.prototype.forEach.call() method.
-        [].forEach.call(e.target.files, (f) => {
-            imageFormData.append("image", f);
-        });
-        dispatch(postAction.uploadImagesRequest(imageFormData));
-    }, []);
+    const onChangeImages = useCallback(
+        (e) => {
+            console.log("images", e.target.files);
+            const imageFormData = new FormData();
+            // e.target.files is not an array, but it is like an array.
+            // So, we can't use forEach() method.
+            // Instead, we can use Array.prototype.forEach.call() method.
+            [].forEach.call(e.target.files, (f) => {
+                imageFormData.append("image", f);
+            });
+            dispatch(postAction.uploadImagesRequest(imageFormData));
+        },
+        [uploadInput.current],
+    );
 
     return (
         <div

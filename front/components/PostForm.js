@@ -65,6 +65,13 @@ const PostForm = () => {
         [uploadInput.current],
     );
 
+    const onRemoveImage = useCallback(
+        (index) => () => {
+            dispatch(postAction.removeImage(index));
+        },
+        [],
+    );
+
     return (
         <div
             style={{
@@ -109,7 +116,7 @@ const PostForm = () => {
                     </Button>
                 </div>
                 <div>
-                    {imagePaths.map((v) => (
+                    {imagePaths.map((v, i) => (
                         <div key={v} style={{ display: "inline-block" }}>
                             <img
                                 src={`http://localhost:3065/${v}`}
@@ -117,7 +124,10 @@ const PostForm = () => {
                                 style={{ width: "200px" }}
                             />
                             <div>
-                                <Button>Remove</Button>
+                                {/*If you want to put data inside a higher-order function, make it a higher-order function.*/}
+                                <Button onClick={onRemoveImage(i)}>
+                                    Remove
+                                </Button>
                             </div>
                         </div>
                     ))}

@@ -266,6 +266,11 @@ export const postSlice = createSlice({
             state.uploadImagesLoading = false;
             state.uploadImagesError = action.payload;
         },
+        removeImage: (state, action) => {
+            state.imagePaths = state.imagePaths.filter(
+                (v, i) => i !== action.payload,
+            );
+        },
 
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},

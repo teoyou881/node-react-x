@@ -163,6 +163,28 @@ function* changeNickname(action) {
     }
 }
 
+function uploadImagesAPI(data) {
+    return axios.post(`/post/images`, data);
+    // surround data with {} to send data as json is not a proper way
+    // return axios.post(`/post/images`, {data});
+}
+function* uploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.payload);
+        yield put({
+            type: POST_ACTION.UPLOAD_IMAGES_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.UPLOAD_IMAGES_FAILURE,
+            error: err,
+            // error: err.response.data,
+        });
+    }
+}
+
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
 }
@@ -187,6 +209,9 @@ function* watchUnlikePost() {
 function* watchChangeNickname() {
     yield takeLatest(POST_ACTION.CHANGE_NICKNAME_REQUEST, changeNickname);
 }
+function* watchUploadImages() {
+    yield takeLatest(POST_ACTION.UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 export default function* postSaga() {
     yield all([
         fork(watchAddPost),
@@ -197,5 +222,6 @@ export default function* postSaga() {
         fork(watchLikePost),
         fork(watchUnlikePost),
         fork(watchChangeNickname),
+        fork(watchUploadImages),
     ]);
 }

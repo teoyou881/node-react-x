@@ -66,6 +66,9 @@ const initialState = {
     changeNicknameLoading: false,
     changeNicknameDone: false,
     changeNicknameError: null,
+    uploadImagesLoading: false,
+    uploadImagesDone: false,
+    uploadImagesError: null,
     firstAccess: false,
 };
 
@@ -248,6 +251,20 @@ export const postSlice = createSlice({
         changeNicknameFailure: (state, action) => {
             state.changeNicknameLoading = false;
             state.changeNicknameError = action.payload;
+        },
+        uploadImagesRequest: (state, action) => {
+            state.uploadImagesLoading = true;
+            state.uploadImagesDone = false;
+            state.uploadImagesError = null;
+        },
+        uploadImagesSuccess: (state, action) => {
+            state.uploadImagesLoading = false;
+            state.uploadImagesDone = true;
+            state.imagePaths = action.payload;
+        },
+        uploadImagesFailure: (state, action) => {
+            state.uploadImagesLoading = false;
+            state.uploadImagesError = action.payload;
         },
 
         removeCommentRequest: (state, action) => {},

@@ -23,4 +23,7 @@ export const POST_ACTION = {
     CHANGE_NICKNAME_REQUEST: "post/changeNicknameRequest",
     CHANGE_NICKNAME_SUCCESS: "post/changeNicknameSuccess",
     CHANGE_NICKNAME_FAILURE: "post/changeNicknameFailure",
+    UPLOAD_IMAGES_REQUEST: "post/uploadImagesRequest",
+    UPLOAD_IMAGES_SUCCESS: "post/uploadImagesSuccess",
+    UPLOAD_IMAGES_FAILURE: "post/uploadImagesFailure",
 };

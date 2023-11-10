@@ -3,6 +3,37 @@ const router = express.Router();
 const { Post, User, Image, Comment } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const { Model } = require("sequelize");
+const multer = require("multer");
+const path = require("path");
+// can use fs to manipulate files
+const fs = require("fs");
+
+try {
+    fs.accessSync("uploads");
+} catch (e) {
+    console.log("There is no uploads folder. Create uploads folder");
+    fs.mkdirSync("uploads");
+}
+
+//router for uploading images
+// for now, save data to hard disk
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, done) {
+            done(null, "uploads");
+        },
+        filename(req, file, done) {
+            // Teo.jpg
+            const ext = path.extname(file.originalname); // extract extension name  jpg
+            const basename = path.basename(file.originalname, ext); // extract file name without extension  Teo
+            done(null, basename + new Date().getTime() + ext); // Teo123123123.jpg
+        },
+    }),
+    // Processing images and videos is very taxing on the server.
+    // For larger services, you should consider pushing them to the cloud directly from your props.
+    limits: { fileSize: 20 * 1024 * 1024 },
+});
+
 router.post("/", isLoggedIn, async (req, res, next) => {
     try {
         const post = await Post.create({
@@ -98,6 +129,14 @@ router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
     } catch (e) {
         console.log(e);
     }
+});
+
+// multiple images upload: upload.array('image')
+// single image upload: upload.single('image')
+// only text like json: upload.none()
+router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
+    console.log(req.files);
+    res.json(req.files.map((v) => v.filename));
 });
 
 module.exports = router;

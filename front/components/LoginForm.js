@@ -76,6 +76,7 @@ const LoginForm = () => {
                         type="password"
                         required
                         {...register("password")}
+                        value="123123"
                     />
                 </div>
                 {/*{logInError && <p style={{ color: "red" }}>{logInError}</p>}*/}

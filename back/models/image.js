@@ -4,9 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     const Image = sequelize.define(
         "Image",
         {
-            // id is automatically created.
-            content: {
+            src: {
                 type: DataTypes.STRING(200),
+                allowNull: false,
             },
         },
         {

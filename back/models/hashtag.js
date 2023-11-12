@@ -5,8 +5,9 @@ module.exports = (sequelize, DataTypes) => {
         "Hashtag",
         {
             // id is automatically created.
-            content: {
+            name: {
                 type: DataTypes.STRING(20),
+                allowNull: false,
             },
         },
         {

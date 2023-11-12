@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import Slick from "react-slick";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
     CloseBtn,
     Global,
@@ -34,7 +34,7 @@ const ImagesZoom = ({ images, onClose }) => {
                             <ImageWrapper key={v.src}>
                                 <img
                                     style={{ width: "1024px" }}
-                                    src={v.src}
+                                    src={`http://localhost:3065/${v.src}`}
                                     alt={v.src}
                                 />
                             </ImageWrapper>

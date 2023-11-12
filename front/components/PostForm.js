@@ -111,6 +111,8 @@ const PostForm = () => {
                         type={"primary"}
                         style={{ float: "right", marginTop: "6px" }}
                         htmlType={"submit"}
+                        ref={buttonRef}
+                        disabled={!(text || imagePaths.length > 0)}
                     >
                         Post
                     </Button>

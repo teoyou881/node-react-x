@@ -11,6 +11,7 @@ const PostForm = () => {
     const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const dispatch = useDispatch();
     const [text, setText] = useState("");
+    const buttonRef = useRef();
 
     // try to change the way to use react-hook-form
     /*
@@ -35,12 +36,20 @@ const PostForm = () => {
     const uploadInput = useRef();
 
     const onSubmit = useCallback(() => {
-        dispatch(postAction.addPostRequest(text));
+        // This code is user just send text
+        // dispatch(postAction.addPostRequest(text));
+
+        const formData = new FormData();
+        imagePaths.forEach((v) => {
+            formData.append("image", v);
+        });
+        formData.append("content", text);
+        dispatch(postAction.addPostRequest(formData));
 
         // If there is an error on backend, the text will be cleared.
         // So, setText() should be called in useEffect.
         // setText("");
-    }, [text]);
+    }, [text, imagePaths]);
     const showFileUploader = useCallback(() => {
         // access input through dom
         // document.getElementById("inputFileUpload").click();

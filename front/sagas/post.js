@@ -15,7 +15,10 @@ import shortId from "shortid";
 import { generateDummyPost } from "../reducers/post";
 
 function addPostAPI(data) {
-    return axios.post("/post", { content: data });
+    // formdata should not be sent as the thing manipulated
+    return axios.post("/post", data);
+
+    // return axios.post("/post", { content: data });
 }
 function* addPost(action) {
     try {

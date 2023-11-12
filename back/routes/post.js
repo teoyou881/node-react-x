@@ -34,12 +34,29 @@ const upload = multer({
     limits: { fileSize: 20 * 1024 * 1024 },
 });
 
-router.post("/", isLoggedIn, async (req, res, next) => {
+// uploads folder has images. file can be cashed in the server. But, db can't.
+// db has images url
+router.post("/", isLoggedIn, upload.none(), async (req, res, next) => {
     try {
         const post = await Post.create({
             content: req.body.content,
             UserId: req.user.id,
         });
+        if (req.body.image) {
+            if (Array.isArray(req.body.image)) {
+                //determines whether the passed value is an array.
+                // if image is an array (multiple images)
+                // Image.create({ src: image }) function returns a promise
+                const images = await Promise.all(
+                    req.body.image.map((image) => Image.create({ src: image })),
+                );
+                await post.addImages(images);
+            } else {
+                const image = await Image.create({ src: req.body.image });
+                await post.addImages(image);
+            }
+        }
+
         const fullPost = await Post.findOne({
             where: { id: post.id },
             include: [

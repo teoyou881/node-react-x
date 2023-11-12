@@ -11,7 +11,7 @@ export const Overlay = styled.div`
 `;
 
 export const Header = styled.header`
-    header: 44px;
+    height: 44px;
     background: white;
     position: relative;
     padding: 0;
@@ -52,14 +52,17 @@ export const Global = createGlobalStyle`
 	height: 100%;
 }
 .slick-prev{
-    top: 774px;
-    left: 40%;
+    top : 10px;
+    margin: 0 auto;
     position: relative;
 }
 .slick-next{
-    top: 0;
-    left: 55%;
+    top: -10px;
+    margin: 0 auto;
     position: relative;
+}
+img{
+    width: 500px;
 }
 `;
 

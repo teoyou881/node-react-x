@@ -174,4 +174,73 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
     res.json(req.files.map((v) => v.filename));
 });
 
+router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {
+    const post = await Post.findOne({
+        where: { id: req.params.postId },
+        include: [
+            {
+                model: Post,
+                as: "Retweet",
+            },
+        ],
+    });
+    if (!post) {
+        return res.status(403).send("There is no post");
+    }
+    // user can't retweet their own post.
+    // user can't retweet other user's retweet which retweet their post.
+    if (
+        req.user.id === post.UserId ||
+        (post.Retweet && post.Retweet.UserId === req.user.id)
+    ) {
+        return res.status(403).send("Can't retweet your post");
+    }
+    // If you're re-tweeting a retweeted post, get the original post ID.
+    // Otherwise, get the post ID.
+    const retweetTargetId = post.RetweetId || post.id;
+    // check if the post is already retweeted
+    // if the post is already retweeted, don't retweet it again.
+    const exPost = await Post.findOne({
+        where: {
+            UserId: req.user.id,
+            RetweetId: retweetTargetId,
+        },
+    });
+    if (exPost) {
+        return res.status(403).send("Already retweeted");
+    }
+    const retweet = await Post.create({
+        UserId: req.user.id,
+        RetweetId: retweetTargetId,
+        content: "retweet",
+    });
+    const retweetWithPrevPost = await Post.findOne({
+        where: { id: retweet.id },
+        include: [
+            {
+                model: Post,
+                as: "Retweet",
+                include: [
+                    {
+                        model: User,
+                        attributes: ["id", "nickname"],
+                    },
+                    { model: Image },
+                ],
+            },
+            {
+                model: User,
+                attributes: ["id", "nickname"],
+            },
+            { model: Image },
+            {
+                model: Comment,
+                include: [{ model: User, attributes: ["id", "nickname"] }],
+            },
+            { model: User, as: "Likers", attributes: ["id"] },
+        ],
+    });
+    res.status(201).json(retweetWithPrevPost);
+});
+
 module.exports = router;

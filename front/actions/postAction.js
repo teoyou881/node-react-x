@@ -26,4 +26,8 @@ export const POST_ACTION = {
     UPLOAD_IMAGES_REQUEST: "post/uploadImagesRequest",
     UPLOAD_IMAGES_SUCCESS: "post/uploadImagesSuccess",
     UPLOAD_IMAGES_FAILURE: "post/uploadImagesFailure",
+    RETWEET_REQUEST: "post/retweetRequest",
+    RETWEET_SUCCESS: "post/retweetSuccess",
+    RETWEET_FAILURE: "post/retweetFailure",
+    RETWEET_ERROR_CLEAR: "post/retweetErrorClear",
 };

@@ -18,68 +18,43 @@ import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
 import FollowButton from "./FollowButton";
 
-const PostCard = ({ post, index }) => {
+const PostCard = ({ post }) => {
     const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
     const liked = post.Likers.find((v) => v.id === id);
-    const { virtualized, loadPostsLoading } = useSelector(
-        (state) => state.post,
-    );
     const [commentFormOpened, setCommentFormOpened] = useState(false);
+
     const onLike = useCallback(() => {
+        if (!id) return alert("Please login first.");
         if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));
-    }, []);
+    }, [id]);
     const onUnlike = useCallback(() => {
+        if (!id) return alert("Please login first.");
         if (id !== post.User.id)
             dispatch(postAction.unlikePostRequest(post.id));
-    }, []);
+    }, [id]);
     const onToggleComment = useCallback(() => {
+        if (!id) return alert("Please login first.");
         setCommentFormOpened((prev) => !prev);
-    }, []);
+    }, [id]);
     const onRemovePost = useCallback(() => {
+        if (!id) return alert("Please login first.");
         dispatch(postAction.removePostRequest(post.id));
-    }, []);
+    }, [id]);
 
-    const postcardRef = useRef();
-    /* For virtual scroll..
-    // useEffect(() => {
-    //     if (postcardRef.current) {
-    //         // Ensure postcardRef.current is not null
-    //         const height = postcardRef.current.clientHeight;
-    //         let data = { index, height, postId: post.id };
-    //         dispatch(postAction.firstVirtualized(data));
-    //     }
-    // }, []);
-
-    // useEffect(() => {
-    //     const handleResize = () => {
-    //         if (postcardRef.current) {
-    //             // Ensure postcardRef.current is not null
-    //             const height = postcardRef.current.clientHeight;
-    //             let data = { index, height, postId: post.id };
-    //             dispatch(postAction.changeVirtualized(data));
-    //         }
-    //     };
-    //     window.addEventListener("resize", handleResize);
-    //     return () => {
-    //         window.removeEventListener("resize", handleResize);
-    //     };
-    // }, []); // Empty dependency array means this effect runs once after the initial render
-
-     */
+    const onRetweet = useCallback(() => {
+        if (!id) return alert("Please login first.");
+        dispatch(postAction.retweetRequest(post.id));
+    }, [id]);
 
     return (
-        <div
-            id={post.id}
-            style={{ width: "inherit", margin: "inherit" }}
-            ref={postcardRef}
-        >
+        <div id={post.id} style={{ width: "inherit", margin: "inherit" }}>
             <Card
                 // extra={id && <FollowButton post={post} />}
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 // Key should be in jsx, when jsx is inside array.
                 actions={[
-                    <RetweetOutlined key="retweet" />,
+                    <RetweetOutlined key="retweet" onClick={onRetweet} />,
                     liked ? (
                         <HeartTwoTone
                             twoToneColor="red"
@@ -115,15 +90,44 @@ const PostCard = ({ post, index }) => {
 
                     // <FollowButton post={post} />,
                 ]}
+                title={
+                    post.RetweetId && post.UserId !== id
+                        ? `${post.User.nickname} retweeted`
+                        : null
+                }
                 extra={
                     id && id !== post.User.id && <FollowButton post={post} />
                 }
             >
-                <Card.Meta
-                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-                    title={post.User.nickname}
-                    description={<PostCardContent postData={post.content} />}
-                />
+                {post.RetweetId && post.Retweet ? (
+                    <Card
+                        cover={
+                            post.Retweet.Images[0] && (
+                                <PostImages images={post.Retweet.Images} />
+                            )
+                        }
+                    >
+                        <Card.Meta
+                            avatar={
+                                <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                            }
+                            title={post.Retweet.User.nickname}
+                            description={
+                                <PostCardContent
+                                    postData={post.Retweet.content}
+                                />
+                            }
+                        />
+                    </Card>
+                ) : (
+                    <Card.Meta
+                        avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                        title={post.User.nickname}
+                        description={
+                            <PostCardContent postData={post.content} />
+                        }
+                    />
+                )}
             </Card>
             {id && commentFormOpened && (
                 <div>
@@ -162,6 +166,8 @@ PostCard.propTypes = {
         Comments: PropTypes.arrayOf(PropTypes.object),
         Images: PropTypes.arrayOf(PropTypes.object),
         Likers: PropTypes.arrayOf(PropTypes.object),
+        RetweetId: PropTypes.number,
+        Retweet: PropTypes.objectOf(PropTypes.any),
     }),
 };
 

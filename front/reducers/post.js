@@ -8,6 +8,7 @@ const initialState = {
     // It is all about sequelize.
     // uppercase means we are given data combined other info.
     mainPosts: [
+        // mainPosts is an array of posts.
         // {
         //     //id of post
         //     id: 1,
@@ -69,6 +70,10 @@ const initialState = {
     uploadImagesLoading: false,
     uploadImagesDone: false,
     uploadImagesError: null,
+    retweetLoading: false,
+    retweetDone: false,
+    retweetError: null,
+
     firstAccess: false,
 };
 
@@ -137,7 +142,7 @@ export const postSlice = createSlice({
         },
         addPostFailure: (state, action) => {
             state.addPostLoading = false;
-            state.addPostError = action.payload;
+            state.addPostError = action.error;
         },
         removePostRequest: (state, action) => {
             state.removePostLoading = true;
@@ -152,7 +157,7 @@ export const postSlice = createSlice({
         },
         removePostFailure: (state, action) => {
             state.removePostLoading = false;
-            state.removePostError = action.payload;
+            state.removePostError = action.error;
         },
         loadPostsRequest: (state, action) => {
             state.loadPostsLoading = true;
@@ -168,7 +173,7 @@ export const postSlice = createSlice({
         },
         loadPostsFailure: (state, action) => {
             state.loadPostsLoading = false;
-            state.loadPostsError = action.payload;
+            state.loadPostsError = action.error;
         },
         addCommentRequest: (state, action) => {
             state.addCommentLoading = true;
@@ -189,7 +194,7 @@ export const postSlice = createSlice({
         },
         addCommentFailure: (state, action) => {
             state.addCommentLoading = false;
-            state.addCommentError = action.payload;
+            state.addCommentError = action.error;
         },
         likePostRequest: (state, action) => {
             state.likePostLoading = true;
@@ -205,7 +210,7 @@ export const postSlice = createSlice({
         },
         likePostFailure: (state, action) => {
             state.likePostLoading = false;
-            state.likePostError = action.payload;
+            state.likePostError = action.error;
         },
         unlikePostRequest: (state, action) => {
             state.unlikeLoading = true;
@@ -224,7 +229,7 @@ export const postSlice = createSlice({
         },
         unlikePostFailure: (state, action) => {
             state.unlikeLoading = false;
-            state.unlikeError = action.payload;
+            state.unlikeError = action.error;
         },
         changeNicknameRequest: (state, action) => {
             state.changeNicknameLoading = true;
@@ -250,7 +255,7 @@ export const postSlice = createSlice({
         },
         changeNicknameFailure: (state, action) => {
             state.changeNicknameLoading = false;
-            state.changeNicknameError = action.payload;
+            state.changeNicknameError = action.error;
         },
         uploadImagesRequest: (state, action) => {
             state.uploadImagesLoading = true;
@@ -264,12 +269,27 @@ export const postSlice = createSlice({
         },
         uploadImagesFailure: (state, action) => {
             state.uploadImagesLoading = false;
-            state.uploadImagesError = action.payload;
+            state.uploadImagesError = action.error;
         },
         removeImage: (state, action) => {
             state.imagePaths = state.imagePaths.filter(
                 (v, i) => i !== action.payload,
             );
+        },
+        retweetRequest: (state, action) => {
+            state.retweetLoading = true;
+            state.retweetDone = false;
+            state.retweetError = null;
+        },
+        retweetSuccess: (state, action) => {
+            state.retweetLoading = false;
+            state.retweetDone = true;
+            state.mainPosts.unshift(action.payload);
+        },
+        retweetFailure: (state, action) => {
+            state.retweetLoading = false;
+            state.retweetError = action.error;
+            state.retweetErrorClear = false;
         },
 
         removeCommentRequest: (state, action) => {},

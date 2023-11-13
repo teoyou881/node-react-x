@@ -34,8 +34,7 @@ function* addPost(action) {
     } catch (err) {
         yield put({
             type: POST_ACTION.ADD_POST_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -56,8 +55,7 @@ function* removePost(action) {
     } catch (err) {
         yield put({
             type: POST_ACTION.REMOVE_POST_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -81,8 +79,7 @@ function* addComment(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.ADD_COMMENT_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -106,8 +103,7 @@ function* loadPosts() {
         console.log(err);
         yield put({
             type: POST_ACTION.LOAD_POSTS_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -125,8 +121,7 @@ function* likePost(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.LIKE_POST_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -144,8 +139,7 @@ function* unlikePost(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.UNLIKE_POST_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -160,8 +154,7 @@ function* changeNickname(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.CHANGE_NICKNAME_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
@@ -182,12 +175,29 @@ function* uploadImages(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.UPLOAD_IMAGES_FAILURE,
-            error: err,
-            // error: err.response.data,
+            error: err.response.data,
         });
     }
 }
 
+function retweetAPI(data) {
+    return axios.post(`/post/${data}/retweet`, data);
+}
+function* retweet(action) {
+    try {
+        const result = yield call(retweetAPI, action.payload);
+        yield put({
+            type: POST_ACTION.RETWEET_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.RETWEET_FAILURE,
+            error: err.response.data,
+        });
+    }
+}
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
 }
@@ -215,6 +225,9 @@ function* watchChangeNickname() {
 function* watchUploadImages() {
     yield takeLatest(POST_ACTION.UPLOAD_IMAGES_REQUEST, uploadImages);
 }
+function* watchRetweet() {
+    yield takeLatest(POST_ACTION.RETWEET_REQUEST, retweet);
+}
 export default function* postSaga() {
     yield all([
         fork(watchAddPost),
@@ -226,5 +239,6 @@ export default function* postSaga() {
         fork(watchUnlikePost),
         fork(watchChangeNickname),
         fork(watchUploadImages),
+        fork(watchRetweet),
     ]);
 }

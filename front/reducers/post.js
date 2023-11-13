@@ -168,8 +168,10 @@ export const postSlice = createSlice({
         loadPostsSuccess: (state, action) => {
             state.loadPostsLoading = false;
             state.loadPostsDone = true;
-            state.mainPosts = state.mainPosts.concat(action.payload);
-            state.hasMorePosts = state.mainPosts.length < 50;
+            state.mainPosts.push(...action.payload.posts);
+            if (action.payload.more === false) {
+                state.hasMorePosts = false;
+            }
         },
         loadPostsFailure: (state, action) => {
             state.loadPostsLoading = false;

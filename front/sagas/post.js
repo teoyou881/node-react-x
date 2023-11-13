@@ -88,13 +88,13 @@ function* removeComment(action) {
     } catch (err) {}
 }
 
-function loadPostsAPI() {
-    return axios.get("/posts");
+function loadPostsAPI(data) {
+    return axios.get(`/posts?lastId=${data || 0}`);
 }
 
-function* loadPosts() {
+function* loadPosts(action) {
     try {
-        const result = yield call(loadPostsAPI);
+        const result = yield call(loadPostsAPI, action.payload);
         yield put({
             type: POST_ACTION.LOAD_POSTS_SUCCESS,
             payload: result.data,

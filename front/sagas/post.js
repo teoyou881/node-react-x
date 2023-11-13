@@ -190,6 +190,10 @@ function* retweet(action) {
             type: POST_ACTION.RETWEET_SUCCESS,
             payload: result.data,
         });
+        yield put({
+            type: USER_ACTION.ADD_POST_TO_ME,
+            payload: result.data.id,
+        });
     } catch (err) {
         console.log(err);
         yield put({

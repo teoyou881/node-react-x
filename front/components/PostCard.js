@@ -24,6 +24,20 @@ const PostCard = ({ post }) => {
     const liked = post.Likers.find((v) => v.id === id);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
+    /*
+    Want to use this code, but it doesn't work.
+    alert error message as the number of mainPosts when retweet error occurs.
+    This is because the number of mainPosts is changed when retweet error occurs.
+    So, Have to use useEffect at parent component (pages/index.js).
+
+    const { retweetError } = useSelector((state) => state.post);
+    useEffect(() => {
+        if ( retweetError) {
+
+            alert(retweetError);
+        }
+    }, [, retweetError]);
+     */
     const onLike = useCallback(() => {
         if (!id) return alert("Please login first.");
         if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));

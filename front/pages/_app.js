@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
+import "antd/dist/reset.css";
 
 import wrapper from "../store/configureStore";
 

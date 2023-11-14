@@ -5,7 +5,15 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
+// If user is logged in, send user info
+// If user is not logged in, send null
 router.get("/", async (req, res, next) => {
+    // when server side rendering, cookie is in req.headers.
+    // At front side, if user don't set it, cookie is not in req.headers.
+    // After adding under code
+    // axios.defaults.headers.Cookie = req ? req.headers.cookie : ""; in front side,
+    // cookie is in req.headers.
+    // console.log(req.headers);
     try {
         const user = await User.findOne({
             where: { id: req.user?.id || null },

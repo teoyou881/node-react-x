@@ -23,9 +23,10 @@ function* logIn(action) {
 function loadUserAPI(data) {
     return axios.get(`/user/${data}`);
 }
-function* loadUser() {
+function* loadUser(action) {
     try {
-        const result = yield call(loadUserAPI);
+        console.log(action.payload);
+        const result = yield call(loadUserAPI, action.payload);
         yield put({
             type: USER_ACTION.LOAD_USER_SUCCESS,
             payload: result.data,

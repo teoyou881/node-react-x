@@ -50,6 +50,48 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+// find user by userId
+// todo
+// 1. Based on user preference, show posts
+// 2. Based on user preference, show followings
+// 3. Based on user preference, show followers
+router.get("/:userId", async (req, res, next) => {
+    try {
+        const user = await User.findOne({
+            where: { id: parseInt(req.params.userId, 10) },
+        });
+        if (!user) {
+            return res.status(200).json(null);
+        }
+        const userWithoutPassword = await User.findOne({
+            where: { id: user.id },
+            attributes: {
+                exclude: ["password"],
+            },
+            include: [
+                {
+                    model: Post,
+                    attributes: ["id"],
+                },
+                {
+                    model: User,
+                    as: "Followings",
+                    attributes: ["id", "nickname"],
+                },
+                {
+                    model: User,
+                    as: "Followers",
+                    attributes: ["id", "nickname"],
+                },
+            ],
+        });
+        res.status(200).json(userWithoutPassword);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 router.post("/", isNotLoggedIn, async (req, res, next) => {
     try {
         await User.findOne({

@@ -8,6 +8,9 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../reducers/user";
 import { useRouter } from "next/router";
+import wrapper from "../store/configureStore";
+import axios from "axios";
+import { END } from "redux-saga";
 
 const ErrorSpanWrapper = styled.div`
     color: red;
@@ -211,5 +214,19 @@ const Signup = () => {
         </>
     );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async ({ req, res, ...etc }) => {
+            const cookie = req ? req.headers.cookie : "";
+            axios.defaults.headers.Cookie = "";
+            if (req && cookie) {
+                axios.defaults.headers.Cookie = cookie;
+            }
+            store.dispatch(userAction.loadMyInfoRequest());
+            store.dispatch(END);
+            await store.sagaTask.toPromise();
+        },
+);
 
 export default Signup;

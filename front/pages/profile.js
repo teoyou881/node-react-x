@@ -7,6 +7,10 @@ import { useRouter } from "next/router";
 import { userAction } from "../reducers/user";
 import { AutoSizer, List } from "react-virtualized";
 import { Button, Empty } from "antd";
+import wrapper from "../store/configureStore";
+import axios from "axios";
+import { postAction } from "../reducers/post";
+import { END } from "redux-saga";
 
 const Profile = () => {
     const {
@@ -68,7 +72,7 @@ const Profile = () => {
             ) {
                 if (showFollowerIndex < Followers.length) {
                     dispatch(
-                        userAction.loadFollowersRequest(showFollowerIndex),
+                        userAction.loadMoreFollowersRequest(showFollowerIndex),
                     );
                 }
             }
@@ -258,5 +262,19 @@ const Profile = () => {
         </>
     );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async ({ req, res, ...etc }) => {
+            const cookie = req ? req.headers.cookie : "";
+            axios.defaults.headers.Cookie = "";
+            if (req && cookie) {
+                axios.defaults.headers.Cookie = cookie;
+            }
+            store.dispatch(userAction.loadMyInfoRequest());
+            store.dispatch(END);
+            await store.sagaTask.toPromise();
+        },
+);
 
 export default Profile;

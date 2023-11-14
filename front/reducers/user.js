@@ -1,7 +1,4 @@
-// store/reducer/user.ts
 import { createSlice } from "@reduxjs/toolkit";
-import shortId from "shortid";
-import { faker } from "@faker-js/faker";
 
 const initialState = {
     logInLoading: false,
@@ -19,12 +16,6 @@ const initialState = {
     loadFollowingsLoading: false,
     loadFollowingsDone: false,
     loadFollowingsError: null,
-    loadMoreFollowingsLoading: false,
-    loadMoreFollowingsDone: false,
-    loadMoreFollowingsError: null,
-    loadMoreFollowersLoading: false,
-    loadMoreFollowersDone: false,
-    loadMoreFollowersError: null,
     logoutLoading: false,
     logoutDone: false,
     logoutError: null,
@@ -53,22 +44,7 @@ const initialState = {
     showFollowingIndex: 10,
     showFollowerIndex: 10,
 };
-/*
-const dummyUser = (data) => ({
-    email: data.email,
-    nickname: "Teo",
-    id: 1,
-    Posts: [{ id: 1 }],
-    Followings: [{ nickname: "H1" }, { nickname: "H2" }, { nickname: "H3" }],
-    Followers: [{ nickname: "F1" }, { nickname: "F2" }, { nickname: "F3" }],
-});
-*/
-/*
-const dummyFollowers = () => ({
-    id: faker.number.int(),
-    nickname: faker.internet.userName(),
-});
-*/
+
 export const userSlice = createSlice({
     name: "user",
     initialState,
@@ -203,11 +179,7 @@ export const userSlice = createSlice({
             state.me.Followings = state.me.Followings.filter(
                 (v) => v.id !== action.payload.UserId,
             );
-            if (state.me.Followings.length < 10) {
-                state.showFollowingIndex = state.me.Followings.length;
-            } else {
-                state.showFollowingIndex = 10;
-            }
+            state.showFollowingIndex = state.me.Followings.length;
         },
         unfollowFailure: (state, action) => {
             state.unfollowLoading = false;
@@ -225,11 +197,7 @@ export const userSlice = createSlice({
             state.me.Followers = state.me.Followers.filter(
                 (v) => v.id !== action.payload.UserId,
             );
-            if (state.me.Followers.length < 10) {
-                state.showFollowerIndex = state.me.Followers.length;
-            } else {
-                state.showFollowerIndex = 10;
-            }
+            state.showFollowerIndex = state.me.Followers.length;
         },
         removeFollowerFailure: (state, action) => {
             state.removeFollowerLoading = false;
@@ -277,48 +245,21 @@ export const userSlice = createSlice({
             state.loadFollowingsError = action.payload;
         },
         loadMoreFollowingsRequest: (state, action) => {
-            state.loadMoreFollowingsLoading = true;
-            state.loadMoreFollowingsDone = false;
-            state.loadMoreFollowingsError = null;
-        },
-        loadMoreFollowingsSuccess: (state, action) => {
-            state.loadMoreFollowingsLoading = false;
-            state.loadMoreFollowingsDone = true;
             if (action.payload === state.me.Followings.length) {
-                return;
-            }
-            if (action.payload + 10 > state.me.Followings.length) {
+            } else if (action.payload + 10 > state.me.Followings.length) {
                 state.showFollowingIndex = state.me.Followings.length;
             } else {
                 state.showFollowingIndex = action.payload + 10;
             }
         },
-        loadMoreFollowingsFailure: (state, action) => {
-            state.loadMoreFollowingsLoading = false;
-            state.loadMoreFollowingsDone = true;
-            state.loadMoreFollowingsError = action.payload;
-        },
+
         loadMoreFollowersRequest: (state, action) => {
-            state.loadMoreFollowersLoading = true;
-            state.loadMoreFollowersDone = false;
-            state.loadMoreFollowersError = null;
-        },
-        loadMoreFollowersSuccess: (state, action) => {
-            state.loadMoreFollowersLoading = false;
-            state.loadMoreFollowersDone = true;
             if (action.payload === state.me.Followers.length) {
-                return;
-            }
-            if (action.payload + 10 > state.me.Followers.length) {
+            } else if (action.payload + 10 > state.me.Followers.length) {
                 state.showFollowerIndex = state.me.Followers.length;
             } else {
                 state.showFollowerIndex = action.payload + 10;
             }
-        },
-        loadMoreFollowersFailure: (state, action) => {
-            state.loadMoreFollowersLoading = false;
-            state.loadMoreFollowersDone = true;
-            state.loadMoreFollowersError = action.payload;
         },
     },
 });

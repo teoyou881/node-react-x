@@ -11,9 +11,7 @@ import { Button, Empty } from "antd";
 const Profile = () => {
     const {
         me,
-        followingLastIndex,
-        loadMoreFollowingsLoading,
-        loadMoreFollowersLoading,
+        // how many followings or followers show on browser
         showFollowingIndex,
         showFollowerIndex,
     } = useSelector((state) => state.user);
@@ -33,6 +31,12 @@ const Profile = () => {
         dispatch(userAction.loadFollowingsRequest());
     }, []);
 
+    const onDelete = useCallback((id, follow) => {
+        if (follow === "following") dispatch(userAction.unfollowRequest(id));
+        if (follow === "follower")
+            dispatch(userAction.removeFollowerRequest(id));
+    }, []);
+
     // useEffect for infinite scrolling
     useEffect(() => {
         const followings = document.getElementById("followings");
@@ -41,7 +45,7 @@ const Profile = () => {
                 followings.scrollTop + followings.clientHeight >
                 followings.scrollHeight - 300
             ) {
-                if (!loadMoreFollowingsLoading) {
+                if (showFollowingIndex < Followings.length) {
                     dispatch(
                         userAction.loadMoreFollowingsRequest(
                             showFollowingIndex,
@@ -54,7 +58,7 @@ const Profile = () => {
         return () => {
             followings?.removeEventListener("scroll", onScroll);
         };
-    }, [loadMoreFollowingsLoading, showFollowingIndex]);
+    }, [showFollowingIndex]);
     useEffect(() => {
         const followers = document.getElementById("followers");
         function onScroll() {
@@ -62,7 +66,7 @@ const Profile = () => {
                 followers.scrollTop + followers.clientHeight >
                 followers.scrollHeight - 300
             ) {
-                if (!loadMoreFollowersLoading) {
+                if (showFollowerIndex < Followers.length) {
                     dispatch(
                         userAction.loadFollowersRequest(showFollowerIndex),
                     );
@@ -73,18 +77,13 @@ const Profile = () => {
         return () => {
             followers?.removeEventListener("scroll", onScroll);
         };
-    }, [loadMoreFollowersLoading, showFollowerIndex]);
-
-    const onDelete = useCallback((id, follow) => {
-        if (follow === "following") dispatch(userAction.unfollowRequest(id));
-        if (follow === "follower")
-            dispatch(userAction.removeFollowerRequest(id));
-    }, []);
+    }, [showFollowerIndex]);
 
     // functions for react-virtualized
     const followingsRowRenderer = useCallback(
         ({ key, index, style, parent }) => {
             const following = Followings[index];
+            if (!following) return null;
             return (
                 <div key={key} style={style}>
                     <div
@@ -116,6 +115,7 @@ const Profile = () => {
     const followersRowRenderer = useCallback(
         ({ key, index, style, parent }) => {
             const follower = Followers[index];
+            if (!follower) return null;
             return (
                 <div key={key} style={style}>
                     <div

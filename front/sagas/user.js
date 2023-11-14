@@ -20,6 +20,23 @@ function* logIn(action) {
         });
     }
 }
+function loadUserAPI(data) {
+    return axios.get(`/user/${data}`);
+}
+function* loadUser() {
+    try {
+        const result = yield call(loadUserAPI);
+        yield put({
+            type: USER_ACTION.LOAD_USER_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        yield put({
+            type: USER_ACTION.LOAD_USER_FAILURE,
+            error: err,
+        });
+    }
+}
 function loadMyInfoAPI() {
     return axios.get("/user");
 }
@@ -241,6 +258,9 @@ function* watchSignUp() {
     yield takeLatest(USER_ACTION.SIGN_UP_REQUEST, signUp);
 }
 function* watchLoadUser() {
+    yield takeLatest(USER_ACTION.LOAD_USER_REQUEST, loadUser);
+}
+function* watchLoadMyInfo() {
     yield takeLatest(USER_ACTION.LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 function* watchChangeNickname() {
@@ -275,6 +295,7 @@ export default function* userSaga() {
         fork(watchUnfollow),
         fork(watchSignUp),
         fork(watchLoadUser),
+        fork(watchLoadMyInfo),
         fork(watchChangeNickname),
         fork(watchLoadFollowers),
         fork(watchLoadFollowings),

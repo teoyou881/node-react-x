@@ -7,6 +7,9 @@ const initialState = {
     logInLoading: false,
     logInDone: false,
     logInError: null,
+    loadUserLoading: false,
+    loadUserDone: false,
+    loadUserError: null,
     loadMyInfoLoading: false,
     loadMyInfoDone: false,
     loadMyInfoError: null,
@@ -41,6 +44,7 @@ const initialState = {
     removeFollowerDone: false,
     removeFollowerError: null,
     me: null,
+    loadUser: null,
     // With this, we can know which button is loading
     // Otherwise, all follow buttons will be loading
     followBtnId: null,
@@ -59,10 +63,12 @@ const dummyUser = (data) => ({
     Followers: [{ nickname: "F1" }, { nickname: "F2" }, { nickname: "F3" }],
 });
 */
+/*
 const dummyFollowers = () => ({
     id: faker.number.int(),
     nickname: faker.internet.userName(),
 });
+*/
 export const userSlice = createSlice({
     name: "user",
     initialState,
@@ -83,19 +89,34 @@ export const userSlice = createSlice({
             state.logInError = action.error.response.data;
         },
         loadMyInfoRequest: (state, action) => {
-            state.logInLoading = true;
-            state.logInDone = false;
-            state.logInError = null;
+            state.loadMyInfoLoading = true;
+            state.loadMyInfoDone = false;
+            state.loadMyInfoError = null;
         },
         loadMyInfoSuccess: (state, action) => {
-            state.logInLoading = false;
-            state.logInDone = true;
+            state.loadMyInfoLoading = false;
+            state.loadMyInfoDone = true;
             state.me = action.payload;
         },
         loadMyInfoFailure: (state, action) => {
-            state.logInLoading = false;
-            state.logInDone = false;
-            state.logInError = action.error.response.data;
+            state.loadMyInfoLoading = false;
+            state.loadMyInfoDone = false;
+            state.loadMyInfoError = action.error.response.data;
+        },
+        loadUserRequest: (state, action) => {
+            state.loadUserLoading = true;
+            state.loadUserDone = false;
+            state.loadUserError = null;
+        },
+        loadUserSuccess: (state, action) => {
+            state.loadUserLoading = false;
+            state.loadUserDone = true;
+            state.loadUser = action.payload;
+        },
+        loadUserFailure: (state, action) => {
+            state.loadUserLoading = false;
+            state.loadUserDone = false;
+            state.loadUserError = action.error.response.data;
         },
         logoutRequest: (state, action) => {
             state.logoutLoading = true;
@@ -146,7 +167,6 @@ export const userSlice = createSlice({
             state.me.Comments = [...state.me.Comments, { id: action.payload }];
         },
         removePostOfMe: (state, action) => {
-            console.log(action.payload);
             state.me.Posts = state.me.Posts.filter(
                 (v) => v.id !== action.payload.PostId,
             );

@@ -55,7 +55,7 @@ router.get("/", async (req, res, next) => {
 // 1. Based on user preference, show posts
 // 2. Based on user preference, show followings
 // 3. Based on user preference, show followers
-router.get("/:userId", async (req, res, next) => {
+router.get("/info/:userId", async (req, res, next) => {
     try {
         const user = await User.findOne({
             where: { id: parseInt(req.params.userId, 10) },

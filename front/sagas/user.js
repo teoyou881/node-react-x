@@ -21,7 +21,7 @@ function* logIn(action) {
     }
 }
 function loadUserAPI(data) {
-    return axios.get(`/user/${data}`);
+    return axios.get(`/user/info/${data}`);
 }
 function* loadUser(action) {
     try {
@@ -209,39 +209,6 @@ function* removeFollower(action) {
     }
 }
 
-function* loadMoreFollowings(action) {
-    //debounce
-    yield delay(100);
-    try {
-        yield put({
-            type: USER_ACTION.LOAD_MORE_FOLLOWINGS_SUCCESS,
-            payload: action.payload,
-        });
-    } catch (err) {
-        console.log(err);
-        yield put({
-            type: USER_ACTION.LOAD_MORE_FOLLOWINGS_FAILURE,
-            error: err,
-        });
-    }
-}
-function* loadMoreFollowers(action) {
-    //debounce
-    yield delay(100);
-    try {
-        yield put({
-            type: USER_ACTION.LOAD_MORE_FOLLOWERS_SUCCESS,
-            payload: action.payload,
-        });
-    } catch (err) {
-        console.log(err);
-        yield put({
-            type: USER_ACTION.LOAD_MORE_FOLLOWERS_FAILURE,
-            error: err,
-        });
-    }
-}
-
 function* watchLogIn() {
     yield takeLatest(USER_ACTION.LOGIN_REQUEST, logIn);
 }
@@ -276,18 +243,6 @@ function* watchLoadFollowings() {
 function* watchRemoveFollower() {
     yield takeLatest(USER_ACTION.REMOVE_FOLLOWER_REQUEST, removeFollower);
 }
-function* watchLoadMoreFollowings() {
-    yield takeLatest(
-        USER_ACTION.LOAD_MORE_FOLLOWINGS_REQUEST,
-        loadMoreFollowings,
-    );
-}
-function* watchLoadMoreFollowers() {
-    yield takeLatest(
-        USER_ACTION.LOAD_MORE_FOLLOWERS_REQUEST,
-        loadMoreFollowers,
-    );
-}
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -301,8 +256,5 @@ export default function* userSaga() {
         fork(watchLoadFollowers),
         fork(watchLoadFollowings),
         fork(watchRemoveFollower),
-        fork(watchLoadMoreFollowings),
-        fork(watchLoadMoreFollowers),
-        // fork(watchEditNickname),
     ]);
 }

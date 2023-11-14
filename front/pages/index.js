@@ -5,6 +5,9 @@ import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
 import { postAction } from "../reducers/post";
 import { userAction } from "../reducers/user";
+import wrapper from "../store/configureStore";
+import { END } from "redux-saga";
+
 const Home = () => {
     const { me } = useSelector((state) => state.user);
     const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } =
@@ -17,12 +20,12 @@ const Home = () => {
         }
     }, [retweetError]);
 
-    useEffect(() => {
-        dispatch(userAction.loadMyInfoRequest());
-        if (!firstAccess) {
-            dispatch(postAction.loadPostsRequest());
-        }
-    }, []);
+    // useEffect(() => {
+    //     dispatch(userAction.loadMyInfoRequest());
+    //     if (!firstAccess) {
+    //         dispatch(postAction.loadPostsRequest());
+    //     }
+    // }, []);
 
     // Just infinite scrolling
     useEffect(() => {
@@ -59,5 +62,19 @@ const Home = () => {
         </div>
     );
 };
+
+//https://github.com/kirill-konshin/next-redux-wrapper#state-reconciliation-during-hydration
+// search ' Using getServerSideProps or getStaticProps'
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async ({ req, res, ...etc }) => {
+            store.dispatch(userAction.loadMyInfoRequest());
+            store.dispatch(postAction.loadPostsRequest());
+            // Wait until the above dispatches are finished.
+            // Without this code, just dispatching actions and then rendering, not waiting the results from dispatch.
+            store.dispatch(END);
+            await store.sagaTask.toPromise();
+        },
+);
 
 export default Home;

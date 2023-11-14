@@ -1,3 +1,8 @@
+/*
+import {combineReducers} from "@reduxjs/toolkit";
+import {user} from "./user";
+import {post} from "./post";
+
 const initialState={
     user:{
         isLoggedIn:false,
@@ -55,5 +60,18 @@ const rootReducer=(state=initialState,action)=>{
             }
     }
 }
+
+const rootReducer = combineReducers({ user, post });
+// Combine their individual states into initialState.
+// ex --> state{user..., post...}
+*/
+
+import { combineReducers } from "@reduxjs/toolkit";
+import { user } from "./user";
+import { post } from "./post";
+
+const rootReducer = combineReducers({ user, post });
+// Combine their individual states into initialState.
+// ex --> state{user..., post...}
 
 export default rootReducer;

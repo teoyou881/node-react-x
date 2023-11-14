@@ -14,10 +14,15 @@ import { user } from "../reducers/user";
 import { post } from "../reducers/post";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "../sagas";
+import rootReducer from "../reducers";
 
-const rootReducer = combineReducers({ user, post });
-// Combine their individual states into initialState.
-// ex --> state{user..., post...}
+const loggerMiddleware =
+    ({ dispatch, getState }) =>
+    (next) =>
+    (action) => {
+        console.log(action);
+        return next(action);
+    };
 
 export const makeStore = () => {
     const sagaMiddleware = createSagaMiddleware();
@@ -25,7 +30,8 @@ export const makeStore = () => {
         reducer: (state, action) => {
             switch (action.type) {
                 case HYDRATE:
-                    return action.payload;
+                    console.log("HYDRATE", action);
+                    return { ...state, ...action.payload };
                 default:
                     return rootReducer(state, action);
             }
@@ -34,11 +40,11 @@ export const makeStore = () => {
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({
                 serializableCheck: false,
-            }).concat(sagaMiddleware),
+            }).concat(sagaMiddleware, loggerMiddleware),
     });
 
     // Run the rootSaga to start your application sagas
-    sagaMiddleware.run(rootSaga);
+    store.sagaTask = sagaMiddleware.run(rootSaga);
 
     return store;
 };

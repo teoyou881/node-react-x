@@ -21,6 +21,7 @@ const Home = () => {
         }
     }, [retweetError]);
 
+    // don't need this code anymore. We can get data using ssr
     // useEffect(() => {
     //     dispatch(userAction.loadMyInfoRequest());
     //     if (!firstAccess) {
@@ -56,6 +57,8 @@ const Home = () => {
 			especially, there is a possibility that post can be deleted.
 			But if elements in iterator are not changed or deleted, can use index*/}
 
+                {/*Todo
+                1. apply react-virtualized*/}
                 {mainPosts?.map((post, index) => (
                     <PostCard key={post.id} post={post} index={index} />
                 ))}

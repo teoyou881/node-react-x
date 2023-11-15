@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { postAction } from "../reducers/post";
 import useGetForms from "../utils/useCommentForms";
-const CommentForm = ({ post }) => {
+const CommentForm = ({ post, single = false }) => {
     // const userId = useSelector((state) => state.user.me?.id);
     // const [comment, setComment] = useState("");
     const { addCommentDone, addCommentLoading } = useSelector(
@@ -28,12 +28,22 @@ const CommentForm = ({ post }) => {
         control,
     } = useForm({ mode: "onChange", defaultValues: { comment: "" } });
     const onFormSubmit = (data) => {
-        dispatch(
-            postAction.addCommentRequest({
-                postId: post.id,
-                content: data.comment,
-            }),
-        );
+        if (!single) {
+            dispatch(
+                postAction.addCommentRequest({
+                    postId: post.id,
+                    content: data.comment,
+                }),
+            );
+        } else {
+            dispatch(
+                postAction.addCommentRequest({
+                    postId: post.id,
+                    content: data.comment,
+                    single: true,
+                }),
+            );
+        }
     };
     const onErrors = (errors) => console.error(errors);
     const { commentField, commentIsDirty, commentDirtyFields } = useGetForms({

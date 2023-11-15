@@ -62,7 +62,7 @@ const Post = () => {
                         content={`https://nodex.com/post/${id}`}
                     />
                 </Head>
-                <PostCard post={singlePost} />
+                <PostCard post={singlePost} single={true} />
             </AppLayout>
         );
     }

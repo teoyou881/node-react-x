@@ -68,7 +68,7 @@ function* addComment(action) {
         const result = yield call(addCommentAPI, action.payload);
         yield put({
             type: POST_ACTION.ADD_COMMENT_SUCCESS,
-            payload: result.data,
+            payload: { comment: result.data, single: action.payload.single },
         });
         yield put({
             type: USER_ACTION.ADD_COMMENT_TO_ME,

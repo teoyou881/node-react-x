@@ -76,7 +76,8 @@ const initialState = {
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
-
+    singlePost: null,
+    removeSinglePost: false,
     firstAccess: false,
 };
 
@@ -204,14 +205,14 @@ export const postSlice = createSlice({
         addCommentSuccess: (state, action) => {
             state.addCommentLoading = false;
             state.addCommentDone = true;
-            const post = state.mainPosts.find(
-                (v) => v.id === action.payload.PostId,
-            );
-            post.Comments.unshift(action.payload);
-            // state.mainPosts.Comments = [
-            //     ...state.mainPosts.Comments,
-            //     dummyComment(action.payload),
-            // ];
+            if (action.payload.single) {
+                state.singlePost.Comments.unshift(action.payload.comment);
+            } else {
+                const post = state.mainPosts.find(
+                    (v) => v.id === action.payload.comment.PostId,
+                );
+                post.Comments.unshift(action.payload.comment);
+            }
         },
         addCommentFailure: (state, action) => {
             state.addCommentLoading = false;

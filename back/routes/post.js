@@ -243,4 +243,38 @@ router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {
     res.status(201).json(retweetWithPrevPost);
 });
 
+// get one post by postId
+router.get("/:postId", async (req, res, next) => {
+    try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+            include: [
+                { model: User, attributes: ["id", "nickname"] },
+                { model: Image },
+                {
+                    model: Comment,
+                    include: [{ model: User, attributes: ["id", "nickname"] }],
+                },
+                { model: User, as: "Likers", attributes: ["id"] },
+                {
+                    model: Post,
+                    as: "Retweet",
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                        { model: Image },
+                    ],
+                },
+            ],
+        });
+        if (!post) res.status(404).send("There is no post");
+        res.status(200).json(post);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
 module.exports = router;

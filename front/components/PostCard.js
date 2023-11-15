@@ -18,10 +18,12 @@ import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
 import FollowButton from "./FollowButton";
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post, single }) => {
     const dispatch = useDispatch();
     const id = useSelector((state) => state.user.me?.id);
+    const me = useSelector((state) => state.user.me);
     const liked = post.Likers.find((v) => v.id === id);
+    const retweeted = me?.Posts.find((v) => v.RetweetId === post.id);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
     /*
@@ -68,7 +70,16 @@ const PostCard = ({ post }) => {
                 cover={post.Images[0] && <PostImages images={post.Images} />}
                 // Key should be in jsx, when jsx is inside array.
                 actions={[
-                    <RetweetOutlined key="retweet" onClick={onRetweet} />,
+                    retweeted ? (
+                        <RetweetOutlined
+                            style={{ color: "blue" }}
+                            key="retweet"
+                            onClick={onRetweet}
+                        />
+                    ) : (
+                        <RetweetOutlined key="retweet" onClick={onRetweet} />
+                    ),
+
                     liked ? (
                         <HeartTwoTone
                             twoToneColor="red"
@@ -145,7 +156,7 @@ const PostCard = ({ post }) => {
             </Card>
             {id && commentFormOpened && (
                 <div>
-                    <CommentForm post={post} />
+                    <CommentForm post={post} single={single} />
                     <List
                         header={`${post.Comments.length} replies`}
                         itemLayout="horizontal"

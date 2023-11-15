@@ -29,7 +29,7 @@ function* addPost(action) {
         });
         yield put({
             type: USER_ACTION.ADD_POST_TO_ME,
-            payload: result.data.id,
+            payload: { id: result.data.id },
         });
     } catch (err) {
         yield put({
@@ -66,7 +66,6 @@ function addCommentAPI(data) {
 function* addComment(action) {
     try {
         const result = yield call(addCommentAPI, action.payload);
-        console.log(result.data);
         yield put({
             type: POST_ACTION.ADD_COMMENT_SUCCESS,
             payload: result.data,
@@ -192,7 +191,7 @@ function* retweet(action) {
         });
         yield put({
             type: USER_ACTION.ADD_POST_TO_ME,
-            payload: result.data.id,
+            payload: { id: result.data.id, RetweetId: result.data.RetweetId },
         });
     } catch (err) {
         console.log(err);

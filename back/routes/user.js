@@ -29,7 +29,7 @@ router.get("/", async (req, res, next) => {
             include: [
                 {
                     model: Post,
-                    attributes: ["id"],
+                    attributes: ["id", "RetweetId"],
                 },
                 {
                     model: User,
@@ -153,7 +153,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
                     include: [
                         {
                             model: Post,
-                            attributes: ["id"],
+                            attributes: ["id", "RetweetId"],
                         },
                         {
                             model: Comment,
@@ -169,6 +169,10 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
                             as: "Followers",
                             attributes: ["id", "nickname"],
                         },
+                        // {
+                        //     model: Post,
+                        //     as: "Retweet",
+                        // },
                     ],
                 });
                 return res.status(200).json(userWithoutPassword);

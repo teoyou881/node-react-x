@@ -115,7 +115,7 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 router.post("/:postId/comment", isLoggedIn, async (req, res, next) => {
     try {
         const post = await Post.findOne({
-            where: { id: req.params.postId, UserId: req.user.id },
+            where: { id: req.params.postId },
         });
         if (!post) {
             return res.status(403).send("There is no post");

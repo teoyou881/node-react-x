@@ -137,7 +137,10 @@ export const userSlice = createSlice({
             state.changeNicknameError = action.payload;
         },
         addPostToMe: (state, action) => {
-            state.me.Posts = [...state.me.Posts, { id: action.payload }];
+            state.me.Posts = [
+                ...state.me.Posts,
+                { id: action.payload.id, RetweetId: action.payload.RetweetId },
+            ];
         },
         addCommentToMe: (state, action) => {
             state.me.Comments = [...state.me.Comments, { id: action.payload }];

@@ -8,6 +8,7 @@ import wrapper from "../store/configureStore";
 const NodeX = ({ Component, pageProps }) => (
     <>
         <Head>
+            <link rel="shortcut icon" href="/favicon.ico" />
             <meta charSet="utf-8" />
             <title>NodeX</title>
         </Head>

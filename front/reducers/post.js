@@ -58,6 +58,9 @@ const initialState = {
     loadPostsLoading: false,
     loadPostsDone: false,
     loadPostsError: null,
+    loadPostLoading: false,
+    loadPostDone: false,
+    loadPostError: null,
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
@@ -176,6 +179,20 @@ export const postSlice = createSlice({
         loadPostsFailure: (state, action) => {
             state.loadPostsLoading = false;
             state.loadPostsError = action.error;
+        },
+        loadPostRequest: (state, action) => {
+            state.loadPostLoading = true;
+            state.loadPostDone = false;
+            state.loadPostError = null;
+        },
+        loadPostSuccess: (state, action) => {
+            state.loadPostLoading = false;
+            state.loadPostDone = true;
+            state.singlePost = action.payload;
+        },
+        loadPostFailure: (state, action) => {
+            state.loadPostLoading = false;
+            state.loadPostError = action.error;
         },
         addCommentRequest: (state, action) => {
             state.addCommentLoading = true;

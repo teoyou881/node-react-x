@@ -157,6 +157,8 @@ export const postSlice = createSlice({
             state.mainPosts = state.mainPosts.filter(
                 (v) => v.id !== action.payload.PostId,
             );
+            state.removeSinglePost = true;
+            state.singlePost = null;
         },
         removePostFailure: (state, action) => {
             state.removePostLoading = false;

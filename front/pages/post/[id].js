@@ -11,6 +11,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import AppLayout from "../../components/AppLayout";
 import PostCard from "../../components/PostCard";
+import Head from "next/head";
 
 const Post = () => {
     const { singlePost, removeSinglePost } = useSelector((state) => state.post);
@@ -27,16 +28,44 @@ const Post = () => {
     }, [removeSinglePost]);
 
     /*todo: make this page more beautiful*/
-    return (
-        <AppLayout>
-            {/*No post exist? --> show div there is no post*/}
-            {singlePost ? (
-                <PostCard post={singlePost} />
-            ) : (
+    if (!singlePost) {
+        return (
+            <AppLayout>
                 <div>The post the user is looking for doesn't exist.</div>
-            )}
-        </AppLayout>
-    );
+            </AppLayout>
+        );
+    } else {
+        return (
+            <AppLayout>
+                <Head>
+                    {" "}
+                    <title>NodeX | {singlePost.User.nickname}'s post</title>
+                    <meta name="description" content={singlePost.content} />
+                    <meta
+                        property="og:title"
+                        content={`${singlePost.User.nickname}'s post`}
+                    />
+                    <meta
+                        property="og:description"
+                        content={singlePost.content}
+                    />
+                    <meta
+                        property="og:image"
+                        content={
+                            singlePost.Images[0]
+                                ? singlePost.Images[0].src
+                                : "https://nodex.com/favicon.ico"
+                        }
+                    />
+                    <meta
+                        property="og:url"
+                        content={`https://nodex.com/post/${id}`}
+                    />
+                </Head>
+                <PostCard post={singlePost} />
+            </AppLayout>
+        );
+    }
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(

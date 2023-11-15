@@ -226,9 +226,13 @@ export const postSlice = createSlice({
         likePostSuccess: (state, action) => {
             state.likePostLoading = false;
             state.likePostDone = true;
-            state.mainPosts
-                .find((v) => v.id === action.payload.PostId)
-                .Likers.push({ id: action.payload.UserId });
+            // there is no mainPosts when user dispatch likePostRequest action on singlePost page
+            if (state.mainPosts.length > 0) {
+                state.mainPosts
+                    .find((v) => v.id === action.payload.PostId)
+                    .Likers.push({ id: action.payload.UserId });
+            }
+            state.singlePost?.Likers.push({ id: action.payload.UserId });
         },
         likePostFailure: (state, action) => {
             state.likePostLoading = false;
@@ -242,12 +246,23 @@ export const postSlice = createSlice({
         unlikePostSuccess: (state, action) => {
             state.unlikeLoading = false;
             state.unlikeDone = true;
-            const post = state.mainPosts.find(
-                (v) => v.id === action.payload.PostId,
-            );
-            post.Likers = post.Likers.filter(
-                (v) => v.id !== action.payload.UserId,
-            );
+            if (state.mainPosts.length > 0) {
+                const post = state.mainPosts.find(
+                    (v) => v.id === action.payload.PostId,
+                );
+                if (post) {
+                    post.Likers = post.Likers.filter(
+                        (v) => v.id !== action.payload.UserId,
+                    );
+                } else {
+                    console.log("post not found");
+                }
+            }
+            if (state.singlePost) {
+                state.singlePost.Likers = state.singlePost.Likers.filter(
+                    (v) => v.id !== action.payload.UserId,
+                );
+            }
         },
         unlikePostFailure: (state, action) => {
             state.unlikeLoading = false;

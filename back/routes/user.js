@@ -41,6 +41,10 @@ router.get("/", async (req, res, next) => {
                     as: "Followers",
                     attributes: ["id", "nickname"],
                 },
+                {
+                    model: Comment,
+                    attributes: ["id"],
+                },
             ],
         });
         res.status(200).json(userWithoutPassword);

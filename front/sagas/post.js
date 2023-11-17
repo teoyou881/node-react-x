@@ -219,6 +219,30 @@ function* loadPost(action) {
         });
     }
 }
+function loadUserPostsAPI(data) {
+    return axios.get(`/user/${data.userId}/posts/${(data.lastId = 0)}`);
+}
+function* loadUserPosts(action) {
+    // action.payload is lastId & userId
+    console.log(action.payload);
+    try {
+        const result = yield call(loadUserPostsAPI, action.payload);
+        console.log(result.data);
+
+        yield put({
+            type: POST_ACTION.LOAD_USER_POSTS_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.LOAD_USER_POSTS_FAILURE,
+            // error: err.response.data,
+            error: "error",
+        });
+    }
+}
+
 function* watchAddPost() {
     yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
 }
@@ -252,6 +276,9 @@ function* watchRetweet() {
 function* watchLoadPost() {
     yield takeLatest(POST_ACTION.LOAD_POST_REQUEST, loadPost);
 }
+function* watchLoadUserPosts() {
+    yield throttle(5000, POST_ACTION.LOAD_USER_POSTS_REQUEST, loadUserPosts);
+}
 export default function* postSaga() {
     yield all([
         fork(watchAddPost),
@@ -265,5 +292,6 @@ export default function* postSaga() {
         fork(watchUploadImages),
         fork(watchRetweet),
         fork(watchLoadPost),
+        fork(watchLoadUserPosts),
     ]);
 }

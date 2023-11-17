@@ -33,4 +33,7 @@ export const POST_ACTION = {
     RETWEET_SUCCESS: "post/retweetSuccess",
     RETWEET_FAILURE: "post/retweetFailure",
     RETWEET_ERROR_CLEAR: "post/retweetErrorClear",
+    LOAD_USER_POSTS_REQUEST: "post/loadUserPostsRequest",
+    LOAD_USER_POSTS_SUCCESS: "post/loadUserPostsSuccess",
+    LOAD_USER_POSTS_FAILURE: "post/loadUserPostsFailure",
 };

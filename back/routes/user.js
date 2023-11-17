@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Post, Comment } = require("../models");
+const { User, Post, Comment, Image } = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
@@ -297,6 +297,53 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
             // limit: parseInt(req.query.limit, 10),
         });
         res.status(200).json(followings);
+    } catch (e) {
+        console.log(e);
+        next(e);
+    }
+});
+
+router.get("/:userId/posts/:lastId", async (req, res, next) => {
+    console.log(req.params.lastId);
+    console.log(req.params.userId);
+
+    try {
+        const where = { id: req.params.userId };
+        const user = await User.findOne({
+            where: where,
+        });
+        if (!user) {
+            return res.status(403).send("There is no user");
+        }
+
+        const post = await Post.findAll({
+            where: { UserId: req.params.userId },
+            offset: 0,
+            limit: 10,
+            include: [
+                { model: User, attributes: ["id", "nickname"] },
+                { model: Image },
+                {
+                    model: Comment,
+                    include: [{ model: User, attributes: ["id", "nickname"] }],
+                },
+                { model: User, as: "Likers", attributes: ["id"] },
+                {
+                    model: Post,
+                    as: "Retweet",
+                    include: [
+                        {
+                            model: User,
+                            attributes: ["id", "nickname"],
+                        },
+                        { model: Image },
+                    ],
+                },
+            ],
+        });
+        console.log(post);
+        if (!post) res.status(404).send("There is no post");
+        res.status(200).json(post);
     } catch (e) {
         console.log(e);
         next(e);

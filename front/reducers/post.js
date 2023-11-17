@@ -328,6 +328,23 @@ export const postSlice = createSlice({
             state.retweetError = action.error;
             state.retweetErrorClear = false;
         },
+        loadUserPostsRequest: (state, action) => {
+            state.loadUserPostsLoading = true;
+            state.loadUserPostsDone = false;
+            state.loadUserPostsError = null;
+            // reset mainPosts
+            state.mainPosts = [];
+        },
+        loadUserPostsSuccess: (state, action) => {
+            state.loadUserPostsLoading = false;
+            state.loadUserPostsDone = true;
+            state.mainPosts.unshift(...action.payload);
+        },
+        loadUserPostsFailure: (state, action) => {
+            state.loadUserPostsLoading = false;
+            state.loadUserPostsError = action.error;
+            state.loadUserPostsErrorClear = false;
+        },
 
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},

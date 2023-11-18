@@ -18,7 +18,7 @@ router.get("/", async (req, res, next) => {
 
             //In real world, it is better to use lastId instead of offset.
             where: where,
-            limit: 10,
+            limit: 11,
 
             order: [
                 ["createdAt", "DESC"],
@@ -46,16 +46,10 @@ router.get("/", async (req, res, next) => {
             ],
         });
 
-        // If there are 10 posts, should check there are more posts after 10 posts.
-        // if there are 11 posts, then there are more posts. otherwise, there are no more posts.
-        if (posts.length === 10) {
-            const morePosts = await Post.findAll({
-                where: where,
-                limit: 11,
-            });
-            if (morePosts.length === 11) {
-                more = true;
-            }
+        // if there are more posts, then more is true.
+        if (posts.length === 11) {
+            more = true;
+            posts.pop();
         }
 
         res.status(200).json({ posts, more });

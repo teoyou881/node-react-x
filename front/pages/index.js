@@ -8,6 +8,7 @@ import { userAction } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "redux-saga";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const Home = () => {
     const { me } = useSelector((state) => state.user);
@@ -15,6 +16,18 @@ const Home = () => {
         useSelector((state) => state.post);
     const dispatch = useDispatch();
     const { retweetError } = useSelector((state) => state.post);
+
+    // when ssr, If there is an error, it will be redirected to home page.
+    // So, we have to handle error on front side.
+    const router = useRouter();
+    const { error } = router.query;
+
+    useEffect(() => {
+        if (error) {
+            alert(error);
+        }
+    }, [error]);
+
     useEffect(() => {
         if (retweetError) {
             alert(retweetError);

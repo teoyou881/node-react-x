@@ -77,22 +77,22 @@ const User = () => {
                     />
                 </Head>
             )}
-            {loadUser ? (
+            {loadUser && loadUser.id !== me?.id ? (
                 <Card
                     style={{ marginBottom: 20 }}
                     actions={[
                         <div key="twit">
-                            짹짹
+                            Posts
                             <br />
                             {loadUser.Posts.length}
                         </div>,
                         <div key="following">
-                            팔로잉
+                            Followings
                             <br />
                             {loadUser.Followings.length}
                         </div>,
                         <div key="follower">
-                            팔로워
+                            Followers
                             <br />
                             {loadUser.Followers.length}
                         </div>,

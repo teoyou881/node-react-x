@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import NicknameEditForm from "../components/NicknameEditForm";
@@ -11,6 +11,11 @@ import wrapper from "../store/configureStore";
 import axios from "axios";
 import { postAction } from "../reducers/post";
 import { END } from "redux-saga";
+import useSWR from "swr";
+
+// build fetcher function for useSWR
+const fetcher = (url) =>
+    axios.get(url, { withCredentials: true }).then((result) => result.data);
 
 const Profile = () => {
     const {
@@ -24,16 +29,19 @@ const Profile = () => {
     const router = useRouter();
     const dispatch = useDispatch();
 
+    // use SWR to fetch data
+    // If there are no data and no error, it means that the data is still being fetched.
+    // If there is data, it means that the data fetching is done.
+    // If there is an error, it means that the data fetching has failed.
+    const { data: followingData, error: followingError } = useSWR(
+        `http://localhost:3065/user/followings`,
+        fetcher,
+    );
+    console.log(followingData, followingError);
+
     useEffect(() => {
         if (!me) router.push("/");
     }, [me]); // Run this effect whenever 'me' changes
-    if (!me) {
-        return null;
-    }
-    useEffect(() => {
-        dispatch(userAction.loadFollowersRequest());
-        dispatch(userAction.loadFollowingsRequest());
-    }, []);
 
     const onDelete = useCallback((id, follow) => {
         if (follow === "following") dispatch(userAction.unfollowRequest(id));
@@ -49,7 +57,7 @@ const Profile = () => {
                 followings.scrollTop + followings.clientHeight >
                 followings.scrollHeight - 300
             ) {
-                if (showFollowingIndex < Followings.length) {
+                if (Followings.length > showFollowingIndex) {
                     dispatch(
                         userAction.loadMoreFollowingsRequest(
                             showFollowingIndex,
@@ -70,7 +78,7 @@ const Profile = () => {
                 followers.scrollTop + followers.clientHeight >
                 followers.scrollHeight - 300
             ) {
-                if (showFollowerIndex < Followers.length) {
+                if (Followers.length > showFollowerIndex) {
                     dispatch(
                         userAction.loadMoreFollowersRequest(showFollowerIndex),
                     );
@@ -148,6 +156,18 @@ const Profile = () => {
         },
         [Followers],
     );
+
+    // why should it be here
+    // return should not be above any hooks
+    // this is because the hooks should be called in the same order every time
+    if (followingError) {
+        console.error(followingError);
+        return <div>Failed to load data</div>;
+    }
+
+    if (!me) {
+        return null;
+    }
 
     return (
         <>

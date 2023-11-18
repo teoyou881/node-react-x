@@ -285,7 +285,10 @@ router.delete("/follower/:userId", isLoggedIn, async (req, res, next) => {
 //router for getting followers
 router.get("/followers", isLoggedIn, async (req, res, next) => {
     try {
-        const user = req.user;
+        const user = await User.findOne({
+            where: { id: req.user.id },
+        });
+        if (!user) return res.status(403).send("No user");
         const followers = await user.getFollowers({
             attributes: ["id", "nickname"],
             // limit: parseInt(req.query.limit, 10),
@@ -300,7 +303,10 @@ router.get("/followers", isLoggedIn, async (req, res, next) => {
 //router for getting followings
 router.get("/followings", isLoggedIn, async (req, res, next) => {
     try {
-        const user = req.user;
+        const user = await User.findOne({
+            where: { id: req.user.id },
+        });
+        if (!user) return res.status(403).send("No user");
         const followings = await user.getFollowings({
             attributes: ["id", "nickname"],
             // limit: parseInt(req.query.limit, 10),

@@ -339,7 +339,10 @@ router.get("/:userId/posts", async (req, res, next) => {
         const posts = await Post.findAll({
             where: where,
             limit: 11,
-            order: [["createdAt", "DESC"]],
+            order: [
+                ["id", "DESC"],
+                ["createdAt", "DESC"],
+            ],
             include: [
                 { model: Hashtag },
                 { model: User, attributes: ["id", "nickname"] },

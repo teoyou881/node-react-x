@@ -21,6 +21,7 @@ router.get("/", async (req, res, next) => {
             limit: 11,
 
             order: [
+                ["id", "DESC"],
                 ["createdAt", "DESC"],
                 [Comment, "createdAt", "DESC"],
             ],
@@ -48,11 +49,12 @@ router.get("/", async (req, res, next) => {
         });
 
         // if there are more posts, then more is true.
+        console.log(posts);
         if (posts.length === 11) {
             more = true;
             posts.pop();
         }
-
+        console.log(posts);
         res.status(200).json({ posts, more });
     } catch (e) {
         console.log(e);

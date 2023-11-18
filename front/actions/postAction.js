@@ -36,4 +36,7 @@ export const POST_ACTION = {
     LOAD_USER_POSTS_REQUEST: "post/loadUserPostsRequest",
     LOAD_USER_POSTS_SUCCESS: "post/loadUserPostsSuccess",
     LOAD_USER_POSTS_FAILURE: "post/loadUserPostsFailure",
+    LOAD_HASHTAG_POSTS_REQUEST: "post/loadHashTagPostsRequest",
+    LOAD_HASHTAG_POSTS_SUCCESS: "post/loadHashTagPostsSuccess",
+    LOAD_HASHTAG_POSTS_FAILURE: "post/loadHashTagPostsFailure",
 };

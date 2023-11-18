@@ -3,6 +3,7 @@ const app = express();
 const postRouter = require("./routes/post");
 const userRouter = require("./routes/user");
 const postsRouter = require("./routes/posts");
+const hashtagRouter = require("./routes/hashtag");
 const db = require("./models");
 const cors = require("cors");
 const passportConfig = require("./passport");
@@ -44,6 +45,7 @@ app.use(passport.session());
 app.use("/post", postRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
+app.use("/hashtag", hashtagRouter);
 
 app.listen(3065, () => {
     db.sequelize.sync().then(() => {

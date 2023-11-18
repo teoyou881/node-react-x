@@ -344,6 +344,24 @@ export const postSlice = createSlice({
             state.loadPostsError = action.error;
             state.loadPostsErrorClear = false;
         },
+        loadHashTagPostsRequest: (state, action) => {
+            state.loadPostsLoading = true;
+            state.loadPostsDone = false;
+            state.loadHashTagPostsError = null;
+        },
+        loadHashTagPostsSuccess: (state, action) => {
+            state.loadPostsLoading = false;
+            state.loadPostsDone = true;
+            state.mainPosts.push(...action.payload.posts);
+            if (!action.payload.more) {
+                state.hasMorePosts = false;
+            }
+        },
+        loadHashTagPostsFailure: (state, action) => {
+            state.loadPostsLoading = false;
+            state.loadPostsError = action.error;
+            state.loadPostsErrorClear = false;
+        },
 
         removeCommentRequest: (state, action) => {},
         removeCommentSuccess: (state, action) => {},

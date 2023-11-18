@@ -220,7 +220,7 @@ function* loadPost(action) {
     }
 }
 function loadUserPostsAPI(data) {
-    return axios.get(`/user/${data.userId}/posts/?lastId=${data.lastId | 0}`);
+    return axios.get(`/user/${data.userId}/posts?lastId=${data.lastId | 0}`);
 }
 function* loadUserPosts(action) {
     // action.payload is lastId & userId
@@ -237,8 +237,31 @@ function* loadUserPosts(action) {
         console.log(err);
         yield put({
             type: POST_ACTION.LOAD_USER_POSTS_FAILURE,
-            // error: err.response.data,
-            error: "error",
+            error: err.response.data,
+            // error: "error",
+        });
+    }
+}
+function loadHashtagPostsAPI(data) {
+    return axios.get(`/hashtag/${data.tag}?lastId=${data.lastId | 0}`);
+}
+function* loadHashtagPosts(action) {
+    // action.payload is lastId & userId
+    console.log(action.payload);
+    try {
+        const result = yield call(loadHashtagPostsAPI, action.payload);
+        console.log(result.data);
+
+        yield put({
+            type: POST_ACTION.LOAD_HASHTAG_POSTS_SUCCESS,
+            payload: result.data,
+        });
+    } catch (err) {
+        console.log(err);
+        yield put({
+            type: POST_ACTION.LOAD_HASHTAG_POSTS_FAILURE,
+            error: err.response.data,
+            // error: "error",
         });
     }
 }
@@ -256,7 +279,7 @@ function* watchRemoveComment() {
     yield takeLatest(POST_ACTION.ADD_COMMENT_REQUEST, removeComment);
 }
 function* watchLoadPosts() {
-    yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
+    yield throttle(5000, POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
 }
 function* watchLikePost() {
     yield takeLatest(POST_ACTION.LIKE_POST_REQUEST, likePost);
@@ -279,6 +302,13 @@ function* watchLoadPost() {
 function* watchLoadUserPosts() {
     yield throttle(5000, POST_ACTION.LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
+function* watchLoadHashtagPosts() {
+    yield throttle(
+        5000,
+        POST_ACTION.LOAD_HASHTAG_POSTS_REQUEST,
+        loadHashtagPosts,
+    );
+}
 export default function* postSaga() {
     yield all([
         fork(watchAddPost),
@@ -293,5 +323,6 @@ export default function* postSaga() {
         fork(watchRetweet),
         fork(watchLoadPost),
         fork(watchLoadUserPosts),
+        fork(watchLoadHashtagPosts),
     ]);
 }

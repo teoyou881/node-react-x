@@ -4,6 +4,12 @@ const { User, Post, Comment, Image } = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+const { Op } = require("sequelize");
+
+function isNumeric(input) {
+    const numericRegex = /^\d+$/;
+    return numericRegex.test(input);
+}
 
 // If user is logged in, send user info
 // If user is not logged in, send null
@@ -61,6 +67,9 @@ router.get("/", async (req, res, next) => {
 // 3. Based on user preference, show followers
 router.get("/info/:userId", async (req, res, next) => {
     try {
+        if (!isNumeric(req.params.userId)) {
+            return res.status(403).send("Invalid userId");
+        }
         const user = await User.findOne({
             where: { id: parseInt(req.params.userId, 10) },
         });
@@ -303,23 +312,27 @@ router.get("/followings", isLoggedIn, async (req, res, next) => {
     }
 });
 
-router.get("/:userId/posts/:lastId", async (req, res, next) => {
-    console.log(req.params.lastId);
-    console.log(req.params.userId);
-
+router.get("/:userId/posts", async (req, res, next) => {
     try {
-        const where = { id: req.params.userId };
+        if (!isNumeric(req.params.userId)) {
+            return res.status(403).send("Invalid userId");
+        }
         const user = await User.findOne({
-            where: where,
+            where: { id: req.params.userId },
         });
         if (!user) {
             return res.status(403).send("There is no user");
         }
-
-        const post = await Post.findAll({
-            where: { UserId: req.params.userId },
-            offset: 0,
-            limit: 10,
+        const where = {};
+        const lastId = parseInt(req.query.lastId, 10);
+        if (lastId) {
+            where.id = { [Op.lt]: lastId };
+        }
+        let more = false;
+        const posts = await Post.findAll({
+            where: where,
+            limit: 11,
+            order: [["createdAt", "DESC"]],
             include: [
                 { model: User, attributes: ["id", "nickname"] },
                 { model: Image },
@@ -341,9 +354,12 @@ router.get("/:userId/posts/:lastId", async (req, res, next) => {
                 },
             ],
         });
-        console.log(post);
-        if (!post) res.status(404).send("There is no post");
-        res.status(200).json(post);
+        if (posts.length === 11) {
+            more = true;
+            posts.pop();
+        }
+        if (!posts) res.status(404).send("There is no post");
+        res.status(200).json({ posts, more });
     } catch (e) {
         console.log(e);
         next(e);

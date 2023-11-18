@@ -17,6 +17,7 @@ import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import { postAction } from "../reducers/post";
 import FollowButton from "./FollowButton";
+import Link from "next/link";
 
 const PostCard = ({ post, single }) => {
     const dispatch = useDispatch();
@@ -134,7 +135,11 @@ const PostCard = ({ post, single }) => {
                     >
                         <Card.Meta
                             avatar={
-                                <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                                <Link href={`/user/${post.Retweet.User.id}`}>
+                                    <Avatar>
+                                        {post.Retweet.User.nickname[0]}
+                                    </Avatar>
+                                </Link>
                             }
                             title={post.Retweet.User.nickname}
                             description={
@@ -146,7 +151,11 @@ const PostCard = ({ post, single }) => {
                     </Card>
                 ) : (
                     <Card.Meta
-                        avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                        avatar={
+                            <Link href={`/user/${post.User.id}`}>
+                                <Avatar>{post.User.nickname[0]}</Avatar>{" "}
+                            </Link>
+                        }
                         title={post.User.nickname}
                         description={
                             <PostCardContent postData={post.content} />

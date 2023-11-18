@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { Avatar, Button, Card } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { userAction } from "../reducers/user";
+import Link from "next/link";
 
 const UserProfile = () => {
     const dispatch = useDispatch();
@@ -16,19 +17,25 @@ const UserProfile = () => {
             <Card
                 actions={[
                     <div key={"twit"}>
-                        Posts
-                        <br />
-                        {me.Posts.length}
+                        <Link href={`/user/${me.id}`}>
+                            Posts
+                            <br />
+                            {me.Posts.length}
+                        </Link>
                     </div>,
                     <div key={"followings"}>
-                        Followings
-                        <br />
-                        {me.Followings.length}
+                        <Link href={`/profile`}>
+                            Followings
+                            <br />
+                            {me.Followings.length}
+                        </Link>
                     </div>,
                     <div key={"followers"}>
-                        Followers
-                        <br />
-                        {me.Followers.length}
+                        <Link href={`/profile`}>
+                            Followers
+                            <br />
+                            {me.Followers.length}
+                        </Link>
                     </div>,
                 ]}
             >

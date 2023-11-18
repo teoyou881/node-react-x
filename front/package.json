@@ -30,7 +30,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.2.3",
     "shortid": "^2.2.16",
-    "styled-components": "^6.0.8"
+    "styled-components": "^6.0.8",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.1.0",

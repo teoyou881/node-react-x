@@ -327,22 +327,22 @@ export const postSlice = createSlice({
             state.retweetErrorClear = false;
         },
         loadUserPostsRequest: (state, action) => {
-            state.loadUserPostsLoading = true;
-            state.loadUserPostsDone = false;
-            state.loadUserPostsError = null;
+            state.loadPostsLoading = true;
+            state.loadPostsDone = false;
+            state.loadPostsError = null;
         },
         loadUserPostsSuccess: (state, action) => {
-            state.loadUserPostsLoading = false;
-            state.loadUserPostsDone = true;
+            state.loadPostsLoading = false;
+            state.loadPostsDone = true;
             state.mainPosts.push(...action.payload.posts);
             if (!action.payload.more) {
                 state.hasMorePosts = false;
             }
         },
         loadUserPostsFailure: (state, action) => {
-            state.loadUserPostsLoading = false;
-            state.loadUserPostsError = action.error;
-            state.loadUserPostsErrorClear = false;
+            state.loadPostsLoading = false;
+            state.loadPostsError = action.error;
+            state.loadPostsErrorClear = false;
         },
 
         removeCommentRequest: (state, action) => {},

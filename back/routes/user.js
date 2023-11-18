@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { User, Post, Comment, Image } = require("../models");
+const { User, Post, Comment, Image, Hashtag } = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
@@ -335,6 +335,7 @@ router.get("/:userId/posts", async (req, res, next) => {
             limit: 11,
             order: [["createdAt", "DESC"]],
             include: [
+                { model: Hashtag },
                 { model: User, attributes: ["id", "nickname"] },
                 { model: Image },
                 {

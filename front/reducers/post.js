@@ -78,7 +78,6 @@ const initialState = {
     retweetError: null,
     singlePost: null,
     removeSinglePost: false,
-    firstAccess: false,
 };
 
 /*
@@ -169,13 +168,12 @@ export const postSlice = createSlice({
             state.loadPostsLoading = true;
             state.loadPostsDone = false;
             state.loadPostsError = null;
-            state.firstAccess = true;
         },
         loadPostsSuccess: (state, action) => {
             state.loadPostsLoading = false;
             state.loadPostsDone = true;
             state.mainPosts.push(...action.payload.posts);
-            if (action.payload.more === false) {
+            if (!action.payload.more) {
                 state.hasMorePosts = false;
             }
         },
@@ -332,13 +330,14 @@ export const postSlice = createSlice({
             state.loadUserPostsLoading = true;
             state.loadUserPostsDone = false;
             state.loadUserPostsError = null;
-            // reset mainPosts
-            state.mainPosts = [];
         },
         loadUserPostsSuccess: (state, action) => {
             state.loadUserPostsLoading = false;
             state.loadUserPostsDone = true;
-            state.mainPosts.unshift(...action.payload);
+            state.mainPosts.push(...action.payload.posts);
+            if (!action.payload.more) {
+                state.hasMorePosts = false;
+            }
         },
         loadUserPostsFailure: (state, action) => {
             state.loadUserPostsLoading = false;

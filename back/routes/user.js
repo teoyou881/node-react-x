@@ -325,6 +325,7 @@ router.get("/:userId/posts", async (req, res, next) => {
         }
         const where = {};
         const lastId = parseInt(req.query.lastId, 10);
+        where.UserId = parseInt(req.params.userId, 10);
         if (lastId) {
             where.id = { [Op.lt]: lastId };
         }

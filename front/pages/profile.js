@@ -39,10 +39,6 @@ const Profile = () => {
     );
     console.log(followingData, followingError);
 
-    useEffect(() => {
-        if (!me) router.push("/");
-    }, [me]); // Run this effect whenever 'me' changes
-
     const onDelete = useCallback((id, follow) => {
         if (follow === "following") dispatch(userAction.unfollowRequest(id));
         if (follow === "follower")
@@ -160,13 +156,24 @@ const Profile = () => {
     // why should it be here
     // return should not be above any hooks
     // this is because the hooks should be called in the same order every time
-    if (followingError) {
-        console.error(followingError);
-        return <div>Failed to load data</div>;
-    }
 
+    // if (followingError) {
+    //     console.error(followingError);
+    //     return <div>Failed to load data</div>;
+    // }
+
+    useEffect(() => {
+        if (!me) {
+            router.push("/");
+        }
+    }, [me]); // Run this effect whenever 'me' changes
     if (!me) {
-        return null;
+        return (
+            <AppLayout>
+                <div>Please login first. </div>
+                <div>You'll soon be back on the homepage. </div>
+            </AppLayout>
+        );
     }
 
     return (

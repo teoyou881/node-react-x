@@ -16,15 +16,10 @@ const User = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { id } = router.query;
-    const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector(
+    const { mainPosts, hasMorePosts, loadUserPostsLoading } = useSelector(
         (state) => state.post,
     );
     const { loadUser, me } = useSelector((state) => state.user);
-
-    // useEffect(() => {
-    //     const lastId = mainPosts[mainPosts.length - 1]?.id;
-    //     dispatch(postAction.loadUserPostsRequest({ lastId, userId: id }));
-    // }, []);
 
     useEffect(() => {
         const onScroll = () => {
@@ -32,10 +27,12 @@ const User = () => {
                 window.pageYOffset + document.documentElement.clientHeight >
                 document.documentElement.scrollHeight - 300
             ) {
-                if (hasMorePosts && !loadPostsLoading) {
+                if (hasMorePosts && !loadUserPostsLoading) {
                     //get posts by userId
                     const lastId = mainPosts[mainPosts?.length - 1]?.id;
-                    dispatch(postAction.loadUserPostsRequest(lastId, id));
+                    dispatch(
+                        postAction.loadUserPostsRequest({ lastId, userId: id }),
+                    );
                 }
             }
         };
@@ -43,7 +40,15 @@ const User = () => {
         return () => {
             window.removeEventListener("scroll", onScroll);
         };
-    }, [mainPosts?.length, hasMorePosts, id, loadPostsLoading]);
+    }, [mainPosts?.length, hasMorePosts, id, loadUserPostsLoading]);
+
+    if (!loadUser) {
+        return (
+            <AppLayout>
+                <div>{id} user does not exist.</div>
+            </AppLayout>
+        );
+    }
 
     return (
         <AppLayout>
@@ -115,16 +120,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 axios.defaults.headers.Cookie = cookie;
             }
 
-            store.dispatch(userAction.loadMyInfoRequest());
-            store.dispatch(userAction.loadUserRequest(params.id));
-            store.dispatch(
-                postAction.loadUserPostsRequest({
-                    userId: params.id,
-                    lastId: 0,
-                }),
-            );
-            store.dispatch(END);
-            await store.sagaTask.toPromise();
+            const numericRegex = /^\d+$/;
+            if (numericRegex.test(params.id)) {
+                store.dispatch(userAction.loadMyInfoRequest());
+                store.dispatch(userAction.loadUserRequest(params.id));
+                store.dispatch(
+                    postAction.loadUserPostsRequest({
+                        userId: params.id,
+                    }),
+                );
+                store.dispatch(END);
+                await store.sagaTask.toPromise();
+            }
         },
 );
 export default User;

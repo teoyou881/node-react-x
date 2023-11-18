@@ -220,7 +220,7 @@ function* loadPost(action) {
     }
 }
 function loadUserPostsAPI(data) {
-    return axios.get(`/user/${data.userId}/posts/${(data.lastId = 0)}`);
+    return axios.get(`/user/${data.userId}/posts/?lastId=${data.lastId | 0}`);
 }
 function* loadUserPosts(action) {
     // action.payload is lastId & userId

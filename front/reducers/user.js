@@ -73,11 +73,13 @@ export const userSlice = createSlice({
             state.loadMyInfoLoading = false;
             state.loadMyInfoDone = true;
             state.me = action.payload;
-            if (state.me.Followings.length < 10) {
-                state.showFollowingIndex = state.me.Followings.length;
-            }
-            if (state.me.Followers.length < 10) {
-                state.showFollowerIndex = state.me.Followers.length;
+            if (state.me) {
+                if (action.payload.Followings.length < 10) {
+                    state.showFollowingIndex = action.payload.Followings.length;
+                }
+                if (action.payload.Followers.length < 10) {
+                    state.showFollowerIndex = action.payload.Followers.length;
+                }
             }
         },
         loadMyInfoFailure: (state, action) => {

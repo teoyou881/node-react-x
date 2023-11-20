@@ -1,9 +1,8 @@
-import { List, Button, Card } from "antd";
-import React, { useCallback } from "react";
+import { List, Button } from "antd";
+import React, from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { userAction } from "../reducers/user";
-import { createGlobalStyle } from "styled-components";
 
 const FollowList = ({ header, data }) => {
     const dispatch = useDispatch();
@@ -60,10 +59,8 @@ const FollowList = ({ header, data }) => {
         />
     );
 };
-
 FollowList.propTypes = {
     header: PropTypes.string.isRequired,
     data: PropTypes.array.isRequired,
 };
-
 export default FollowList;

@@ -1,111 +1,107 @@
-import React, { useEffect } from "react";
-import AppLayout from "../components/AppLayout";
-import { useDispatch, useSelector } from "react-redux";
-import PostForm from "../components/PostForm";
-import PostCard from "../components/PostCard";
-import { postAction } from "../reducers/post";
-import { userAction } from "../reducers/user";
-import wrapper from "../store/configureStore";
-import { END } from "redux-saga";
-import axios from "axios";
-import { useRouter } from "next/router";
+import React, { useEffect } from 'react';
+import AppLayout from '../components/AppLayout';
+import { useDispatch, useSelector } from 'react-redux';
+import PostForm from '../components/PostForm';
+import PostCard from '../components/PostCard';
+import { postAction } from '../reducers/post';
+import { userAction } from '../reducers/user';
+import wrapper from '../store/configureStore';
+import { END } from 'redux-saga';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Home = () => {
-    const { me } = useSelector((state) => state.user);
-    const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } =
-        useSelector((state) => state.post);
-    const dispatch = useDispatch();
-    const { retweetError } = useSelector((state) => state.post);
+  const { me } = useSelector((state) => state.user);
+  const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } = useSelector((state) => state.post);
+  const dispatch = useDispatch();
+  const { retweetError } = useSelector((state) => state.post);
 
-    // when ssr, If there is an error, it will be redirected to home page.
-    // So, we have to handle error on front side.
-    const router = useRouter();
-    const { error } = router.query;
+  // when ssr, If there is an error, it will be redirected to home page.
+  // So, we have to handle error on front side.
+  const router = useRouter();
+  const { error } = router.query;
 
-    useEffect(() => {
-        if (error) {
-            alert(error);
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
+
+  // don't need this code anymore. We can get data using ssr
+  // useEffect(() => {
+  //     dispatch(userAction.loadMyInfoRequest());
+  //     if (!firstAccess) {
+  //         dispatch(postAction.loadPostsRequest());
+  //     }
+  // }, []);
+
+  // Just infinite scrolling
+  useEffect(() => {
+    function onScroll() {
+      if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 400) {
+        if (hasMorePosts && !loadPostsLoading) {
+          const lastId = mainPosts[mainPosts.length - 1]?.id;
+          dispatch(postAction.loadPostsRequest(lastId));
         }
-    }, [error]);
+      }
+    }
+    window.addEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [hasMorePosts, loadPostsLoading]);
 
-    useEffect(() => {
-        if (retweetError) {
-            alert(retweetError);
-        }
-    }, [retweetError]);
-
-    // don't need this code anymore. We can get data using ssr
-    // useEffect(() => {
-    //     dispatch(userAction.loadMyInfoRequest());
-    //     if (!firstAccess) {
-    //         dispatch(postAction.loadPostsRequest());
-    //     }
-    // }, []);
-
-    // Just infinite scrolling
-    useEffect(() => {
-        function onScroll() {
-            if (
-                window.scrollY + document.documentElement.clientHeight >
-                document.documentElement.scrollHeight - 400
-            ) {
-                if (hasMorePosts && !loadPostsLoading) {
-                    const lastId = mainPosts[mainPosts.length - 1]?.id;
-                    dispatch(postAction.loadPostsRequest(lastId));
-                }
-            }
-        }
-        window.addEventListener("scroll", onScroll);
-        return () => {
-            window.removeEventListener("scroll", onScroll);
-        };
-    }, [hasMorePosts, loadPostsLoading]);
-
-    return (
-        <div>
-            <AppLayout>
-                {me && <PostForm />}
-                {/* This is one of the anti-patterns that using index into a key as props
+  return (
+    <div>
+      <AppLayout>
+        {me && <PostForm />}
+        {/* This is one of the anti-patterns that using index into a key as props
 			In most case, we must not pass index to a key
 			especially, there is a possibility that post can be deleted.
 			But if elements in iterator are not changed or deleted, can use index*/}
 
-                {/*Todo
+        {/*Todo
                 1. apply react-virtualized*/}
-                {mainPosts?.map((post, index) => (
-                    <PostCard key={post.id} post={post} index={index} />
-                ))}
-            </AppLayout>
-        </div>
-    );
+        {mainPosts?.map((post, index) => (
+          <PostCard key={post.id} post={post} index={index} />
+        ))}
+      </AppLayout>
+    </div>
+  );
 };
 
 // When you look at redux devs, we can see posts in mainPosts, but there is no data in me in user.
 // This under code is being run on server side, not on browser.
 // So, we already set cookie on browser and backend though, we have to set cookie o front side.
 export const getServerSideProps = wrapper.getServerSideProps(
-    //https://github.com/kirill-konshin/next-redux-wrapper#state-reconciliation-during-hydration
-    // search ' Using getServerSideProps or getStaticProps'
-    (store) =>
-        async ({ req, res, ...etc }) => {
-            // set header cookie on front side
-            const cookie = req ? req.headers.cookie : "";
-            axios.defaults.headers.Cookie = "";
-            // should have this if state.
-            // To prevent from sharing cookie with other users.
-            // Like under code, error and bug can occur.
-            // axios.defaults.headers.Cookie = req ? req.headers.cookie : "";
-            if (req && cookie) {
-                axios.defaults.headers.Cookie = cookie;
-            }
+  //https://github.com/kirill-konshin/next-redux-wrapper#state-reconciliation-during-hydration
+  // search ' Using getServerSideProps or getStaticProps'
+  (store) =>
+    async ({ req, res, ...etc }) => {
+      // set header cookie on front side
+      const cookie = req ? req.headers.cookie : '';
+      axios.defaults.headers.Cookie = '';
+      // should have this if state.
+      // To prevent from sharing cookie with other users.
+      // Like under code, error and bug can occur.
+      // axios.defaults.headers.Cookie = req ? req.headers.cookie : "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
 
-            store.dispatch(userAction.loadMyInfoRequest());
-            store.dispatch(postAction.loadPostsRequest());
-            // Wait until the above dispatches are finished.
-            // Without this code, just dispatching actions and then rendering, not waiting the results from dispatch.
-            store.dispatch(END);
-            await store.sagaTask.toPromise();
-        },
+      store.dispatch(userAction.loadMyInfoRequest());
+      store.dispatch(postAction.loadPostsRequest());
+      // Wait until the above dispatches are finished.
+      // Without this code, just dispatching actions and then rendering, not waiting the results from dispatch.
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    },
 );
 
 export default Home;

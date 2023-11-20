@@ -1,7 +1,7 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@babel/eslint-parser",
     "parserOptions": {
-        "ecmaVersion": "latest",
+        "ecmaVersion": 2020,
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
@@ -10,19 +10,41 @@
     "env": {
         "browser": true,
         "node": true,
-        "es2024": true
+        "es6": true
     },
-    "extends": ["airbnb"],
-    "plugins": ["import", "react-hooks", "jsx-a11y"],
+    "extends": [
+        "airbnb","prettier","prettier/react"
+    ],
+    "plugins": [
+        "import",
+        "react",
+        "react-hooks",
+        "jsx-a11y"
+        ,"prettier"
+    ],
     "rules": {
         "jsx-a11y/label-has-associated-control": "off",
         "jsx-a11y/anchor-is-valid": "off",
-        "no-console": "off" ,
+        "no-console": "off",
         "no-underscore-dangle": "off",
         "react/forbid-prop-types": "off",
         "react/jsx-filename-extension": "off",
         "react/jsx-one-expression-per-line": "off",
+        "react/require-default-props": "off",
         "object-curly-newline": "off",
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "no-param-reassign": "off",
+        "react/function-component-definition":[
+            2,
+            { "namedComponents": [
+                "arrow-function",
+                "function-declaration"
+            ] }
+        ],
+        "react/jsx-curly-brace-presence": [
+            2,
+            { "props": "never", "children": "never" }
+        ],
+        "arrow-body-style": ["error", "as-needed"]
     }
 }

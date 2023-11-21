@@ -13,8 +13,16 @@ const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
+const hpp = require("hpp");
+const helmet = require("helmet");
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "production") {
+    app.use(morgan("combined"));
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan("dev"));
+}
 dotenv.config();
 
 // why use path.join? --> window and mac use different slash to separate folders
@@ -23,7 +31,7 @@ app.use("/", express.static(path.join(__dirname, "uploads"))); // back/uploads f
 passportConfig();
 app.use(
     cors({
-        origin: true,
+        origin: ["http://localhost:3000", "nodex.com"],
         credentials: true,
     }),
 );

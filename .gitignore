@@ -1,1 +1,4 @@
-.idea
+react-node-x
+node_modules
+.env
+.next

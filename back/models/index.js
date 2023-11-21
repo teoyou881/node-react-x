@@ -1,5 +1,7 @@
 "use strict";
 
+const hashtag = require("./hashtag");
+
 const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env];
@@ -16,7 +18,15 @@ db.User = require("./user")(sequelize, Sequelize);
 db.Post = require("./post")(sequelize, Sequelize);
 db.Comment = require("./comment")(sequelize, Sequelize);
 db.Image = require("./image")(sequelize, Sequelize);
-db.Hashtag = require("./hashtag")(sequelize, Sequelize);
+// db.Hashtag = require("./hashtag")(sequelize, Sequelize);
+db.Hashtag = hashtag;
+
+// Extending Model
+Object.keys(db).forEach((modelName) => {
+    if (modelName === "Hashtag") {
+        db[modelName].init(sequelize);
+    }
+});
 
 Object.keys(db).forEach((modelName) => {
     if (db[modelName].associate) {

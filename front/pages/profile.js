@@ -31,8 +31,8 @@ const Profile = () => {
   // If there are no data and no error, it means that the data is still being fetched.
   // If there is data, it means that the data fetching is done.
   // If there is an error, it means that the data fetching has failed.
+  // eslint-disable-next-line no-unused-vars
   const { data: followingData, error: followingError } = useSWR(`http://localhost:3065/user/followings`, fetcher);
-  console.log(followingData, followingError);
 
   const onDelete = useCallback((id, follow) => {
     if (follow === 'following') dispatch(userAction.unfollowRequest(id));

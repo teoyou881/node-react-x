@@ -280,7 +280,7 @@ function* watchRemoveComment() {
   yield takeLatest(POST_ACTION.ADD_COMMENT_REQUEST, removeComment);
 }
 function* watchLoadPosts() {
-  yield throttle(5000, POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
+  yield takeLatest(POST_ACTION.LOAD_POSTS_REQUEST, loadPosts);
 }
 function* watchLikePost() {
   yield takeLatest(POST_ACTION.LIKE_POST_REQUEST, likePost);
@@ -301,10 +301,10 @@ function* watchLoadPost() {
   yield takeLatest(POST_ACTION.LOAD_POST_REQUEST, loadPost);
 }
 function* watchLoadUserPosts() {
-  yield throttle(5000, POST_ACTION.LOAD_USER_POSTS_REQUEST, loadUserPosts);
+  yield takeLatest(POST_ACTION.LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 function* watchLoadHashtagPosts() {
-  yield throttle(5000, POST_ACTION.LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
+  yield takeLatest(POST_ACTION.LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
 export default function* postSaga() {
   yield all([

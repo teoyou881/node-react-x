@@ -18,7 +18,6 @@ dayjs.locale('ca');
 dayjs.extend(relativeTime);
 
 const PostCard = ({ post, single }) => {
-  console.log('dayjs', dayjs);
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.me?.id);
   const me = useSelector((state) => state.user.me);
@@ -163,7 +162,7 @@ PostCard.propTypes = {
       nickname: PropTypes.string,
     }),
     content: PropTypes.string,
-    createdAt: PropTypes.object,
+    createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
     Likers: PropTypes.arrayOf(PropTypes.object),

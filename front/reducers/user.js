@@ -247,7 +247,7 @@ export const userSlice = createSlice({
       state.loadFollowingsError = action.payload;
     },
     loadMoreFollowingsRequest: (state, action) => {
-      if (action.payload + 10 <= state.me.Followings.length) {
+      if (action.payload + 10 >= state.showFollowingIndex) {
         state.showFollowingIndex = state.me.Followings.length;
       } else {
         state.showFollowingIndex = action.payload + 10;
@@ -255,7 +255,7 @@ export const userSlice = createSlice({
     },
 
     loadMoreFollowersRequest: (state, action) => {
-      if (action.payload + 10 <= state.me.Followers.length) {
+      if (action.payload + 10 >= state.showFollowerIndex) {
         state.showFollowerIndex = state.me.Followers.length;
       } else {
         state.showFollowerIndex = action.payload + 10;

@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "dev": "next",
-    "build": "next build"
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start"
   },
   "author": "Teo",
   "license": "ISC",
   "dependencies": {
     "@ant-design/compatible": "^5.1.2",
     "@ant-design/icons": "^5.2.6",
+    "@next/bundle-analyzer": "^14.0.3",
     "@reduxjs/toolkit": "^1.9.6",
+    "add": "^2.0.6",
     "antd": "^5.9.2",
     "axios": "^1.5.1",
     "babel-plugin-styled-components": "^2.1.4",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.11.10",
     "faker": "^6.6.6",
     "next": "^13.5.2",
@@ -36,14 +40,17 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.23.3",
     "@faker-js/faker": "^8.1.0",
     "@types/node": "20.6.4",
     "@types/react": "18.2.22",
     "babel-eslint": "^10.1.0",
     "eslint": "^8.50.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
     "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "5.2.2"

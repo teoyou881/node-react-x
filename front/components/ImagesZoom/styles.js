@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
+
 export const Overlay = styled.div`
   position: fixed;
   z-index: 1000;

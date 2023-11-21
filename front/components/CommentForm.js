@@ -5,12 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { postAction } from '../reducers/post';
 import useGetForms from '../utils/useCommentForms';
+
 const CommentForm = ({ post, single = false }) => {
   const { addCommentDone } = useSelector((state) => state.post);
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (addCommentDone) {
+      // eslint-disable-next-line no-use-before-define
       reset({
         comment: '',
       });
@@ -80,6 +82,7 @@ CommentForm.propTypes = {
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
   }),
+  single: PropTypes.bool,
 };
 
 export default CommentForm;

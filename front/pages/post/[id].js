@@ -2,16 +2,16 @@
 // should be named as [id].js
 // surrounded by []
 import { useRouter } from 'next/router';
-import wrapper from '../../store/configureStore';
 import axios from 'axios';
-import { userAction } from '../../reducers/user';
 import { END } from 'redux-saga';
-import { postAction } from '../../reducers/post';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import Head from 'next/head';
+import wrapper from '../../store/configureStore';
+import { userAction } from '../../reducers/user';
+import { postAction } from '../../reducers/post';
 import AppLayout from '../../components/AppLayout';
 import PostCard from '../../components/PostCard';
-import Head from 'next/head';
 
 const Post = () => {
   const { singlePost, removeSinglePost } = useSelector((state) => state.post);
@@ -27,35 +27,37 @@ const Post = () => {
     }
   }, [removeSinglePost]);
 
-  /*todo: make this page more beautiful*/
-  if (!singlePost) {
-    return (
-      <AppLayout>
-        <div>The post the user is looking for doesn't exist.</div>
-      </AppLayout>
-    );
-  } else {
-    return (
-      <AppLayout>
-        <Head>
-          {' '}
-          <title>NodeX | {singlePost.User.nickname}'s post</title>
-          <meta name="description" content={singlePost.content} />
-          <meta property="og:title" content={`${singlePost.User.nickname}'s post`} />
-          <meta property="og:description" content={singlePost.content} />
-          <meta
-            property="og:image"
-            content={singlePost.Images[0] ? singlePost.Images[0].src : 'https://nodex.com/favicon.ico'}
-          />
-          <meta property="og:url" content={`https://nodex.com/post/${id}`} />
-        </Head>
-        <PostCard post={singlePost} single={true} />
-      </AppLayout>
-    );
-  }
+  /*
+  todo: make this page more beautiful
+   */
+
+  return (
+    <AppLayout>
+      {!singlePost ? (
+        <div>The post the user is looking for does not exist.</div>
+      ) : (
+        <>
+          <Head>
+            {' '}
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
+            <title>NodeX | {singlePost.User.nickname}'s post</title>
+            <meta name="description" content={singlePost.content} />
+            <meta property="og:title" content={`${singlePost.User.nickname}'s post`} />
+            <meta property="og:description" content={singlePost.content} />
+            <meta
+              property="og:image"
+              content={singlePost.Images[0] ? singlePost.Images[0].src : 'https://nodex.com/favicon.ico'}
+            />
+            <meta property="og:url" content={`https://nodex.com/post/${id}`} />
+          </Head>
+          <PostCard post={singlePost} single />
+        </>
+      )}
+    </AppLayout>
+  );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res, params, query, ...etc }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, params }) => {
   const cookie = req ? req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
   if (req && cookie) {

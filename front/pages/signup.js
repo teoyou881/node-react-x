@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import AppLayout from '../components/AppLayout';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Form, Button } from 'antd';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { userAction } from '../reducers/user';
-import { useRouter } from 'next/router';
-import wrapper from '../store/configureStore';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { END } from 'redux-saga';
+import AppLayout from '../components/AppLayout';
+import { userAction } from '../reducers/user';
+import wrapper from '../store/configureStore';
 
 const ErrorSpanWrapper = styled.div`
   color: red;
@@ -62,9 +62,11 @@ const Signup = () => {
   const passwordConfirm = {
     required: true,
     validate: (value) => {
-      if (watch('password') != value) {
+      // eslint-disable-next-line no-use-before-define
+      if (watch('password') !== value) {
         return 'Your password does not match';
       }
+      return true;
     },
   };
 
@@ -81,6 +83,7 @@ const Signup = () => {
     dispatch(userAction.signUpRequest(data));
     reset();
   };
+  // eslint-disable-next-line no-shadow
   const onErrors = (errors) => {
     console.error(errors);
 

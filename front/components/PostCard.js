@@ -26,29 +26,27 @@ const PostCard = ({ post, single }) => {
   const retweeted = me?.Posts.find((v) => v.RetweetId === post.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
-  const isWithinDay = (date) => {
-    return dayjs().diff(date, 'day') < 1;
-  };
+  const isWithinDay = (date) => dayjs().diff(date, 'day') < 1;
 
   const onLike = useCallback(() => {
-    if (!id) return alert('Please login first.');
+    if (!id) alert('Please login first.');
     if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));
   }, [id]);
   const onUnlike = useCallback(() => {
-    if (!id) return alert('Please login first.');
+    if (!id) alert('Please login first.');
     if (id !== post.User.id) dispatch(postAction.unlikePostRequest(post.id));
   }, [id]);
   const onToggleComment = useCallback(() => {
-    if (!id) return alert('Please login first.');
+    if (!id) alert('Please login first.');
     setCommentFormOpened((prev) => !prev);
   }, [id]);
   const onRemovePost = useCallback(() => {
-    if (!id) return alert('Please login first.');
+    if (!id) alert('Please login first.');
     dispatch(postAction.removePostRequest(post.id));
   }, [id]);
 
   const onRetweet = useCallback(() => {
-    if (!id) return alert('Please login first.');
+    if (!id) alert('Please login first.');
     dispatch(postAction.retweetRequest(post.id));
   }, [id]);
 
@@ -96,17 +94,17 @@ const PostCard = ({ post, single }) => {
 
           // <FollowButton post={post} />,
         ]}
-        title={post.RetweetId && post.UserId !== id ? `${post.User.nickname} retweeted` : null}
+        title={post.RetweetId && post.User.id !== id ? `${post.User.nickname} retweeted` : null}
         extra={id && id !== post.User.id && <FollowButton post={post} />}
       >
-        {isWithinDay(post.createAt) ? (
+        {isWithinDay(post.createdAt) ? (
           <div style={{ float: 'right' }}>{dayjs(post.createdAt).fromNow()}</div>
         ) : (
           <div style={{ float: 'right' }}>{dayjs(post.createdAt).format('YYYY-MM-DD')}</div>
         )}
         {post.RetweetId && post.Retweet ? (
           <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
-            {isWithinDay(post.createAt) ? (
+            {isWithinDay(post.createdAt) ? (
               <div style={{ float: 'right' }}>{dayjs(post.Retweet.createdAt).fromNow()}</div>
             ) : (
               <div style={{ float: 'right' }}>{dayjs(post.Retweet.createdAt).format('YYYY-MM-DD')}</div>
@@ -147,7 +145,7 @@ const PostCard = ({ post, single }) => {
                   author={item.User.nickname}
                   avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                   content={item.content}
-                ></Comment>
+                />
               </li>
             )}
           />

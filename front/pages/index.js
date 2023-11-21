@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
-import AppLayout from '../components/AppLayout';
 import { useDispatch, useSelector } from 'react-redux';
+import { END } from 'redux-saga';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import AppLayout from '../components/AppLayout';
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 import { postAction } from '../reducers/post';
 import { userAction } from '../reducers/user';
 import wrapper from '../store/configureStore';
-import { END } from 'redux-saga';
-import axios from 'axios';
-import { useRouter } from 'next/router';
 
 const Home = () => {
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePosts, loadPostsLoading, firstAccess } = useSelector((state) => state.post);
+  const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   const { retweetError } = useSelector((state) => state.post);
 
@@ -61,13 +61,17 @@ const Home = () => {
     <div>
       <AppLayout>
         {me && <PostForm />}
-        {/* This is one of the anti-patterns that using index into a key as props
-			In most case, we must not pass index to a key
-			especially, there is a possibility that post can be deleted.
-			But if elements in iterator are not changed or deleted, can use index*/}
+        {/*
+        This is one of the anti-patterns that using index into a key as props
+        In most case, we must not pass index to a key
+        especially, there is a possibility that post can be deleted.
+        But if elements in iterator are not changed or deleted, can use index
+        */}
 
-        {/*Todo
-                1. apply react-virtualized*/}
+        {/*
+        Todo
+        1. apply react-virtualized
+        */}
         {mainPosts?.map((post, index) => (
           <PostCard key={post.id} post={post} index={index} />
         ))}
@@ -80,10 +84,10 @@ const Home = () => {
 // This under code is being run on server side, not on browser.
 // So, we already set cookie on browser and backend though, we have to set cookie o front side.
 export const getServerSideProps = wrapper.getServerSideProps(
-  //https://github.com/kirill-konshin/next-redux-wrapper#state-reconciliation-during-hydration
+  // https://github.com/kirill-konshin/next-redux-wrapper#state-reconciliation-during-hydration
   // search ' Using getServerSideProps or getStaticProps'
   (store) =>
-    async ({ req, res, ...etc }) => {
+    async ({ req }) => {
       // set header cookie on front side
       const cookie = req ? req.headers.cookie : '';
       axios.defaults.headers.Cookie = '';

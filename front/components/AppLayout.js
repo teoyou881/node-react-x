@@ -2,12 +2,12 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Input, Menu, Row, Col } from 'antd';
-import UserProfile from './UserProfile';
-import LoginForm from './LoginForm';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import UserProfile from './UserProfile';
+import LoginForm from './LoginForm';
 import UseInput from '../hooks/useInput';
-import { useRouter } from 'next/router';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;

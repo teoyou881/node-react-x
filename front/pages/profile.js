@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import AppLayout from '../components/AppLayout';
-import Head from 'next/head';
-import NicknameEditForm from '../components/NicknameEditForm';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import { userAction } from '../reducers/user';
-import { AutoSizer, List } from 'react-virtualized';
-import { Button, Empty } from 'antd';
-import wrapper from '../store/configureStore';
-import axios from 'axios';
-import { postAction } from '../reducers/post';
+import React, { useCallback, useEffect } from 'react';
 import { END } from 'redux-saga';
 import useSWR from 'swr';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { AutoSizer, List } from 'react-virtualized';
+import { Button, Empty } from 'antd';
+import axios from 'axios';
+import NicknameEditForm from '../components/NicknameEditForm';
+import wrapper from '../store/configureStore';
+import { userAction } from '../reducers/user';
+import AppLayout from '../components/AppLayout';
 
 // build fetcher function for useSWR
 const fetcher = (url) => axios.get(url, { withCredentials: true }).then((result) => result.data);
@@ -72,7 +71,7 @@ const Profile = () => {
 
   // functions for react-virtualized
   const followingsRowRenderer = useCallback(
-    ({ key, index, style, parent }) => {
+    ({ key, index, style }) => {
       const following = Followings[index];
       if (!following) return null;
       return (
@@ -100,7 +99,7 @@ const Profile = () => {
     [Followings],
   );
   const followersRowRenderer = useCallback(
-    ({ key, index, style, parent }) => {
+    ({ key, index, style }) => {
       const follower = Followers[index];
       if (!follower) return null;
       return (
@@ -146,7 +145,7 @@ const Profile = () => {
     return (
       <AppLayout>
         <div>Please login first. </div>
-        <div>You'll soon be back on the homepage. </div>
+        <div>You will soon be back on the homepage. </div>
       </AppLayout>
     );
   }
@@ -265,7 +264,7 @@ const Profile = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res, ...etc }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req }) => {
   const cookie = req ? req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
   if (req && cookie) {

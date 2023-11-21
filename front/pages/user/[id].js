@@ -4,9 +4,8 @@ import { Avatar, Card } from 'antd';
 import { END } from 'redux-saga';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-
-import { postAction } from '../../reducers/post';
 import axios from 'axios';
+import { postAction } from '../../reducers/post';
 import PostCard from '../../components/PostCard';
 import wrapper from '../../store/configureStore';
 import AppLayout from '../../components/AppLayout';
@@ -23,7 +22,7 @@ const User = () => {
     const onScroll = () => {
       if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostLoading) {
-          //get posts by userId
+          // get posts by userId
           const lastId = mainPosts[mainPosts?.length - 1]?.id;
           dispatch(postAction.loadUserPostsRequest({ lastId, userId: id }));
         }
@@ -47,6 +46,7 @@ const User = () => {
     <AppLayout>
       {loadUser && (
         <Head>
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
           <title>NodeX | {loadUser.nickname}'s posts</title>
           <meta name="description" content={`${loadUser.nickname}'s posts`} />
           <meta property="og:title" content={`${loadUser.nickname}'s posts`} />
@@ -86,7 +86,7 @@ const User = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res, params, ...etc }) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, params }) => {
   const cookie = req ? req.headers.cookie : '';
   axios.defaults.headers.Cookie = '';
   if (req && cookie) {

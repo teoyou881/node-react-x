@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ImageUpload = ({ field }) => {
   const onChange = (e) => {
@@ -7,6 +8,10 @@ const ImageUpload = ({ field }) => {
   };
 
   return <input type="file" accept="image/*" onChange={onChange} />;
+};
+
+ImageUpload.propTypes = {
+  field: PropTypes.object.isRequired,
 };
 
 export default ImageUpload;

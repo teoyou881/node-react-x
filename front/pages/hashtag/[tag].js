@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { END } from 'redux-saga';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { postAction } from '../../reducers/post';
 import axios from 'axios';
+import { postAction } from '../../reducers/post';
 import PostCard from '../../components/PostCard';
 import wrapper from '../../store/configureStore';
 import AppLayout from '../../components/AppLayout';
@@ -20,9 +20,9 @@ const User = () => {
     const onScroll = () => {
       if (window.pageYOffset + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (hasMorePosts && !loadPostLoading) {
-          //get posts by userId
+          // get posts by userId
           const lastId = mainPosts[mainPosts?.length - 1]?.id;
-          dispatch(postAction.loadUserPostsRequest({ lastId, userId: id }));
+          dispatch(postAction.loadHashTagPostsRequest({ lastId, tag }));
         }
       }
     };
@@ -35,7 +35,7 @@ const User = () => {
   if (mainPosts.length < 1) {
     return (
       <AppLayout>
-        <div>No posts were found for #{name}.</div>
+        <div>No posts were found for #{tag}.</div>
       </AppLayout>
     );
   }

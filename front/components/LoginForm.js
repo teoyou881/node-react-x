@@ -1,6 +1,6 @@
 import { Button, Form } from 'antd';
 import React, { useEffect } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 // {} === {} --> false
 // that's why we sholudn't use <div style={{}}></div>
@@ -27,8 +27,7 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
+    formState: { isSubmitting },
   } = useForm({ mode: 'onChange' });
 
   useEffect(() => {
@@ -41,7 +40,7 @@ const LoginForm = () => {
     dispatch(userAction.signUpDoneReset());
   };
 
-  //TODO: deals with dummy data after connecting with backend
+  // TODO: deals with dummy data after connecting with backend
   const onFormSubmit = (data) => {
     dispatch(userAction.loginRequest(data));
   };

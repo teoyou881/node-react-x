@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { postAction } from '../reducers/post';
+import { backUrl } from '../config/config';
 
 const PostForm = () => {
   const { imagePaths, addPostDone } = useSelector((state) => state.post);
@@ -111,7 +112,7 @@ const PostForm = () => {
         <div>
           {imagePaths.map((v, i) => (
             <div key={v} style={{ display: 'inline-block' }}>
-              <img src={`http://localhost:3065/${v}`} alt={v} style={{ width: '200px' }} />
+              <img src={`${backUrl}/${v}`} alt={v} style={{ width: '200px' }} />
               <div>
                 {/*
                 If you want to put data inside a higher-order function,

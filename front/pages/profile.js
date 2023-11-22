@@ -11,6 +11,7 @@ import NicknameEditForm from '../components/NicknameEditForm';
 import wrapper from '../store/configureStore';
 import { userAction } from '../reducers/user';
 import AppLayout from '../components/AppLayout';
+import { backUrl } from '../config/config';
 
 // build fetcher function for useSWR
 const fetcher = (url) => axios.get(url, { withCredentials: true }).then((result) => result.data);
@@ -32,7 +33,7 @@ const Profile = () => {
   // If there is data, it means that the data fetching is done.
   // If there is an error, it means that the data fetching has failed.
   // eslint-disable-next-line no-unused-vars
-  const { data: followingData, error: followingError } = useSWR(`http://localhost:3065/user/followings`, fetcher);
+  const { data: followingData, error: followingError } = useSWR(`${backUrl}/user/followings`, fetcher);
 
   const onDelete = useCallback((id, follow) => {
     if (follow === 'following') dispatch(userAction.unfollowRequest(id));

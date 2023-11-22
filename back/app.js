@@ -59,5 +59,5 @@ app.listen(3065, () => {
     db.sequelize.sync().then(() => {
         console.log("db is connected");
     });
-    console.log("Server is running on http://localhost:3065");
+    console.log("Server is running");
 });

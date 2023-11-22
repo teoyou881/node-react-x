@@ -2,3 +2,5 @@ react-node-x
 node_modules
 .env
 .next
+react-node-x.pem
+.idea

@@ -19,7 +19,7 @@ const helmet = require("helmet");
 if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined"));
     app.use(hpp());
-    app.use(helmet());
+    app.use(helmet({ contentSecurityPolicy: false }));
 } else {
     app.use(morgan("dev"));
 }
@@ -31,7 +31,7 @@ app.use("/", express.static(path.join(__dirname, "uploads"))); // back/uploads f
 passportConfig();
 app.use(
     cors({
-        origin: ["http://localhost:3000", "nodex.com"],
+        origin: ["http://localhost:3000", "nodex.com", "http://3.98.131.169"],
         credentials: true,
     }),
 );

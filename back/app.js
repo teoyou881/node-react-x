@@ -16,6 +16,8 @@ const path = require("path");
 const hpp = require("hpp");
 const helmet = require("helmet");
 
+const port = process.env.NODE_ENV === "production" ? 80 : 3065;
+
 if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined"));
     app.use(hpp());
@@ -59,9 +61,9 @@ app.use("/posts", postsRouter);
 app.use("/user", userRouter);
 app.use("/hashtag", hashtagRouter);
 
-app.listen(3065, () => {
+app.listen(port, () => {
     db.sequelize.sync().then(() => {
         console.log("db is connected");
     });
-    console.log("Server is running");
+    console.log(`Server is running ${port}`);
 });

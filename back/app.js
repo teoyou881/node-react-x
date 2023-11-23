@@ -33,7 +33,7 @@ app.use("/", express.static(path.join(__dirname, "uploads"))); // back/uploads f
 passportConfig();
 app.use(
     cors({
-        origin: ["http://localhost:3000", "nodex.com", "http://3.98.131.169"],
+        origin: ["http://localhost:3000", "nodex.com", "http://34.235.167.125"],
         credentials: true,
     }),
 );

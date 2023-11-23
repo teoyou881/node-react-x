@@ -1,6 +1,3 @@
-// Extending Model
-// Class-based approach
-
 const DataTypes = require("sequelize");
 const { Model } = DataTypes;
 
@@ -8,7 +5,6 @@ module.exports = class Hashtag extends Model {
     static init(sequelize) {
         return super.init(
             {
-                // id가 기본적으로 들어있다.
                 name: {
                     type: DataTypes.STRING(20),
                     allowNull: false,
@@ -24,6 +20,6 @@ module.exports = class Hashtag extends Model {
         );
     }
     static associate(db) {
-        db.Hashtag.belongsToMany(db.Post, { through: "PostHashtag" }); // A hashtag belongs to many posts.
+        db.Hashtag.belongsToMany(db.Post, { through: "PostHashtag" });
     }
 };

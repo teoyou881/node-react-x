@@ -33,7 +33,11 @@ app.use("/", express.static(path.join(__dirname, "uploads"))); // back/uploads f
 passportConfig();
 app.use(
     cors({
-        origin: ["http://localhost:3000", "nodex.com", "http://34.235.167.125"],
+        origin: [
+            "http://localhost:3000",
+            "http://teonodex.com",
+            "http://34.235.167.125",
+        ],
         credentials: true,
     }),
 );
@@ -46,7 +50,13 @@ app.use(
         savedUninitialized: false,
         resave: false,
         secret: process.env.COOKIE_SECRET,
-        cookie: { secure: false, httpOnly: true },
+        cookie: {
+            // cookie will not be accessible by javascript
+            httpOnly: true,
+            secure: false,
+            // this is for cookie to be shared between front and back
+            domain: process.env.NODE_ENV === "production" && ".teonodex.com",
+        },
     }),
 );
 app.use(passport.initialize());

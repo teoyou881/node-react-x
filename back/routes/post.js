@@ -214,10 +214,13 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
             // File uploaded successfully, get the URL
             const fileURL = data.Location; // This is the URL of the uploaded file
             uploadedFileURLs.push(fileURL);
+
+            if (uploadedFileURLs.length === uploadedFiles.length) {
+                console.log(uploadedFileURLs);
+                res.json({ uploadedFileURLs });
+            }
         });
     });
-    console.log(uploadedFileURLs);
-    res.json({ uploadedFileURLs });
 });
 
 router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {

@@ -4,6 +4,10 @@ const { Post, User, Image, Comment, Hashtag } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const { Model } = require("sequelize");
 const multer = require("multer");
+// multer-s3 is for uploading images to aws s3
+const multerS3 = require("multer-s3");
+// aws-sdk is for getting access to aws s3
+const AWS = require("aws-sdk");
 const path = require("path");
 // can use fs to manipulate files
 const fs = require("fs");
@@ -15,8 +19,14 @@ try {
     fs.mkdirSync("uploads");
 }
 
-//router for uploading images
-// for now, save data to hard disk
+AWS.config.update({
+    region: "us-east-1",
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+});
+
+// upload file to a local storage using multer
+/*
 const upload = multer({
     storage: multer.diskStorage({
         destination(req, file, done) {
@@ -31,6 +41,23 @@ const upload = multer({
     }),
     // Processing images and videos is very taxing on the server.
     // For larger services, you should consider pushing them to the cloud directly from your props.
+    limits: { fileSize: 20 * 1024 * 1024 },
+});
+ */
+
+// upload file to aws s3 using multer-s3
+const upload = multer({
+    storage: multerS3({
+        // get access to aws s3 with key and secret key
+        s3: new AWS.S3(),
+        bucket: "teonodex",
+        key(req, file, cb) {
+            cb(
+                null,
+                `original/${Date.now()}${path.basename(file.originalname)}`,
+            );
+        },
+    }),
     limits: { fileSize: 20 * 1024 * 1024 },
 });
 
@@ -170,8 +197,11 @@ router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
 // single image upload: upload.single('image')
 // only text like json: upload.none()
 router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
-    console.log(req.files);
-    res.json(req.files.map((v) => v.filename));
+    // under code is for local storage
+    // res.json(req.files.map((v) => v.filename));
+
+    // under code is for aws s3. filename is changed to location
+    res.json(req.files.map((v) => v.location));
 });
 
 router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {

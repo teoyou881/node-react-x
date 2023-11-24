@@ -217,7 +217,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
 
             if (uploadedFileURLs.length === uploadedFiles.length) {
                 console.log(uploadedFileURLs);
-                res.json({ uploadedFileURLs });
+                res.json(uploadedFileURLs);
             }
         });
     });

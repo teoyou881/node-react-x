@@ -200,7 +200,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
         const params = {
             Bucket: "teonodex",
             // key is file name which should be unique, we use Date.now() to make it unique
-            Key: file.originalname,
+            Key: `original/${Date.now()}_${path.basename(file.originalname)}`,
             // body is file itself
             Body: file.buffer,
         };
@@ -216,7 +216,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
             uploadedFileURLs.push(fileURL);
         });
     });
-
+    console.log(uploadedFileURLs);
     res.json({ uploadedFileURLs });
 });
 

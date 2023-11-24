@@ -201,6 +201,7 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
     // res.json(req.files.map((v) => v.filename));
 
     // under code is for aws s3. filename is changed to location
+    console.log(req.files);
     res.json(req.files.map((v) => v.location));
 });
 

@@ -24,6 +24,7 @@ AWS.config.update({
     accessKeyId: process.env.S3_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
 });
+const s3 = new AWS.S3();
 
 // upload file to a local storage using multer
 /*
@@ -47,18 +48,10 @@ const upload = multer({
 
 // upload file to aws s3 using multer-s3
 const upload = multer({
-    storage: multerS3({
-        // get access to aws s3 with key and secret key
-        s3: new AWS.S3(),
-        bucket: "teonodex",
-        key(req, file, cb) {
-            cb(
-                null,
-                `original/${Date.now()}${path.basename(file.originalname)}`,
-            );
-        },
-    }),
-    limits: { fileSize: 20 * 1024 * 1024 },
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // limit file size to 5MB
+    },
 });
 
 // uploads folder has images. file can be cashed in the server. But, db can't.
@@ -200,9 +193,31 @@ router.post("/images", isLoggedIn, upload.array("image"), (req, res, next) => {
     // under code is for local storage
     // res.json(req.files.map((v) => v.filename));
 
-    // under code is for aws s3. filename is changed to location
-    console.log(req.files);
-    res.json(req.files.map((v) => v.location));
+    const uploadedFiles = req.files;
+    const uploadedFileURLs = [];
+
+    uploadedFiles.forEach((file) => {
+        const params = {
+            Bucket: "teonodex",
+            // key is file name which should be unique, we use Date.now() to make it unique
+            Key: file.originalname,
+            // body is file itself
+            Body: file.buffer,
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send("Error uploading file");
+            }
+
+            // File uploaded successfully, get the URL
+            const fileURL = data.Location; // This is the URL of the uploaded file
+            uploadedFileURLs.push(fileURL);
+        });
+    });
+
+    res.json({ uploadedFileURLs });
 });
 
 router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {

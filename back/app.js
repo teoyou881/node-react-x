@@ -22,7 +22,19 @@ if (process.env.NODE_ENV === "production") {
     app.use(morgan("combined"));
     app.use(hpp());
     app.use(helmet({ contentSecurityPolicy: false }));
+    app.use(
+        cors({
+            origin: ["http://teonodex.com"],
+            credentials: true,
+        }),
+    );
 } else {
+    app.use(
+        cors({
+            origin: true,
+            credentials: true,
+        }),
+    );
     app.use(morgan("dev"));
 }
 dotenv.config();
@@ -31,16 +43,6 @@ dotenv.config();
 // window: \   mac: /
 app.use("/", express.static(path.join(__dirname, "uploads"))); // back/uploads folder is now accessible to the front
 passportConfig();
-app.use(
-    cors({
-        origin: [
-            "http://localhost:3000",
-            "http://teonodex.com",
-            "http://34.235.167.125",
-        ],
-        credentials: true,
-    }),
-);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

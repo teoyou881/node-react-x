@@ -111,7 +111,12 @@ const PostForm = () => {
         <div>
           {imagePaths.map((v, i) => (
             <div key={v} style={{ display: 'inline-block' }}>
-              <img src={v} alt={v} style={{ width: '200px' }} />
+              {/* change img url from thumb to original to show img */}
+              {/* When using the REPLACE function, if you want to specify a pattern as a regular expression,
+                you must enclose it in forward slashes (/).
+                Because the slash has special meaning in regular expressions,
+                it may need to be escaped. */}
+              <img src={v.replace(/\/thumb\//, '/original/')} alt={v} style={{ width: '200px' }} />
               <div>
                 {/*
                 If you want to put data inside a higher-order function,

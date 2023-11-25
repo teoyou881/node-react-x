@@ -18,6 +18,7 @@ const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
   const router = useRouter();
 
+  // todo: when type #, it shows 404 page. It should show hashtag page.
   const onSearch = useCallback(() => {
     router.push(`/hashtag/${searchInput}`);
   }, [searchInput]);

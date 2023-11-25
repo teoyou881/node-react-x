@@ -27,6 +27,7 @@ const PostCard = ({ post, single }) => {
 
   const isWithinDay = (date) => dayjs().diff(date, 'day') < 1;
 
+  // todo: when not logged in and click btn, alert twice.
   const onLike = useCallback(() => {
     if (!id) alert('Please login first.');
     if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));

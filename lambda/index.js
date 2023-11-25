@@ -13,7 +13,8 @@ exports.handler = async (event, context, cb) => {
     // user can upload file named with korean. Just in case, using decodeURIComponent.
     const Key = decodeURIComponent(event.Records[0].s3.object.key); // original/123123.png
     console.log(Bucket, Key);
-    const filename = Key.split("/")[Key.split("/").at(-1)];
+    // const filename = Key.split("/")[Key.split("/").at(-1)]; // at() is not working
+    const filename = Key.split("/").slice(-1)[0];
     const ext = Key.split(".")[Key.split(".").length - 1].toLowerCase();
     // sharp can't accept jpg. have to change jpg to jpeg.
     const filetype = ext === "jpg" ? "jpeg" : ext;

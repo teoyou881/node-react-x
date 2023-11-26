@@ -14,7 +14,11 @@ const AWS = require('aws-sdk');
 // });
 // const s3 = new AWS.S3();
 
-const lambda = new AWS.Lambda();
+const lambda = new AWS.Lambda({
+  region: 'us-east-1',
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+});
 
 // multer-s3 needs @aws-sdk/client-s3
 const { S3Client } = require('@aws-sdk/client-s3');
@@ -259,7 +263,6 @@ router.post('/images', isLoggedIn, uploadS3.array('image'), (req, res, next) => 
   const params = {
     FunctionName: 'image-resize',
     InvocationType: 'RequestResponse', // 요청 및 응답 형식으로 호출
-    region: 'us-east-1',
   };
 
   lambda.invoke(params, (err, data) => {

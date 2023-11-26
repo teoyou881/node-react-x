@@ -11,7 +11,11 @@ exports.handler = async (event, context, cb) => {
     // event has s3 upload information.
     const Bucket = event.Records[0].s3.bucket.name; // teonodex
     // user can upload file named with korean. Just in case, using decodeURIComponent.
-    const Key = decodeURIComponent(event.Records[0].s3.object.key); // original/123123.png
+
+    // Update this part of your code to handle the space in the filename
+    const Key = decodeURIComponent(
+        event.Records[0].s3.object.key.replace(/\s/g, "_"),
+    ); // original/123123.png
     console.log(Bucket, Key);
     // const filename = Key.split("/")[Key.split("/").at(-1)]; // at() is not working
     const filename = Key.split("/").slice(-1)[0];

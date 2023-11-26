@@ -26,8 +26,6 @@ const PostCard = ({ post, single }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
   const isWithinDay = (date) => dayjs().diff(date, 'day') < 1;
-
-  // todo: when not logged in and click btn, alert twice.
   const onLike = useCallback(() => {
     if (!id) alert('Please login first.');
     if (id !== post.User.id) dispatch(postAction.likePostRequest(post.id));
@@ -37,9 +35,8 @@ const PostCard = ({ post, single }) => {
     if (id !== post.User.id) dispatch(postAction.unlikePostRequest(post.id));
   }, [id]);
   const onToggleComment = useCallback(() => {
-    if (!id) alert('Please login first.');
     setCommentFormOpened((prev) => !prev);
-  }, [id]);
+  }, []);
   const onRemovePost = useCallback(() => {
     if (!id) alert('Please login first.');
     dispatch(postAction.removePostRequest(post.id));
@@ -47,7 +44,7 @@ const PostCard = ({ post, single }) => {
 
   const onRetweet = useCallback(() => {
     if (!id) alert('Please login first.');
-    dispatch(postAction.retweetRequest(post.id));
+    else dispatch(postAction.retweetRequest(post.id));
   }, [id]);
 
   return (
@@ -132,23 +129,42 @@ const PostCard = ({ post, single }) => {
           />
         )}
       </Card>
-      {id && commentFormOpened && (
+      {commentFormOpened && (
         <div>
-          <CommentForm post={post} single={single} />
-          <List
-            header={`${post.Comments.length} replies`}
-            itemLayout="horizontal"
-            dataSource={post.Comments}
-            renderItem={(item) => (
-              <li>
-                <Comment
-                  author={item.User.nickname}
-                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
-                  content={item.content}
-                />
-              </li>
-            )}
-          />
+          {id ? (
+            <div>
+              <CommentForm post={post} single={single} />
+              <List
+                header={`${post.Comments.length} replies`}
+                itemLayout="horizontal"
+                dataSource={post.Comments}
+                renderItem={(item) => (
+                  <li>
+                    <Comment
+                      author={item.User.nickname}
+                      avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                      content={item.content}
+                    />
+                  </li>
+                )}
+              />
+            </div>
+          ) : (
+            <List
+              header={`${post.Comments.length} replies`}
+              itemLayout="horizontal"
+              dataSource={post.Comments}
+              renderItem={(item) => (
+                <li>
+                  <Comment
+                    author={item.User.nickname}
+                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                    content={item.content}
+                  />
+                </li>
+              )}
+            />
+          )}
         </div>
       )}
     </div>

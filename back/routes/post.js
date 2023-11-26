@@ -43,7 +43,7 @@ const uploadS3 = multer({
     },
     key(req, file, cb) {
       // we can create folder in s3
-      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}.replace(/\\s/g, "_")`);
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname).replace(/\s/g, '_')}`);
     },
     limits: { fileSize: 20 * 1024 * 1024 },
   }),

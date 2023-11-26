@@ -260,9 +260,13 @@ router.post('/images', isLoggedIn, uploadS3.array('image'), (req, res, next) => 
   // image-resize lambda function is triggered by s3.
   // I need to know when image-resize lambda function is done to get the resized image url.
   // Because lambda function needs some time when it is triggered and when it is done.
+  // ** this code is working though, actually it is now useful
+  // ** because S3 replicates data to multiple regions around the world, it can take a while for an object to synchronize to all regions after it's uploaded
+  // ** The issue with the image not showing up in the post if you post it as soon as you upload it is separate from the lambda.
+  // ** Amazon recommends to use an instance with at least 10 Gbps of throughput.
   const params = {
     FunctionName: 'image-resize',
-    InvocationType: 'RequestResponse', // 요청 및 응답 형식으로 호출
+    InvocationType: 'RequestResponse',
   };
 
   lambda.invoke(params, (err, data) => {

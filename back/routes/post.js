@@ -259,6 +259,7 @@ router.post('/images', isLoggedIn, uploadS3.array('image'), (req, res, next) => 
   const params = {
     FunctionName: 'image-resize',
     InvocationType: 'RequestResponse', // 요청 및 응답 형식으로 호출
+    region: 'us-east-1',
   };
 
   lambda.invoke(params, (err, data) => {

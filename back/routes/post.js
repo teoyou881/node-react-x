@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { Post, User, Image, Comment, Hashtag } = require('../models');
 const { isLoggedIn } = require('./middlewares');
-const { Model } = require('sequelize');
 const multer = require('multer');
 // multer-s3 is for uploading images to aws s3
 const multerS3 = require('multer-s3');
@@ -15,7 +14,7 @@ const multerS3 = require('multer-s3');
 // });
 // const s3 = new AWS.S3();
 
-import { S3Client } from '@aws-sdk/client-s3';
+const { S3Client } = require('@aws-sdk/client-s3');
 const s3 = new S3Client({
   region: 'us-east-1',
   credentials: {

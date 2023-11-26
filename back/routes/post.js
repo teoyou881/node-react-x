@@ -6,7 +6,7 @@ const multer = require('multer');
 // multer-s3 is for uploading images to aws s3
 const multerS3 = require('multer-s3');
 // aws-sdk is for getting access to aws s3
-// const AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 // AWS.config.update({
 //     region: 'us-east-1',
 //     accessKeyId: process.env.S3_ACCESS_KEY_ID,
@@ -14,6 +14,9 @@ const multerS3 = require('multer-s3');
 // });
 // const s3 = new AWS.S3();
 
+const lambda = new AWS.Lambda();
+
+// multer-s3 needs @aws-sdk/client-s3
 const { S3Client } = require('@aws-sdk/client-s3');
 const s3 = new S3Client({
   region: 'us-east-1',
@@ -249,7 +252,23 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
 
 router.post('/images', isLoggedIn, uploadS3.array('image'), (req, res, next) => {
   console.log(req.files);
-  res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
+
+  // image-resize lambda function is triggered by s3.
+  // I need to know when image-resize lambda function is done to get the resized image url.
+  // Because lambda function needs some time when it is triggered and when it is done.
+  const params = {
+    FunctionName: 'image-resize',
+    InvocationType: 'RequestResponse', // 요청 및 응답 형식으로 호출
+  };
+
+  lambda.invoke(params, (err, data) => {
+    if (err) {
+      console.error('An error occurred while calling the lambda.', err);
+    } else {
+      console.log('Success to call lambda:', data);
+      res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
+    }
+  });
 });
 
 router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {

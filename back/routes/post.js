@@ -26,6 +26,18 @@ AWS.config.update({
 });
 const s3 = new AWS.S3();
 
+const uploadS3 = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: 'teonodex',
+    key(req, file, cb) {
+      // we can create folder in s3
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
+    },
+    limits: { fileSize: 20 * 1024 * 1024 },
+  }),
+});
+
 // upload file to a local storage using multer
 /*
 const upload = multer({
@@ -187,41 +199,46 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
 // multiple images upload: upload.array('image')
 // single image upload: upload.single('image')
 // only text like json: upload.none()
-router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
-  // under code is for local storage
-  // res.json(req.files.map((v) => v.filename));
+// router.post('/images', isLoggedIn, upload.array('image'), (req, res, next) => {
+//   // under code is for local storage
+//   // res.json(req.files.map((v) => v.filename));
+//
+//   const uploadedFiles = req.files;
+//   const uploadedFileURLs = [];
+//
+//   uploadedFiles.forEach((file) => {
+//     const params = {
+//       Bucket: 'teonodex',
+//       // key is file name which should be unique, we use Date.now() to make it unique
+//       Key: `original/${Date.now()}_${path.basename(file.originalname)}`,
+//       // body is file itself
+//       Body: file.buffer,
+//     };
+//
+//     s3.upload(params, (err, data) => {
+//       if (err) {
+//         console.error(err);
+//         return res.status(500).send('Error uploading file');
+//       }
+//
+//       // File uploaded successfully, get the URL
+//       // Now we upload image to s3 original folder and s3 triggers lambda function.
+//       // lambda function will resize image and upload it to s3 thumb folder.
+//       // Here, we need to get the url of the resized image.
+//       const fileURL = data.Location.replace(/\/original\//, '/thumb/');
+//       uploadedFileURLs.push(fileURL);
+//
+//       if (uploadedFileURLs.length === uploadedFiles.length) {
+//         console.log(uploadedFileURLs);
+//         res.json(uploadedFileURLs);
+//       }
+//     });
+//   });
+// });
 
-  const uploadedFiles = req.files;
-  const uploadedFileURLs = [];
-
-  uploadedFiles.forEach((file) => {
-    const params = {
-      Bucket: 'teonodex',
-      // key is file name which should be unique, we use Date.now() to make it unique
-      Key: `original/${Date.now()}_${path.basename(file.originalname)}`,
-      // body is file itself
-      Body: file.buffer,
-    };
-
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send('Error uploading file');
-      }
-
-      // File uploaded successfully, get the URL
-      // Now we upload image to s3 original folder and s3 triggers lambda function.
-      // lambda function will resize image and upload it to s3 thumb folder.
-      // Here, we need to get the url of the resized image.
-      const fileURL = data.Location.replace(/\/original\//, '/thumb/');
-      uploadedFileURLs.push(fileURL);
-
-      if (uploadedFileURLs.length === uploadedFiles.length) {
-        console.log(uploadedFileURLs);
-        res.json(uploadedFileURLs);
-      }
-    });
-  });
+router.post('/images', isLoggedIn, uploadS3.array('image'), (req, res, next) => {
+  console.log(req.files);
+  res.json(req.files.map((v) => v.location.replace(/\/original\//, '/thumb/')));
 });
 
 router.post(`/:postId/retweet`, isLoggedIn, async (req, res, next) => {

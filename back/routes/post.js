@@ -7,7 +7,23 @@ const multer = require('multer');
 // multer-s3 is for uploading images to aws s3
 const multerS3 = require('multer-s3');
 // aws-sdk is for getting access to aws s3
-const AWS = require('aws-sdk');
+// const AWS = require('aws-sdk');
+// AWS.config.update({
+//     region: 'us-east-1',
+//     accessKeyId: process.env.S3_ACCESS_KEY_ID,
+//     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+// });
+// const s3 = new AWS.S3();
+
+import { S3Client } from '@aws-sdk/client-s3';
+const s3 = new S3Client({
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  },
+});
+
 const path = require('path');
 // can use fs to manipulate files
 const fs = require('fs');
@@ -19,17 +35,13 @@ try {
   fs.mkdirSync('uploads');
 }
 
-AWS.config.update({
-  region: 'us-east-1',
-  accessKeyId: process.env.S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-});
-const s3 = new AWS.S3();
-
 const uploadS3 = multer({
   storage: multerS3({
-    s3: new AWS.S3(),
+    s3: s3,
     bucket: 'teonodex',
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
     key(req, file, cb) {
       // we can create folder in s3
       cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);

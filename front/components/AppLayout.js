@@ -29,7 +29,7 @@ const ChildrenCol = styled(Col)`
   margin-left: 20px;
   @media (max-width: 1050px) {
     width: 600px;
-    margin: 0px;
+    margin: 0;
     left: -50px;
   }
   @media (max-width: 900px) {
@@ -45,7 +45,7 @@ const ChildrenCol = styled(Col)`
 const StyledDiv = styled('div')`
   margin-left: 40px;
   height: 700px;
-  background: gray;
+  background: #f8f8f8;
 
   @media (max-width: 1400px) {
     display: none;
@@ -99,7 +99,7 @@ const AppLayout = ({ children }) => {
       />
 
       <Row gutter={8} style={{ marginTop: '50px' }}>
-        <UserInfoCol xs={{ span: 22, offset: 1 }} md={{ span: 5, offset: 2 }}>
+        <UserInfoCol xs={{ span: 22, offset: 1 }} md={{ span: 5, offset: 3 }}>
           {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
           {/* Don't have to pass setIsLOggedIn to another component because we use redux. */}
           {me ? <UserProfile /> : <LoginForm />}
@@ -114,7 +114,7 @@ const AppLayout = ({ children }) => {
         >
           <div style={{ width: 'inherit', margin: 'inherit' }}> {children} </div>
           <StyledDiv>
-            <div style={{ width: '330px' }}></div>
+            <div style={{ width: '330px' }} />
 
             <a
               href="https://teo-you.tistory.com/"

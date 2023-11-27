@@ -63,7 +63,7 @@ const LoginForm = () => {
           do not use <Input> form antd if you want to use react-form-hook
           Because there is no name attribute in antd Input
           */}
-          <input id="password" name="password" type="password" required {...register('password')} value="123123" />
+          <input id="password" name="password" type="password" required {...register('password')} />
         </div>
         <ButtonWrapper>
           <Button type="primary" htmlType="submit" loading={logInLoading} disabled={isSubmitting}>

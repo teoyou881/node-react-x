@@ -158,7 +158,7 @@ const Profile = () => {
       </Head>
       <AppLayout>
         <NicknameEditForm />
-        <div style={{ marginTop: '50px' }}>
+        <div style={{ marginTop: '50px', width: 'inherit', margin: 'inherit' }}>
           <div>
             <div style={{ textAlign: 'center' }}>
               <h2 style={{ margin: '0 auto' }}>Followings</h2>

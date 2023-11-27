@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import ImagesZoom from './ImagesZoom';
 
@@ -123,46 +122,45 @@ const PostImages = ({ images }) => {
       </WrapperFor3>
     );
   }
-  if (images.length === 4) {
-    return (
-      <WrapperFor4>
-        <WrapperVer>
-          <img
-            role="presentation"
-            src={`${images[0].src}`}
-            alt={images[0].src}
-            onClick={onZoom}
-            style={{ width: '49%' }}
-          />
-          <img
-            role="presentation"
-            src={`${images[1].src}`}
-            alt={images[1].src}
-            onClick={onZoom}
-            style={{ width: '49%' }}
-          />
-        </WrapperVer>
-        <WrapperVer>
-          <img
-            role="presentation"
-            src={`${images[2].src}`}
-            alt={images[2].src}
-            onClick={onZoom}
-            style={{ width: '49%' }}
-          />
-          <img
-            role="presentation"
-            src={`${images[3].src}`}
-            alt={images[3].src}
-            onClick={onZoom}
-            style={{ width: '49%' }}
-          />
-        </WrapperVer>
+  // if the number of images is 4, default return
+  return (
+    <WrapperFor4>
+      <WrapperVer>
+        <img
+          role="presentation"
+          src={`${images[0].src}`}
+          alt={images[0].src}
+          onClick={onZoom}
+          style={{ width: '49%' }}
+        />
+        <img
+          role="presentation"
+          src={`${images[1].src}`}
+          alt={images[1].src}
+          onClick={onZoom}
+          style={{ width: '49%' }}
+        />
+      </WrapperVer>
+      <WrapperVer>
+        <img
+          role="presentation"
+          src={`${images[2].src}`}
+          alt={images[2].src}
+          onClick={onZoom}
+          style={{ width: '49%' }}
+        />
+        <img
+          role="presentation"
+          src={`${images[3].src}`}
+          alt={images[3].src}
+          onClick={onZoom}
+          style={{ width: '49%' }}
+        />
+      </WrapperVer>
 
-        {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
-      </WrapperFor4>
-    );
-  }
+      {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
+    </WrapperFor4>
+  );
 };
 
 PostImages.propTypes = {

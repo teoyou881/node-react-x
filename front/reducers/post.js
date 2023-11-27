@@ -200,10 +200,10 @@ export const postSlice = createSlice({
       state.addCommentLoading = false;
       state.addCommentDone = true;
       if (action.payload.single) {
-        state.singlePost.Comments.unshift(action.payload.comment);
+        state.singlePost.Comments.push(action.payload.comment);
       } else {
         const post = state.mainPosts.find((v) => v.id === action.payload.comment.PostId);
-        post.Comments.unshift(action.payload.comment);
+        post.Comments.push(action.payload.comment);
       }
     },
     addCommentFailure: (state, action) => {

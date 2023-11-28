@@ -13,42 +13,55 @@ const SearchInput = styled(Input.Search)`
   vertical-align: middle;
 `;
 
-const UserInfoCol = styled(Col)`
-  @media (min-width: 768px) {
-    min-width: 235px; /* 최소 너비 설정 */
-    max-width: 25px;
-    //margin-left: 100px;
-    @media (max-width: 1050px) {
-      left: -50px;
-    }
-  }
-`;
-
-const ChildrenCol = styled(Col)`
-  width: 600px;
-  margin-left: 20px;
-  @media (max-width: 1050px) {
-    width: 600px;
-    margin: 0;
-    left: -50px;
-  }
-  @media (max-width: 900px) {
-    width: 480px;
-  }
+const UserInfoCol = styled.div`
   @media (max-width: 768px) {
     width: 100%;
     margin: 0 auto;
-    left: 0;
+    min-width: 500px;
+  }
+  @media (min-width: 769px) and (max-width: 1200px) {
+    width: 735px;
+    margin: 0 auto;
+  }
+  @media (min-width: 1201px) and (max-width: 1800px) {
+    min-width: 235px;
+    max-width: 250px;
+    margin-left: 15%;
+  }
+  @media (min-width: 1801px) {
+    //min-width: 235px;
+    //max-width: 250px;
+    margin-left: calc((100% - 1200px) / 2); /* 화면 너비에 따라 가운데 정렬 */
   }
 `;
 
-const StyledDiv = styled('div')`
-  margin-left: 40px;
+const ChildrenCol = styled.div`
+  @media (max-width: 768px) {
+    width: 100%;
+    margin: 0 auto;
+    min-width: 500px;
+  }
+  @media (min-width: 769px) and (max-width: 1200px) {
+    width: 735px;
+    margin: 0 auto;
+    min-width: 600px;
+  }
+  @media (min-width: 1201px) {
+    width: 600px;
+    margin: 0 10px;
+  }
+`;
+
+const StyledDiv = styled.div`
   height: 700px;
   background: #f8f8f8;
+  margin-left: 30px;
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1450px) {
     display: none;
+  }
+  @media (min-width: 1801px) {
+    margin-right: 50px; /* 화면 너비에 따라 가운데 정렬 */
   }
 `;
 
@@ -99,15 +112,21 @@ const AppLayout = ({ children }) => {
       />
 
       <Row gutter={8} style={{ marginTop: '50px' }}>
-        <UserInfoCol xs={{ span: 22, offset: 1 }} md={{ span: 5, offset: 3 }}>
+        <UserInfoCol>
           {/* {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn}/>} */}
           {/* Don't have to pass setIsLOggedIn to another component because we use redux. */}
-          {me ? <UserProfile /> : <LoginForm />}
+          {me ? (
+            <div>
+              <UserProfile />
+            </div>
+          ) : (
+            <div>
+              <LoginForm />
+            </div>
+          )}
         </UserInfoCol>
 
         <ChildrenCol
-          xs={{ span: 22, offset: 1 }}
-          md={8}
           style={{
             display: 'flex',
           }}

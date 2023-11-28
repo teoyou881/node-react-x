@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Avatar, Button, Card, List, Popover } from 'antd';
 import { Comment } from '@ant-design/compatible';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRouter } from 'next/router';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
@@ -24,6 +25,62 @@ const PostCard = ({ post, single }) => {
   const liked = post.Likers.find((v) => v.id === id);
   const retweeted = me?.Posts.find((v) => v.RetweetId === post.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const userId = document.getElementsByClassName(post.createdAt)[0];
+    const divId = document.getElementById(post.id);
+
+    const userMouseOver = () => {
+      userId.style.textDecoration = 'underline';
+    };
+    const userMouseOut = () => {
+      userId.style.textDecoration = 'none';
+    };
+    const divMouseOver = () => {
+      divId.style.cursor = 'pointer';
+      // divId.style.textDecoration = 'none';
+    };
+    const divMouseOut = () => {
+      divId.style.cursor = 'none';
+    };
+    const routerUserPosts = () => {
+      router.push(`/user/${post.User.id}`);
+    };
+    userId.addEventListener('mouseover', userMouseOver);
+    userId.addEventListener('mouseout', userMouseOut);
+    userId.addEventListener('onclick', routerUserPosts);
+    divId.addEventListener('mouseover', divMouseOver);
+    divId.addEventListener('mouseout', divMouseOut);
+    return () => {
+      userId.removeEventListener('mouseover', userMouseOver);
+      userId.removeEventListener('mouseout', userMouseOut);
+      divId.addEventListener('mouseover', divMouseOver);
+      divId.addEventListener('mouseout', divMouseOut);
+    };
+  }, [post]);
+
+  // todo: when image extends, click div --> post[id]. prevent it.
+  const onClick = useCallback(
+    (e) => {
+      console.log(e.target.nodeName);
+      console.log(e.target);
+      console.log(e.target.classList[0]);
+      if (e.target.classList[0] !== 'ant-avatar-string' && e.target.classList[0] !== 'ant-avatar') {
+        if (e.target.classList[0] === post.createdAt) {
+          router.push(`/user/${post.User.id}`);
+        } else if (
+          e.target.nodeName !== 'svg' &&
+          e.target.nodeName !== 'IMG' &&
+          e.target.nodeName !== 'path' &&
+          e.target.nodeName !== 'BUTTON'
+        ) {
+          router.push(`/post/${post.id}`);
+        }
+      }
+    },
+    [post],
+  );
 
   const isWithinDay = (date) => dayjs().diff(date, 'day') < 1;
   const onLike = useCallback(() => {
@@ -49,7 +106,16 @@ const PostCard = ({ post, single }) => {
 
   return (
     <div id={post.id} style={{ width: 'inherit', margin: 'inherit' }}>
+      <style>
+        {`
+          .hovered {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        `}
+      </style>
       <Card
+        onClick={onClick}
         // extra={id && <FollowButton post={post} />}
         cover={post.Images[0] && <PostImages images={post.Images} />}
         // Key should be in jsx, when jsx is inside array.
@@ -91,7 +157,13 @@ const PostCard = ({ post, single }) => {
 
           // <FollowButton post={post} />,
         ]}
-        title={post.RetweetId && post.User.id !== id ? `${post.User.nickname} retweeted` : null}
+        title={
+          post.RetweetId && post.User.id !== id ? (
+            <div>
+              <span className={post.createdAt}>`${post.User.nickname} retweeted`</span>
+            </div>
+          ) : null
+        }
         extra={id && id !== post.User.id && <FollowButton post={post} />}
       >
         {isWithinDay(post.createdAt) ? (
@@ -113,7 +185,11 @@ const PostCard = ({ post, single }) => {
                   <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
                 </Link>
               }
-              title={post.Retweet.User.nickname}
+              title={
+                <div>
+                  <span className={post.createdAt}>{post.Retweet.User.nickname}</span>
+                </div>
+              }
               description={<PostCardContent postData={post.Retweet.content} />}
             />
           </Card>
@@ -124,7 +200,11 @@ const PostCard = ({ post, single }) => {
                 <Avatar>{post.User.nickname[0]}</Avatar>{' '}
               </Link>
             }
-            title={post.User.nickname}
+            title={
+              <div>
+                <span className={post.createdAt}>{post.User.nickname}</span>
+              </div>
+            }
             description={<PostCardContent postData={post.content} />}
           />
         )}

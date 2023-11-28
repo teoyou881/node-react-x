@@ -36,8 +36,8 @@ export const CloseBtn = styled(CloseOutlined)`
 `;
 
 export const SlickWrapper = styled.div`
-  height: calc(100% - 44px);
-  background: #101010;
+  height: 200%;
+  background: black;
 `;
 export const ImageWrapper = styled.div`
   padding: 32px;

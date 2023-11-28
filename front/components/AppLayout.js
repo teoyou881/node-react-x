@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Input, Menu, Row, Col } from 'antd';
+import { Input, Menu, Row } from 'antd';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';

@@ -70,7 +70,7 @@ const PostImages = ({ images }) => {
       <Wrapper>
         <img
           role="presentation"
-          style={{ width: '100%' }}
+          style={{ width: '100%', zIndex: 1000 }}
           src={`${images[0].src}`}
           alt={images[0].src}
           onClick={onZoom}

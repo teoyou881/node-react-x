@@ -19,13 +19,17 @@ const helmet = require('helmet');
 // const port = process.env.NODE_ENV === "production" ? 80 : 3065;
 // change port to 3065 because nginx is using port 80
 const port = 3065;
+
+// when using nginx, should be set for cookie
+app.set('trust proxy', 1);
 if (process.env.NODE_ENV === 'production') {
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet({ contentSecurityPolicy: false }));
   app.use(
     cors({
-      origin: ['http://teonodex.com'],
+      // domain was changed 'https~'
+      origin: ['https://teonodex.com'],
       credentials: true,
     }),
   );
@@ -53,10 +57,13 @@ app.use(
     savedUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    // when use nginx, should be set for cookie
+    proxy: true,
     cookie: {
       // cookie will not be accessible by javascript
       httpOnly: true,
-      secure: false,
+      // after applying https, secure: true
+      secure: true,
       // this is for cookie to be shared between front and back
       domain: process.env.NODE_ENV === 'production' && '.teonodex.com',
     },

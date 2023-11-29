@@ -40,7 +40,6 @@ const Input = styled.input`
     margin: 0 auto;
   }
 `;
-const LabelOver1200 = styled.label``;
 
 // TypeError: Cannot read properties of null (reading 'useMemo')
 // IDK why

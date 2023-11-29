@@ -29,8 +29,8 @@ const UserInfoCol = styled.div`
     margin-left: 15%;
   }
   @media (min-width: 1801px) {
-    //min-width: 235px;
-    //max-width: 250px;
+    min-width: 235px;
+    max-width: 250px;
     margin-left: calc((100% - 1200px) / 2); /* 화면 너비에 따라 가운데 정렬 */
   }
 `;
@@ -57,7 +57,7 @@ const StyledDiv = styled.div`
   background: #f8f8f8;
   margin-left: 30px;
 
-  @media (max-width: 1450px) {
+  @media (max-width: 1470px) {
     display: none;
   }
   @media (min-width: 1801px) {

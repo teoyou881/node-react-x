@@ -10,8 +10,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
-  margin-top: 10px;
+  margin: 10px auto;
+  text-align: center;
 `;
+
+const InputWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  @media screen and (max-width: 1200px) {
+    justify-content: flex-start;
+  }
+`;
+
+const Label = styled.label`
+  width: 100%;
+  margin: 0 auto;
+  display: inline-block;
+  @media screen and (max-width: 1200px) {
+    text-align: center;
+    font-size: 20px !important;
+  }
+`;
+const Input = styled.input`
+  width: 90%;
+  display: inline-block;
+  @media screen and (max-width: 1200px) {
+    margin: 0 auto;
+  }
+`;
+const LabelOver1200 = styled.label``;
 
 // TypeError: Cannot read properties of null (reading 'useMemo')
 // IDK why
@@ -51,22 +80,28 @@ const LoginForm = () => {
     // onFinish has already applied e.preventDefault();
     <div className="formWrapper">
       <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
-        <div>
-          <label htmlFor="email">email</label>
-          <br />
-          <input id="email" name="email" {...register('email')} />
-        </div>
-        <div>
-          <label htmlFor="password">password</label>
-          <br />
+        <InputWrapper>
+          <Label htmlFor="email">email</Label>
+
+          <Input id="email" name="email" {...register('email')} />
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="password">password</Label>
+
           {/*
           do not use <Input> form antd if you want to use react-form-hook
           Because there is no name attribute in antd Input
           */}
-          <input id="password" name="password" type="password" required {...register('password')} />
-        </div>
+          <Input id="password" name="password" type="password" required {...register('password')} />
+        </InputWrapper>
         <ButtonWrapper>
-          <Button type="primary" htmlType="submit" loading={logInLoading} disabled={isSubmitting}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={logInLoading}
+            disabled={isSubmitting}
+            style={{ marginRight: '5px' }}
+          >
             Sign In
           </Button>
           <Link href="/signup">

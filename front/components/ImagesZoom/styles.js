@@ -9,6 +9,7 @@ export const Overlay = styled.div`
   right: 0;
   bottom: 0;
   height: 100%;
+  width: 100% !important;
 `;
 
 export const Header = styled.header`

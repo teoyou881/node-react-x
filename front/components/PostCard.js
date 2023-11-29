@@ -62,9 +62,11 @@ const PostCard = ({ post, single }) => {
 
   const onClick = useCallback(
     (e) => {
-      console.log(e.target.nodeName);
-      console.log(e.target);
-      console.log(e.target.classList[0]);
+      console.log('nodeName', e.target.nodeName);
+      console.log('e.target.tagName', e.target.tagName);
+      console.log('e.target.textContent', e.target.textContent);
+      console.log('e.target.classList', e.target.classList);
+      console.log('e.target.parentNode', e.target.parentNode);
       if (e.target.classList[0] !== 'ant-avatar-string' && e.target.classList[0] !== 'ant-avatar') {
         if (e.target.classList[0] === post.createdAt) {
           router.push(`/user/${post.User.id}`);
@@ -75,7 +77,8 @@ const PostCard = ({ post, single }) => {
           e.target.nodeName !== 'BUTTON' &&
           e.target.nodeName !== 'H1' &&
           !e.target.classList[0]?.includes('styles__ImageWrapper') &&
-          !e.target.classList[0]?.includes('anticon')
+          !e.target.classList[0]?.includes('anticon') &&
+          e.target.tagName !== 'SPAN'
         ) {
           router.push(`/post/${post.id}`);
         }

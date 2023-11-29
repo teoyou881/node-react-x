@@ -60,7 +60,6 @@ const PostCard = ({ post, single }) => {
     };
   }, [post]);
 
-  // todo: when image extends, click div --> post[id]. prevent it.
   const onClick = useCallback(
     (e) => {
       console.log(e.target.nodeName);
@@ -73,7 +72,10 @@ const PostCard = ({ post, single }) => {
           e.target.nodeName !== 'svg' &&
           e.target.nodeName !== 'IMG' &&
           e.target.nodeName !== 'path' &&
-          e.target.nodeName !== 'BUTTON'
+          e.target.nodeName !== 'BUTTON' &&
+          e.target.nodeName !== 'H1' &&
+          !e.target.classList[0]?.includes('styles__ImageWrapper') &&
+          !e.target.classList[0]?.includes('anticon')
         ) {
           router.push(`/post/${post.id}`);
         }

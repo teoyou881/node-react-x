@@ -20,7 +20,7 @@ const loggerMiddleware =
   ({ dispatch, getState }) =>
   (next) =>
   (action) => {
-    console.log(action);
+    // console.log(action);
     return next(action);
   };
 
@@ -30,7 +30,7 @@ export const makeStore = () => {
     reducer: (state, action) => {
       switch (action.type) {
         case HYDRATE:
-          console.log('HYDRATE', action);
+          // console.log('HYDRATE', action);
           return { ...state, ...action.payload };
         default:
           return rootReducer(state, action);
@@ -38,9 +38,13 @@ export const makeStore = () => {
     },
     devTools: process.env.NODE_ENV !== 'production',
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: false,
-      }).concat(sagaMiddleware, loggerMiddleware),
+      process.env.NODE_ENV !== 'production'
+        ? getDefaultMiddleware({
+            serializableCheck: false,
+          }).concat(sagaMiddleware, loggerMiddleware)
+        : getDefaultMiddleware({
+            serializableCheck: false,
+          }).concat(sagaMiddleware),
   });
 
   // Run the rootSaga to start your application sagas

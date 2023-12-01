@@ -5,8 +5,15 @@ import ImagesZoom from './ImagesZoom';
 
 const Wrapper = styled.div`
   width: calc(100% - 20px) !important;
+  display: flex !important;
   height: 300px;
   margin: 10px auto;
+  justify-content: space-around;
+
+  & > img {
+    width: 100%;
+    object-fit: cover;
+  }
 `;
 
 const WrapperFor2 = styled.div`
@@ -68,13 +75,7 @@ const PostImages = ({ images }) => {
   if (images.length === 1) {
     return (
       <Wrapper>
-        <img
-          role="presentation"
-          style={{ width: '100%', zIndex: 1000 }}
-          src={`${images[0].src}`}
-          alt={images[0].src}
-          onClick={onZoom}
-        />
+        <img role="presentation" src={`${images[0].src}`} alt={images[0].src} onClick={onZoom} />
         {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </Wrapper>
     );

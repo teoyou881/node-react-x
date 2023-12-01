@@ -16,13 +16,15 @@ const path = require('path');
 const hpp = require('hpp');
 const helmet = require('helmet');
 
+dotenv.config();
+
 // const port = process.env.NODE_ENV === "production" ? 80 : 3065;
 // change port to 3065 because nginx is using port 80
 const port = 3065;
 
-// when using nginx, should be set for cookie
-app.set('trust proxy', 1);
 if (process.env.NODE_ENV === 'production') {
+  // when using nginx, should be set for cookie
+  app.set('trust proxy', 1);
   app.use(morgan('combined'));
   app.use(hpp());
   app.use(helmet({ contentSecurityPolicy: false }));
@@ -42,7 +44,6 @@ if (process.env.NODE_ENV === 'production') {
   );
   app.use(morgan('dev'));
 }
-dotenv.config();
 
 // why use path.join? --> window and mac use different slash to separate folders
 // window: \   mac: /
@@ -63,7 +64,8 @@ app.use(
       // cookie will not be accessible by javascript
       httpOnly: true,
       // after applying https, secure: true
-      secure: true,
+      // if process.env.NODE_ENV is production, secure: true
+      secure: process.env.NODE_ENV === 'production',
       // this is for cookie to be shared between front and back
       domain: process.env.NODE_ENV === 'production' && '.teonodex.com',
     },

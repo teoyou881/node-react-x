@@ -33,18 +33,27 @@
 
 ## display composition
 home
-![main](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2014%2059%2022.png)![2023-12-01 15 01 31.png](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2001%2031.png)
+
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463670460_main1.png"/>
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463670460_main2.png"/>
+
 
 sign up
-![signUp](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2000%2043.png)
+
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463787608_2023-12-01_15_00_43.png">
+
 
 edit post
-![editPost](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2001%2052.png)
-![editPost](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2002%2021.png)![2023-12-01 15 02 32.png](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2002%2032.png)
+
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463953204_2023-12-01_15_01_52.png">
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463953204_2023-12-01_15_02_21.png">
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/original/1701463831164_2023-12-01_15_02_32.png">
 
 profile
-![2023-12-01 15 10 45.png](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2010%2045.png)
+
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701464059600_2023-12-01_15_10_45.png">
 
 ## Project Architecture
-![2023-12-01 15 41 53.png](..%2F..%2F..%2FDocuments%2FPicPick%2F2023-12-01%2015%2041%2053.png)
+<img src="https://teonodex.s3.us-east-1.amazonaws.com/original/1701464085720_2023-12-01_15_41_53.png">
+
 #### nginx receives both port 80 and port 443. The 443 port is passed to the next 3000 port or backend's 3065, and the 80 port is changed to 443 and passed on. --> Because I'm using https now

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  // The object starts with a uppercase letter like User, Images, and Comments,
+  // The object starts with an uppercase letter like User, Images, and Comments,
   // what's the difference between it and the object starting with a lowercase like id content
   // It is all about sequelize.
   // uppercase means we are given data combined other info.
@@ -76,6 +76,7 @@ const initialState = {
   retweetError: null,
   singlePost: null,
   removeSinglePost: false,
+  closeModal: true,
 };
 
 /*
@@ -286,7 +287,8 @@ export const postSlice = createSlice({
     uploadImagesSuccess: (state, action) => {
       state.uploadImagesLoading = false;
       state.uploadImagesDone = true;
-      state.imagePaths = action.payload;
+      console.log(action.payload);
+      state.imagePaths.push(...action.payload);
     },
     uploadImagesFailure: (state, action) => {
       state.uploadImagesLoading = false;
@@ -345,6 +347,32 @@ export const postSlice = createSlice({
       state.loadPostsLoading = false;
       state.loadPostsError = action.error;
       state.loadPostsErrorClear = false;
+    },
+    editPostRequest: (state) => {
+      state.editPostLoading = true;
+      state.editPostDone = false;
+      state.editPostError = null;
+    },
+    editPostSuccess: (state, action) => {
+      state.editPostLoading = false;
+      state.editPostDone = true;
+      // find post and change content
+      console.log(action.payload);
+      const postIndex = state.mainPosts.findIndex((v) => v.id === action.payload.PostId);
+      if (postIndex) {
+        state.mainPosts[postIndex] = action.payload;
+      }
+    },
+    editPostFailure: (state, action) => {
+      state.editPostLoading = false;
+      state.editPostError = action.error;
+      state.editPostErrorClear = false;
+    },
+    setImagePaths: (state, action) => {
+      state.imagePaths = action.payload;
+    },
+    closeEditDiv: (state) => {
+      state.imagePaths = [];
     },
 
     // todo: removeComment

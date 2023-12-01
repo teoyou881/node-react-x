@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { postAction } from '../reducers/post';
 
 const PostForm = () => {
-  const { imagePaths, addPostDone } = useSelector((state) => state.post);
+  const { imagePaths, addPostDone, editPostStatus } = useSelector((state) => state.post);
   const dispatch = useDispatch();
   const [text, setText] = useState('');
   const buttonRef = useRef();
@@ -102,12 +102,12 @@ const PostForm = () => {
             name="image"
             onChange={onChangeImages}
           />
-          <Button onClick={showFileUploader} style={{ marginTop: '6px' }}>
+          <Button onClick={showFileUploader} style={{ margin: '5px 0' }}>
             image upload
           </Button>
           <Button
             type="primary"
-            style={{ float: 'right', marginTop: '6px' }}
+            style={{ float: 'right', margin: '5px 0' }}
             htmlType="submit"
             ref={buttonRef}
             disabled={!(text || imagePaths.length > 0)}
@@ -115,25 +115,27 @@ const PostForm = () => {
             Post
           </Button>
         </div>
-        <div>
-          {imagePaths.map((v, i) => (
-            <div key={v} style={{ display: 'inline-block' }}>
-              {/* change img url from thumb to original to show img */}
-              {/* When using the REPLACE function, if you want to specify a pattern as a regular expression,
+        {!editPostStatus && (
+          <div>
+            {imagePaths.map((v, i) => (
+              <div key={v} style={{ display: 'inline-block' }}>
+                {/* change img url from thumb to original to show img */}
+                {/* When using the REPLACE function, if you want to specify a pattern as a regular expression,
                 you must enclose it in forward slashes (/).
                 Because the slash has special meaning in regular expressions,
                 it may need to be escaped. */}
-              <img src={v.replace(/\/thumb\//, '/original/')} alt={v} style={{ width: '200px' }} />
-              <div>
-                {/*
+                <img src={v.replace(/\/thumb\//, '/original/')} alt={v} style={{ width: '200px' }} />
+                <div>
+                  {/*
                 If you want to put data inside a higher-order function,
                 make it a higher-order function.
                 */}
-                <Button onClick={onRemoveImage(i)}>Remove</Button>
+                  <Button onClick={onRemoveImage(i)}>Remove</Button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </Form>
     </div>
   );

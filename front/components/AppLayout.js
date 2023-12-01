@@ -78,7 +78,11 @@ const AppLayout = ({ children }) => {
   const userMenuItems = [
     {
       key: 'home',
-      icon: <Link href="/">X</Link>,
+      icon: (
+        <Link href="/" id="home">
+          X
+        </Link>
+      ),
     },
     {
       key: 'profile',

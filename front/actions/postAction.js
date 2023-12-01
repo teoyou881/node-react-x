@@ -40,4 +40,7 @@ export const POST_ACTION = {
   LOAD_HASHTAG_POSTS_REQUEST: 'post/loadHashTagPostsRequest',
   LOAD_HASHTAG_POSTS_SUCCESS: 'post/loadHashTagPostsSuccess',
   LOAD_HASHTAG_POSTS_FAILURE: 'post/loadHashTagPostsFailure',
+  EDIT_POST_REQUEST: 'post/editPostRequest',
+  EDIT_POST_SUCCESS: 'post/editPostSuccess',
+  EDIT_POST_FAILURE: 'post/editPostFailure',
 };

@@ -9,28 +9,61 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useRouter } from 'next/router';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Modal from 'react-modal';
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { postAction } from '../reducers/post';
 import FollowButton from './FollowButton';
+import EditPostForm from './EditPostForm';
 
 dayjs.locale('ca');
 dayjs.extend(relativeTime);
 
+Modal.setAppElement('#__next');
+
 const PostCard = ({ post, single }) => {
   const dispatch = useDispatch();
+  const { editPostDone } = useSelector((state) => state.post);
   const id = useSelector((state) => state.user.me?.id);
   const me = useSelector((state) => state.user.me);
   const liked = post.Likers.find((v) => v.id === id);
   const retweeted = me?.Posts.find((v) => v.RetweetId === post.id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (editPostDone) {
+      setModalIsOpen(false);
+    }
+  }, [editPostDone]);
+
+  // click home btn to close modal
+  useEffect(() => {
+    const home = document.getElementById('home');
+    const handleClick = () => {
+      setModalIsOpen(false);
+    };
+    if (home) {
+      home.addEventListener('click', handleClick);
+    }
+    return () => {
+      if (home) {
+        home.removeEventListener('click', handleClick);
+      }
+    };
+  }, [post]);
+
+  const onCancel = useCallback(() => {
+    setModalIsOpen(false);
+    dispatch(postAction.closeEditDiv());
+  }, [post]);
 
   useEffect(() => {
     const userId = document.getElementsByClassName(post.createdAt)[0];
     const divId = document.getElementById(post.id);
-
     const userMouseOver = () => {
       userId.style.textDecoration = 'underline';
     };
@@ -78,6 +111,7 @@ const PostCard = ({ post, single }) => {
           e.target.nodeName !== 'H1' &&
           !e.target.classList[0]?.includes('styles__ImageWrapper') &&
           !e.target.classList[0]?.includes('anticon') &&
+          !e.target.classList[0]?.includes('ant-card-actions') &&
           e.target.tagName !== 'SPAN'
         ) {
           router.push(`/post/${post.id}`);
@@ -86,6 +120,10 @@ const PostCard = ({ post, single }) => {
     },
     [post],
   );
+
+  const onEditPost = useCallback(() => {
+    setModalIsOpen(true);
+  }, []);
 
   const isWithinDay = (date) => dayjs().diff(date, 'day') < 1;
   const onLike = useCallback(() => {
@@ -111,6 +149,11 @@ const PostCard = ({ post, single }) => {
 
   return (
     <div id={post.id} style={{ width: 'inherit', margin: 'inherit' }}>
+      {modalIsOpen && (
+        <Modal isOpen={modalIsOpen}>
+          <EditPostForm post={post} initialText={post.content} onCancel={onCancel} />
+        </Modal>
+      )}
       <style>
         {`
           .hovered {
@@ -143,7 +186,7 @@ const PostCard = ({ post, single }) => {
               <ButtonGroup>
                 {id && post.User.id === id ? (
                   <>
-                    {!post.RetweetId && <Button>Edit</Button>}
+                    {!post.RetweetId && <Button onClick={onEditPost}>Edit</Button>}
                     <Button
                       // type="danger"
                       onClick={onRemovePost}

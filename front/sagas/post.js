@@ -267,6 +267,30 @@ function* loadHashtagPosts(action) {
   }
 }
 
+function editPostAPI(data) {
+  return axios.patch(`/post/${data.id}`, data.formData);
+}
+function* editPost(action) {
+  // action.payload is lastId & userId
+  console.log(action.payload);
+  try {
+    const result = yield call(editPostAPI, action.payload);
+    console.log(result.data);
+
+    yield put({
+      type: POST_ACTION.EDIT_POST_SUCCESS,
+      payload: result.data,
+    });
+  } catch (err) {
+    console.log(err);
+    yield put({
+      type: POST_ACTION.EDIT_POST_FAILURE,
+      error: err.response,
+      // error: "error",
+    });
+  }
+}
+
 function* watchAddPost() {
   yield takeLatest(POST_ACTION.ADD_POST_REQUEST, addPost);
 }
@@ -306,6 +330,9 @@ function* watchLoadUserPosts() {
 function* watchLoadHashtagPosts() {
   yield takeLatest(POST_ACTION.LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts);
 }
+function* watchEditPost() {
+  yield takeLatest(POST_ACTION.EDIT_POST_REQUEST, editPost);
+}
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
@@ -321,5 +348,6 @@ export default function* postSaga() {
     fork(watchLoadPost),
     fork(watchLoadUserPosts),
     fork(watchLoadHashtagPosts),
+    fork(watchEditPost),
   ]);
 }

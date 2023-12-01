@@ -379,4 +379,84 @@ router.get('/:postId', async (req, res, next) => {
   }
 });
 
+// edit post
+router.patch('/:postId', isLoggedIn, upload.none(), async (req, res, next) => {
+  try {
+    const post = await Post.findOne({ where: { id: req.params.postId } });
+    if (!post) {
+      return res.status(403).send('There is no post');
+    } else {
+      await post.update({
+        content: req.body.content,
+      });
+    }
+
+    const hashtags = req.body.content.match(/#[^\s#]+/g);
+    // We must check if there is a hashtag. If there is a hashtag, hashtags will be null.
+    if (hashtags) {
+      // no hashtag matched, create it.
+      // hashtag matched, get it.
+      // we need to findOrCreate it.
+      // findOrCreate returns array.
+      const result = await Promise.all(
+        hashtags.map((tag) =>
+          Hashtag.findOrCreate({
+            where: {
+              name: tag.slice(1).toLowerCase(),
+            },
+          }),
+        ),
+      );
+      // findOrCreate returns array. --> [[node, true], [react, true]]
+      await post.setHashtags(result.map((v) => v[0]));
+    }
+
+    //사진
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        //determines whether the passed value is an array.
+        // if image is an array (multiple images)
+        // Image.create({ src: image }) function returns a promise
+        const images = await Promise.all(req.body.image.map((image) => Image.create({ src: image })));
+        await post.setImages(images);
+      } else {
+        const image = await Image.create({ src: req.body.image });
+        await post.setImages(image);
+      }
+    }
+
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        { model: Image },
+        {
+          model: Comment,
+          include: [
+            {
+              model: User,
+              attributes: ['id', 'nickname'],
+            },
+          ],
+        },
+        // user who create the post
+        {
+          model: User,
+          attributes: ['id', 'nickname'],
+        },
+        // user who click like button
+        {
+          model: User,
+          as: 'Likers',
+          attributes: ['id'],
+        },
+      ],
+    });
+    console.log(fullPost);
+    res.status(201).json(fullPost);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
 module.exports = router;

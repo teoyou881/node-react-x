@@ -33,9 +33,8 @@
 
 ## display composition
 home
-
-[<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463670460_main1.png"/>](https://private-user-images.githubusercontent.com/136386055/287380761-7b92a168-d423-4caa-bd82-1a35ac853274.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTEiLCJleHAiOjE3MDE0NjQ2MDIsIm5iZiI6MTcwMTQ2NDMwMiwicGF0aCI6Ii8xMzYzODYwNTUvMjg3MzgwNzYxLTdiOTJhMTY4LWQ0MjMtNGNhYS1iZDgyLTFhMzVhYzg1MzI3NC5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBSVdOSllBWDRDU1ZFSDUzQSUyRjIwMjMxMjAxJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDIzMTIwMVQyMDU4MjJaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT01ZmU2MTFhOTA2OGEwNTkxOTkzNWRjMTJiNDA2ZDI5OTUxZWRjMDY3ZmM1MjdhMTcxMzU5NjFmYjg2YTg5ZmJlJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.5X3O1mG3I4F_yApvzcw_XHyhiaZnaCSPbR0qB0rPHuc)
-<img src="https://teonodex.s3.us-east-1.amazonaws.com/thumb/1701463670460_main2.png"/>
+![main1](https://github.com/teoyou881/node-react-x/assets/136386055/d4db9830-133c-4ad5-aaf5-1e79948daa68)
+![main2](https://github.com/teoyou881/node-react-x/assets/136386055/2cfe0b46-683a-4968-823a-dbd1ed7fc7c0)
 
 
 sign up

@@ -40,7 +40,14 @@ const UserProfile = () => {
         ]}
       >
         <Card.Meta avatar={<Avatar>{me.nickname[0]}</Avatar>} title={me.nickname} />
-        <Button onClick={onSignOut} loading={isLoggingOut} style={{ left: '40px', top: '10px' }}>
+        <Button
+          onClick={onSignOut}
+          loading={isLoggingOut}
+          style={{
+            left: '40px',
+            top: '10px',
+          }}
+        >
           Sign Out
         </Button>
       </Card>

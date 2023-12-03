@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Input, Menu, Row } from 'antd';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { useSelector } from 'react-redux';
 import UserProfile from './UserProfile';
 import LoginForm from './LoginForm';
@@ -99,12 +99,12 @@ const AppLayout = ({ children }) => {
       icon: <Link href="/">X</Link>,
     },
     {
-      key: 'search',
-      icon: <SearchInput value={searchInput} onChange={onChangeSearchInput} onSearch={onSearch} />,
-    },
-    {
       key: 'signup',
       icon: <Link href="/signup">Signup</Link>,
+    },
+    {
+      key: 'search',
+      icon: <SearchInput value={searchInput} onChange={onChangeSearchInput} onSearch={onSearch} />,
     },
   ];
   return (

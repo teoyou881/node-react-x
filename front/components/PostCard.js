@@ -143,12 +143,21 @@ const PostCard = ({ post, single }) => {
   }, [id]);
 
   const onRetweet = useCallback(() => {
-    if (!id) alert('Please login first.');
-    else dispatch(postAction.retweetRequest(post.id));
+    if (!id) {
+      alert('Please login first.');
+    } else {
+      dispatch(postAction.retweetRequest(post.id));
+    }
   }, [id]);
 
   return (
-    <div id={post.id} style={{ width: 'inherit', margin: 'inherit' }}>
+    <div
+      id={post.id}
+      style={{
+        width: 'inherit',
+        margin: 'inherit',
+      }}
+    >
       {modalIsOpen && (
         <Modal isOpen={modalIsOpen}>
           <EditPostForm post={post} initialText={post.content} onCancel={onCancel} />

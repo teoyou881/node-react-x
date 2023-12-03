@@ -39,7 +39,12 @@ const EditPostForm = ({ post, initialText, onCancel }) => {
       formData.append('image', v);
     });
     formData.append('content', text);
-    dispatch(postAction.editPostRequest({ formData, id: post.id }));
+    dispatch(
+      postAction.editPostRequest({
+        formData,
+        id: post.id,
+      }),
+    );
 
     // If there is an error on backend, the text will be cleared.
     // So, setText() should be called in useEffect.
@@ -119,14 +124,24 @@ const EditPostForm = ({ post, initialText, onCancel }) => {
           </Button>
           <Button
             type="primary"
-            style={{ float: 'right', margin: '5px 0  5px 5px' }}
+            style={{
+              float: 'right',
+              margin: '5px 0  5px 5px',
+            }}
             htmlType="submit"
             ref={buttonRef}
             disabled={!(text || imagePaths.length > 0)}
           >
             Edit
           </Button>
-          <Button danger style={{ float: 'right', margin: '5px 0' }} onClick={onCancel}>
+          <Button
+            danger
+            style={{
+              float: 'right',
+              margin: '5px 0',
+            }}
+            onClick={onCancel}
+          >
             cancel
           </Button>
         </div>

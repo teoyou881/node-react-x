@@ -103,6 +103,9 @@ const PostCard = ({ post, single }) => {
       if (e.target.classList[0] !== 'ant-avatar-string' && e.target.classList[0] !== 'ant-avatar') {
         if (e.target.classList[0] === post.createdAt) {
           router.push(`/user/${post.User.id}`);
+        } else if (e.target.tagName === 'A' && e.target.textContent.includes('#')) {
+          console.log('seghsoghsog');
+          router.push(`/hashtag/${e.target.textContent.slice(1)}`);
         } else if (
           e.target.nodeName !== 'svg' &&
           e.target.nodeName !== 'IMG' &&
@@ -215,10 +218,30 @@ const PostCard = ({ post, single }) => {
           // <FollowButton post={post} />,
         ]}
         title={
-          post.RetweetId && post.User.id !== id ? (
-            <div>
-              <span className={post.createdAt}>`${post.User.nickname} retweeted`</span>
-            </div>
+          post.RetweetId ? (
+            post.User.id !== id ? (
+              <div>
+                <span className={post.createdAt}>{`${post.User.nickname} retweeted`}</span>
+                {isWithinDay(post.createdAt) ? (
+                  <div style={{ float: 'right', fontWeight: 'normal' }}>{dayjs(post.createdAt).fromNow()}</div>
+                ) : (
+                  <div style={{ float: 'right', fontWeight: 'normal' }}>
+                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <span className={post.createdAt}>{`You retweeted`}</span>
+                {isWithinDay(post.createdAt) ? (
+                  <div style={{ float: 'right', fontWeight: 'normal' }}>{dayjs(post.createdAt).fromNow()}</div>
+                ) : (
+                  <div style={{ float: 'right', fontWeight: 'normal' }}>
+                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
+                  </div>
+                )}
+              </div>
+            )
           ) : null
         }
         extra={id && id !== post.User.id && <FollowButton post={post} />}

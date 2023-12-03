@@ -3,9 +3,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-  // Enables the styled-components SWC transform
-  compiler: { styledComponents: true },
   reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
   compress: true,
   webpack(config) {
     const prod = process.env.NODE_ENV === 'production';

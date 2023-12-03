@@ -153,6 +153,206 @@ const PostCard = ({ post, single }) => {
     }
   }, [id]);
 
+  if (post.RetweetId) {
+    return (
+      <div
+        id={post.id}
+        style={{
+          width: 'inherit',
+          margin: 'inherit',
+        }}
+      >
+        {modalIsOpen && (
+          <Modal isOpen={modalIsOpen}>
+            <EditPostForm post={post} initialText={post.content} onCancel={onCancel} />
+          </Modal>
+        )}
+        <style>
+          {`
+          .hovered {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        `}
+        </style>
+        <Card
+          onClick={onClick}
+          // extra={id && <FollowButton post={post} />}
+          cover={post.Images[0] && <PostImages images={post.Images} />}
+          // Key should be in jsx, when jsx is inside array.
+          actions={[
+            retweeted ? (
+              <RetweetOutlined style={{ color: 'blue' }} key="retweet" onClick={onRetweet} />
+            ) : (
+              <RetweetOutlined key="retweet" onClick={onRetweet} />
+            ),
+
+            liked ? (
+              <HeartTwoTone twoToneColor="red" key="heart" onClick={onUnlike} />
+            ) : (
+              <HeartOutlined key="heart" onClick={onLike} />
+            ),
+            <MessageOutlined key="comment" onClick={onToggleComment} />,
+            <Popover
+              key="more"
+              content={
+                <ButtonGroup>
+                  {id && post.User.id === id ? (
+                    <>
+                      {!post.RetweetId && <Button onClick={onEditPost}>Edit</Button>}
+                      <Button
+                        // type="danger"
+                        onClick={onRemovePost}
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  ) : (
+                    <Button>Report</Button>
+                  )}
+                </ButtonGroup>
+              }
+            >
+              <EllipsisOutlined />
+            </Popover>,
+
+            // <FollowButton post={post} />,
+          ]}
+          title={
+            post.User.id !== id ? (
+              <div>
+                <span className={post.createdAt}>{`${post.User.nickname} retweeted`}</span>
+                {isWithinDay(post.createdAt) ? (
+                  <div
+                    style={{
+                      float: 'right',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    {dayjs(post.createdAt).fromNow()}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      float: 'right',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <span className={post.createdAt}>You retweeted</span>
+                {isWithinDay(post.createdAt) ? (
+                  <div
+                    style={{
+                      float: 'right',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    {dayjs(post.createdAt).fromNow()}
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      float: 'right',
+                      fontWeight: 'normal',
+                    }}
+                  >
+                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
+                  </div>
+                )}
+              </div>
+            )
+          }
+          extra={id && id !== post.User.id && <FollowButton post={post} />}
+        >
+          {isWithinDay(post.createdAt) ? (
+            <div style={{ float: 'right' }}>{dayjs(post.createdAt).fromNow()}</div>
+          ) : (
+            <div style={{ float: 'right' }}>{dayjs(post.createdAt).format('YYYY-MM-DD')}</div>
+          )}
+          {post.RetweetId && post.Retweet ? (
+            <Card cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}>
+              {isWithinDay(post.createdAt) ? (
+                <div style={{ float: 'right' }}>{dayjs(post.Retweet.createdAt).fromNow()}</div>
+              ) : (
+                <div style={{ float: 'right' }}>{dayjs(post.Retweet.createdAt).format('YYYY-MM-DD')}</div>
+              )}
+
+              <Card.Meta
+                avatar={
+                  <Link href={`/user/${post.Retweet.User.id}`}>
+                    <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                  </Link>
+                }
+                title={
+                  <div>
+                    <span className={post.createdAt}>{post.Retweet.User.nickname}</span>
+                  </div>
+                }
+                description={<PostCardContent postData={post.Retweet.content} />}
+              />
+            </Card>
+          ) : (
+            <Card.Meta
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <Avatar>{post.User.nickname[0]}</Avatar>{' '}
+                </Link>
+              }
+              title={
+                <div>
+                  <span className={post.createdAt}>{post.User.nickname}</span>
+                </div>
+              }
+              description={<PostCardContent postData={post.content} />}
+            />
+          )}
+        </Card>
+        {commentFormOpened && (
+          <div>
+            {id ? (
+              <div>
+                <CommentForm post={post} single={single} />
+                <List
+                  header={`${post.Comments.length} replies`}
+                  itemLayout="horizontal"
+                  dataSource={post.Comments}
+                  renderItem={(item) => (
+                    <li>
+                      <Comment
+                        author={item.User.nickname}
+                        avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                        content={item.content}
+                      />
+                    </li>
+                  )}
+                />
+              </div>
+            ) : (
+              <List
+                header={`${post.Comments.length} replies`}
+                itemLayout="horizontal"
+                dataSource={post.Comments}
+                renderItem={(item) => (
+                  <li>
+                    <Comment
+                      author={item.User.nickname}
+                      avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                      content={item.content}
+                    />
+                  </li>
+                )}
+              />
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
   return (
     <div
       id={post.id}
@@ -217,33 +417,7 @@ const PostCard = ({ post, single }) => {
 
           // <FollowButton post={post} />,
         ]}
-        title={
-          post.RetweetId ? (
-            post.User.id !== id ? (
-              <div>
-                <span className={post.createdAt}>{`${post.User.nickname} retweeted`}</span>
-                {isWithinDay(post.createdAt) ? (
-                  <div style={{ float: 'right', fontWeight: 'normal' }}>{dayjs(post.createdAt).fromNow()}</div>
-                ) : (
-                  <div style={{ float: 'right', fontWeight: 'normal' }}>
-                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div>
-                <span className={post.createdAt}>{`You retweeted`}</span>
-                {isWithinDay(post.createdAt) ? (
-                  <div style={{ float: 'right', fontWeight: 'normal' }}>{dayjs(post.createdAt).fromNow()}</div>
-                ) : (
-                  <div style={{ float: 'right', fontWeight: 'normal' }}>
-                    {dayjs(post.createdAt).format('YYYY-MM-DD')}
-                  </div>
-                )}
-              </div>
-            )
-          ) : null
-        }
+        title={null}
         extra={id && id !== post.User.id && <FollowButton post={post} />}
       >
         {isWithinDay(post.createdAt) ? (

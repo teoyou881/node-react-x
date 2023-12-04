@@ -48,6 +48,24 @@ const Signup = () => {
   const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
   const router = useRouter();
 
+  // for modal
+  const [isChecked, setIsChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    setIsChecked(false);
+  }, []);
+  const closeModalAgree = useCallback(() => {
+    setIsModalOpen(false);
+    setIsChecked(true);
+  }, []);
+  useEffect(() => {
+    console.log('isChecked:', isChecked);
+  }, [isChecked]);
+
   useEffect(() => {
     if (signUpDone || me) {
       router.push('/');
@@ -117,23 +135,7 @@ const Signup = () => {
       alert(errors.term.message);
     }
   };
-  // for modal
-  const [isChecked, setIsChecked] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = useCallback(() => {
-    setIsModalOpen(true);
-  }, []);
-  const closeModal = useCallback(() => {
-    setIsModalOpen(false);
-    setIsChecked(false);
-  }, []);
-  const closeModalAgree = useCallback(() => {
-    setIsModalOpen(false);
-    setIsChecked(true);
-  }, []);
-  useEffect(() => {
-    console.log('isChecked:', isChecked);
-  }, [isChecked]);
+
   return (
     <>
       <Head>
@@ -215,7 +217,17 @@ const Signup = () => {
               }}
             >
               I have read and agree to the{' '}
-              <a key="ek" onClick={openModal}>
+              <a
+                href="#"
+                role="button"
+                onClick={openModal}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    openModal();
+                  }
+                }}
+                tabIndex={0}
+              >
                 terms of service
               </a>
             </span>
@@ -229,7 +241,10 @@ const Signup = () => {
                   height: '100%',
                 }}
               >
-                <p>Modal content goes here.</p>
+                <div>
+                  <h2>Terms of Service</h2>
+                  Our Terms of Service were last updated on 04/12/2023.
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                   <Button onClick={closeModalAgree} style={{ marginRight: '5px' }}>
                     Agree

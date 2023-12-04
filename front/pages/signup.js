@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import Modal from 'react-modal';
 import Head from 'next/head';
 import Link from 'next/link';
 import { Form, Button } from 'antd';
@@ -23,6 +24,23 @@ const ButtonWrapper = styled.div`
 `;
 const InputWrapper = styled.input`
   width: 100%;
+`;
+
+const ChildrenCol = styled(Form)`
+  @media (max-width: 768px) {
+    width: 100%;
+    margin: 0 auto;
+    min-width: 500px;
+  }
+  @media (min-width: 769px) and (max-width: 1200px) {
+    width: 735px;
+    margin: 0 auto;
+    min-width: 600px;
+  }
+  @media (min-width: 1201px) {
+    width: 600px;
+    margin: 0 10px;
+  }
 `;
 
 const Signup = () => {
@@ -80,6 +98,10 @@ const Signup = () => {
   } = useForm({ mode: 'onBlur' });
 
   const onFormSubmit = (data) => {
+    if (!isChecked) {
+      alert('You must agree to our terms of service');
+      return;
+    }
     dispatch(userAction.signUpRequest(data));
     reset();
   };
@@ -95,14 +117,30 @@ const Signup = () => {
       alert(errors.term.message);
     }
   };
-
+  // for modal
+  const [isChecked, setIsChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    setIsChecked(false);
+  }, []);
+  const closeModalAgree = useCallback(() => {
+    setIsModalOpen(false);
+    setIsChecked(true);
+  }, []);
+  useEffect(() => {
+    console.log('isChecked:', isChecked);
+  }, [isChecked]);
   return (
     <>
       <Head>
         <title>NodeX | Sign Up</title>
       </Head>
       <AppLayout>
-        <Form onFinish={handleSubmit(onFormSubmit, onErrors)}>
+        <ChildrenCol onFinish={handleSubmit(onFormSubmit, onErrors)}>
           <div>
             <label htmlFor="email">email</label>
             <br />
@@ -158,14 +196,15 @@ const Signup = () => {
           <div>
             <input
               type="checkbox"
+              id="inputCheckbox"
+              checked={isChecked}
               style={{
                 verticalAlign: 'middle',
                 textAlign: 'center',
                 width: '100%',
               }}
-              {...register('term', {
-                required: 'You must agree to our terms of service',
-              })}
+              onChange={(e) => setIsChecked(e.target.checked)}
+              {...register('term')}
               className="mx-3"
             />
             <span
@@ -175,8 +214,30 @@ const Signup = () => {
                 textAlign: 'center',
               }}
             >
-              I have read and agree to the terms of service
+              I have read and agree to the{' '}
+              <a key="ek" onClick={openModal}>
+                terms of service
+              </a>
             </span>
+            <Modal isOpen={isModalOpen} onRequestClose={closeModal} contentLabel="Example Modal">
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  textAlign: 'center',
+                  height: '100%',
+                }}
+              >
+                <p>Modal content goes here.</p>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Button onClick={closeModalAgree} style={{ marginRight: '5px' }}>
+                    Agree
+                  </Button>
+                  <Button onClick={closeModal}>DisAgree</Button>
+                </div>
+              </div>
+            </Modal>
             {/* {errors.term && (
                             <ErrorSpanWrapper>
                                 <span>{errors.term?.message}</span>
@@ -191,7 +252,7 @@ const Signup = () => {
               <Button>Sign In</Button>
             </Link>
           </ButtonWrapper>
-        </Form>
+        </ChildrenCol>
       </AppLayout>
     </>
   );

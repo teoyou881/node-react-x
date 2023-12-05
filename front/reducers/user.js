@@ -247,18 +247,22 @@ export const userSlice = createSlice({
       state.loadFollowingsError = action.payload;
     },
     loadMoreFollowingsRequest: (state, action) => {
-      if (action.payload + 10 >= state.showFollowingIndex) {
-        state.showFollowingIndex = state.me.Followings.length;
+      const followings = state.me.Followings.length;
+      const more = followings - action.payload;
+      if (more >= 10) {
+        state.showFollowingIndex += 10;
       } else {
-        state.showFollowingIndex = action.payload + 10;
+        state.showFollowingIndex = followings;
       }
     },
 
     loadMoreFollowersRequest: (state, action) => {
-      if (action.payload + 10 >= state.showFollowerIndex) {
-        state.showFollowerIndex = state.me.Followers.length;
+      const followers = state.me.Followers.length;
+      const more = followers - action.payload;
+      if (more >= 10) {
+        state.showFollowerIndex += 10;
       } else {
-        state.showFollowerIndex = action.payload + 10;
+        state.showFollowerIndex = followers;
       }
     },
   },

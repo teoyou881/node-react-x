@@ -44,7 +44,7 @@ const Profile = () => {
   useEffect(() => {
     const followings = document.getElementById('followings');
     function onScroll() {
-      if (followings.scrollTop + followings.clientHeight > followings.scrollHeight - 300) {
+      if (followings.scrollTop + followings.clientHeight > followings.scrollHeight - 150) {
         if (Followings.length > showFollowingIndex) {
           dispatch(userAction.loadMoreFollowingsRequest(showFollowingIndex));
         }
@@ -58,7 +58,7 @@ const Profile = () => {
   useEffect(() => {
     const followers = document.getElementById('followers');
     function onScroll() {
-      if (followers.scrollTop + followers.clientHeight > followers.scrollHeight - 300) {
+      if (followers.scrollTop + followers.clientHeight > followers.scrollHeight - 150) {
         if (Followers.length > showFollowerIndex) {
           dispatch(userAction.loadMoreFollowersRequest(showFollowerIndex));
         }

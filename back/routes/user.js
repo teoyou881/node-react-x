@@ -4,7 +4,7 @@ const { User, Post, Comment, Image, Hashtag } = require('../models');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 function isNumeric(input) {
   const numericRegex = /^\d+$/;
@@ -204,9 +204,13 @@ router.post('/logout', isLoggedIn, (req, res, next) => {
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   try {
     const existingUser = await User.findOne({
-      where: { nickname: req.body.nickname },
+      where: {
+        nickname: {
+          [Op.and]: [Sequelize.where(Sequelize.fn('BINARY', Sequelize.col('nickname')), req.body.nickname)],
+        },
+        id: { [Op.not]: req.user.id }, // Exclude the current user
+      },
     });
-
     if (existingUser) {
       return res.status(400).json({ error: 'Nickname is already in use' });
     }
